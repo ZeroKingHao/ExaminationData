@@ -1,0 +1,35 @@
+{
+  "totalRecords": 10066,
+  "totalUniversities": 121,
+  "universities985": 47,
+  "universities211": 74,
+  "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "sources": [
+    {
+      "year": 2021,
+      "url": "http://www.hebeea.edu.cn/c/2021-07-24/488945.html"
+    },
+    {
+      "year": 2022,
+      "url": "http://www.hebeea.edu.cn/c/2022-07-25/488817.html"
+    },
+    {
+      "year": 2023,
+      "url": "https://www.hebeea.edu.cn/c/2023-07-25/489286.html"
+    },
+    {
+      "year": 2024,
+      "url": "https://www.hebeea.edu.cn/c/2024-07-22/489446.html"
+    },
+    {
+      "year": 2025,
+      "url": "https://www.hebeea.edu.cn/c/2025-07-23/489213.html"
+    }
+  ]
+}
