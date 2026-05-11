@@ -1,6 +1,30 @@
 import { useMemo, useState } from 'react';
 import { admissionData } from '../data/admissionData';
-import { BarChart3, Table2 } from 'lucide-react';
+import { BarChart3, Table2, Search, X } from 'lucide-react';
+
+// Simple sparkline component using SVG
+function MiniSparkline({ data, years, width = 60, height = 20 }: { data: number[]; years?: number[]; width?: number; height?: number }) {
+  if (data.length < 2) return <span className="text-xs text-muted-foreground">-</span>;
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+  const range = max - min || 1;
+  const points = data.map((v, i) => {
+    const x = (i / (data.length - 1)) * width;
+    const y = height - ((v - min) / range) * (height - 4) - 2;
+    return `${x},${y}`;
+  }).join(' ');
+
+  const titleText = years
+    ? data.map((v, i) => `${years[i] ?? '?'}: ${v.toLocaleString()}`).join('\n')
+    : '';
+
+  return (
+    <svg width={width} height={height} className="inline-block">
+      {titleText && <title>{titleText}</title>}
+      <polyline fill="none" stroke="hsl(var(--primary))" strokeWidth={1.5} points={points} />
+    </svg>
+  );
+}
 
 interface HeatmapChartProps {
   university: string;
@@ -12,6 +36,8 @@ type HeatMode = 'rank' | 'score';
 export default function HeatmapChart({ university, category }: HeatmapChartProps) {
   const years = [2021, 2022, 2023, 2024, 2025];
   const [heatMode, setHeatMode] = useState<HeatMode>('rank');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [hoveredCell, setHoveredCell] = useState<{ major: string; year: number } | null>(null);
 
   const heatmapData = useMemo(() => {
     let filtered = admissionData.filter(d => d.university === university);
@@ -31,6 +57,12 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
 
     return { majors, filtered, minRank, maxRank, minScore, maxScore };
   }, [university, category]);
+
+  // Filter majors by search query
+  const displayMajors = useMemo(() => {
+    if (!searchQuery.trim()) return heatmapData.majors;
+    return heatmapData.majors.filter(m => m.toLowerCase().includes(searchQuery.toLowerCase()));
+  }, [heatmapData.majors, searchQuery]);
 
   const getRankColor = (rank: number) => {
     const { minRank, maxRank } = heatmapData;
@@ -76,11 +108,11 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
             {category !== '全部' && ` · 已筛选：${category}`}
           </p>
         </div>
-        <div className="flex items-center gap-1 bg-secondary rounded-lg p-1">
+        <div className="flex items-center gap-1 bg-muted/60 rounded-lg p-1">
           <button
             onClick={() => setHeatMode('rank')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${
-              heatMode === 'rank' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:bg-accent'
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-300 ${
+              heatMode === 'rank' ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20' : 'text-muted-foreground hover:bg-accent/50'
             }`}
           >
             <Table2 className="h-3 w-3" />
@@ -88,8 +120,8 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
           </button>
           <button
             onClick={() => setHeatMode('score')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${
-              heatMode === 'score' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:bg-accent'
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-300 ${
+              heatMode === 'score' ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20' : 'text-muted-foreground hover:bg-accent/50'
             }`}
           >
             <Table2 className="h-3 w-3" />
@@ -98,7 +130,32 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
         </div>
       </div>
 
-      <div className="bg-card rounded-xl border border-border p-6 shadow-sm overflow-x-auto">
+      {/* Search Bar */}
+      <div className="mb-4 flex items-center gap-3">
+        <div className="relative flex-1 max-w-xs">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            placeholder="搜索专业名称..."
+            className="w-full h-9 rounded-lg border border-input bg-background pl-9 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-ring/50 transition-all"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </div>
+        <span className="text-xs text-muted-foreground">
+          显示 {displayMajors.length} / {heatmapData.majors.length} 个专业
+        </span>
+      </div>
+
+      <div className="bg-card rounded-xl border border-border/60 p-6 shadow-card card-shine overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
             <tr>
@@ -110,7 +167,7 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
                   {y}年
                 </th>
               ))}
-              <th className="text-center text-xs font-semibold text-muted-foreground p-3 border-b border-border min-w-[110px]">
+              <th className="text-center text-xs font-semibold text-muted-foreground p-3 border-b border-border min-w-[80px]">
                 5年趋势
               </th>
               <th className="text-center text-xs font-semibold text-muted-foreground p-3 border-b border-border min-w-[80px]">
@@ -119,7 +176,7 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
             </tr>
           </thead>
           <tbody>
-            {heatmapData.majors.map(major => {
+            {displayMajors.map(major => {
               const cells = years.map(y => getCellData(major, y));
               const validRanks = cells.filter((c): c is NonNullable<typeof c> => c !== null).map(c => c.minRank);
 
@@ -141,7 +198,9 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
                     if (!cell) {
                       return (
                         <td key={y} className="text-center p-2 border-b border-border">
-                          <span className="text-xs text-muted-foreground">-</span>
+                          <span className="inline-flex items-center justify-center w-[90px] h-[42px] rounded-lg border-2 border-dashed border-border/60 text-xs text-muted-foreground/40">
+                            -
+                          </span>
                         </td>
                       );
                     }
@@ -152,8 +211,12 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
                     return (
                       <td key={y} className="text-center p-2 border-b border-border">
                         <div
-                          className="inline-flex flex-col items-center justify-center rounded-lg p-2 min-w-[90px] transition-all duration-200 hover:scale-105"
+                          className={`inline-flex flex-col items-center justify-center rounded-lg p-2 min-w-[90px] transition-all duration-200 cursor-default ${
+                            hoveredCell?.major === major && hoveredCell?.year === y ? 'scale-105 shadow-lg z-10 relative ring-1 ring-border' : 'hover:scale-[1.02]'
+                          }`}
                           style={{ backgroundColor: color.bg, color: color.text }}
+                          onMouseEnter={() => setHoveredCell({ major, year: y })}
+                          onMouseLeave={() => setHoveredCell(null)}
                         >
                           <span className="text-xs font-bold">{mainValue}</span>
                           <span className="text-[10px] opacity-75">{subValue}{heatMode === 'rank' ? '分' : '位'}</span>
@@ -162,22 +225,7 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
                     );
                   })}
                   <td className="text-center p-3 border-b border-border">
-                    <div className="flex items-center justify-center gap-1">
-                      {trend < -500 ? (
-                        <span className="text-xs font-semibold text-red-400">🔥 强势升温</span>
-                      ) : trend < -100 ? (
-                        <span className="text-xs font-semibold text-orange-400">↑ 升温</span>
-                      ) : trend > 500 ? (
-                        <span className="text-xs font-semibold text-blue-400">❄ 明显降温</span>
-                      ) : trend > 100 ? (
-                        <span className="text-xs font-semibold text-cyan-400">↓ 降温</span>
-                      ) : (
-                        <span className="text-xs text-muted-foreground">→ 稳定</span>
-                      )}
-                    </div>
-                    <div className="text-[10px] text-muted-foreground mt-0.5">
-                      {trend > 0 ? '+' : ''}{formatRank(trend)}位
-                    </div>
+                    <MiniSparkline data={validRanks} years={years} />
                   </td>
                   <td className="text-center p-3 border-b border-border">
                     <span className="text-xs font-mono">{latestEnrollment || '-'}人</span>
@@ -190,7 +238,7 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
       </div>
 
       {/* Color Scale Legend */}
-      <div className="mt-4 p-4 rounded-xl bg-card border border-border">
+      <div className="mt-4 p-4 rounded-xl bg-card border border-border/60 shadow-card card-shine">
         <h3 className="text-xs font-semibold text-muted-foreground mb-3">
           {heatMode === 'rank' ? '位次热度色阶（位次越小颜色越暖）' : '分数热度色阶（分数越高颜色越暖）'}
         </h3>

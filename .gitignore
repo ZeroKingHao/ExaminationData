@@ -4,3 +4,15 @@ dist-ssr
 *.local
 .DS_Store
 .qoder
+
+# Claude Code
+.claude/
+
+# 构建产物
+tsconfig.app.tsbuildinfo
+
+# API测试（与主项目无关）
+mimo_request.json
+
+# 本地文档
+docs/

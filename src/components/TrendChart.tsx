@@ -13,7 +13,8 @@ import {
   Cell,
 } from 'recharts';
 import { getDataByUniversity, getMajorsByUniversity } from '../data/admissionData';
-import { TrendingUp, AlertTriangle, BarChart3, Activity, Filter, ChevronDown, ChevronUp, X } from 'lucide-react';
+import { TrendingUp, AlertTriangle, BarChart3, Activity, Filter, ChevronDown, ChevronUp, X, Search, Inbox } from 'lucide-react';
+import { ChartTooltip } from './ChartTooltip';
 
 const COLORS = [
   'hsl(217, 80%, 58%)',
@@ -52,6 +53,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
   const [yearStart, setYearStart] = useState(2021);
   const [yearEnd, setYearEnd] = useState(2025);
   const [selectedMajors, setSelectedMajors] = useState<Set<string>>(new Set());
+  const [hiddenMajors, setHiddenMajors] = useState<Set<string>>(new Set());
   const [filterOpen, setFilterOpen] = useState(false);
   const data = getDataByUniversity(university);
 
@@ -66,13 +68,13 @@ export default function TrendChart({ university, category }: TrendChartProps) {
     return majorList;
   }, [university, category, data]);
 
-  // 实际显示的专业（用户选择 or 全部）
+  // 实际显示的专业（用户选择 or 全部），排除被Legend点击隐藏的
   const majors = useMemo(() => {
-    if (selectedMajors.size > 0) {
-      return allMajors.filter(m => selectedMajors.has(m));
-    }
-    return allMajors;
-  }, [allMajors, selectedMajors]);
+    let visible = selectedMajors.size > 0
+      ? allMajors.filter(m => selectedMajors.has(m))
+      : allMajors;
+    return visible.filter(m => !hiddenMajors.has(m));
+  }, [allMajors, selectedMajors, hiddenMajors]);
 
   // 年份范围
   const years = useMemo(() => {
@@ -188,15 +190,15 @@ export default function TrendChart({ university, category }: TrendChartProps) {
             {selectedMajors.size > 0 && ` · 已选${selectedMajors.size}个专业`}
           </p>
         </div>
-        <div className="flex items-center gap-1 bg-secondary rounded-lg p-1">
+        <div className="flex items-center gap-1 bg-muted/60 rounded-lg p-1">
           {subViews.map(v => (
             <button
               key={v.id}
               onClick={() => setSubView(v.id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-300 ${
                 subView === v.id
-                  ? 'bg-primary text-primary-foreground shadow-sm'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                  ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
               }`}
             >
               <v.icon className="h-3 w-3" />
@@ -207,7 +209,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
       </div>
 
       {/* Filter Bar */}
-      <div className="mb-4 bg-card rounded-xl border border-border p-4 shadow-sm">
+      <div className="mb-4 bg-card rounded-xl border border-border/60 p-4 shadow-card">
         <div className="flex items-center justify-between">
           <button
             onClick={() => setFilterOpen(!filterOpen)}
@@ -216,7 +218,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
             <Filter className="h-4 w-4" />
             筛选条件
             {selectedMajors.size > 0 && (
-              <span className="px-1.5 py-0.5 rounded-full bg-primary/10 text-primary text-xs">
+              <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-semibold">
                 {selectedMajors.size}个专业
               </span>
             )}
@@ -234,10 +236,10 @@ export default function TrendChart({ university, category }: TrendChartProps) {
               <button
                 key={preset.label}
                 onClick={() => { setYearStart(preset.start); setYearEnd(preset.end); }}
-                className={`px-2 py-1 rounded text-xs font-medium transition-all ${
+                className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-300 ${
                   yearStart === preset.start && yearEnd === preset.end
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-secondary text-secondary-foreground hover:bg-accent'
+                    ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
+                    : 'bg-secondary/80 text-secondary-foreground hover:bg-accent hover:shadow-sm'
                 }`}
               >
                 {preset.label}
@@ -268,8 +270,12 @@ export default function TrendChart({ university, category }: TrendChartProps) {
         </div>
 
         {/* Expanded filter: Major selection */}
-        {filterOpen && (
-          <div className="mt-3 pt-3 border-t border-border animate-fade-in">
+        <div
+          className={`overflow-hidden transition-all duration-300 ease-out ${
+            filterOpen ? 'max-h-96 opacity-100 mt-3' : 'max-h-0 opacity-0'
+          }`}
+        >
+          <div className="pt-3 border-t border-border">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium text-muted-foreground">
                 选择专业（点击选择/取消，未选择则显示全部{allMajors.length}个专业）
@@ -289,10 +295,10 @@ export default function TrendChart({ university, category }: TrendChartProps) {
                   <button
                     key={major}
                     onClick={() => toggleMajor(major)}
-                    className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all duration-200 ${
+                    className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-300 ${
                       isSelected
-                        ? 'bg-primary text-primary-foreground shadow-sm'
-                        : 'bg-secondary text-secondary-foreground hover:bg-accent'
+                        ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20 scale-[1.02]'
+                        : 'bg-secondary/80 text-secondary-foreground hover:bg-accent hover:shadow-sm'
                     }`}
                   >
                     {major}
@@ -301,7 +307,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
               })}
             </div>
           </div>
-        )}
+        </div>
 
         {/* Selected major tags */}
         {selectedMajors.size > 0 && !filterOpen && (
@@ -323,10 +329,17 @@ export default function TrendChart({ university, category }: TrendChartProps) {
 
       {/* ========== 位次趋势折线图 ========== */}
       {subView === 'rank' && (
-        <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
+        <div className="bg-card rounded-xl border border-border/60 p-6 shadow-card card-shine">
           <h3 className="text-sm font-semibold mb-4 text-muted-foreground">
             最低录取位次趋势 · {yearStart}-{yearEnd}年（Y轴逆序：越靠上 = 位次越靠前 = 热度越高）
           </h3>
+          {chartData.length === 0 || majors.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
+              <Inbox className="h-10 w-10 mb-3 opacity-30" />
+              <p className="text-sm">暂无数据</p>
+              <p className="text-xs mt-1">请调整筛选条件或更换高校</p>
+            </div>
+          ) : (
           <ResponsiveContainer width="100%" height={460}>
             <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
@@ -340,15 +353,32 @@ export default function TrendChart({ university, category }: TrendChartProps) {
                 domain={['dataMin', 'dataMax']}
               />
               <Tooltip
-                contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}
-                formatter={(value: number, name: string) => {
-                  const major = majors.find(m => name === `${m}_rank`);
-                  if (major) return [`位次: ${value.toLocaleString()}`, major];
-                  return [value, name];
-                }}
-                labelFormatter={label => `${label}年`}
+                content={
+                  <ChartTooltip
+                    labelFormatter={(l) => `${l}年`}
+                    valueFormatter={(value, name) => {
+                      const major = majors.find(m => name === `${m}_rank`);
+                      if (major) return [`位次: ${value.toLocaleString()}`, major];
+                      return [String(value), name];
+                    }}
+                    colorMap={Object.fromEntries(majors.map((m, i) => [`${m}_rank`, COLORS[i % COLORS.length]]))}
+                  />
+                }
               />
-              <Legend formatter={(value: string) => majors.find(m => value === `${m}_rank`) || value} />
+              <Legend
+                formatter={(value: string) => majors.find(m => value === `${m}_rank`) || value}
+                onClick={(data) => {
+                  const majorName = String(data.dataKey ?? '').replace('_rank', '');
+                  if (majorName) {
+                    setHiddenMajors(prev => {
+                      const next = new Set(prev);
+                      next.has(majorName) ? next.delete(majorName) : next.add(majorName);
+                      return next;
+                    });
+                  }
+                }}
+                wrapperStyle={{ cursor: 'pointer' }}
+              />
               {majors.map((major, idx) => (
                 <Line
                   key={major}
@@ -356,22 +386,33 @@ export default function TrendChart({ university, category }: TrendChartProps) {
                   dataKey={`${major}_rank`}
                   stroke={COLORS[idx % COLORS.length]}
                   strokeWidth={2.5}
-                  dot={{ r: 4, fill: COLORS[idx % COLORS.length] }}
+                  dot={{ r: 4, fill: COLORS[idx % COLORS.length], strokeWidth: 2, stroke: 'hsl(var(--card))' }}
                   activeDot={{ r: 6, stroke: COLORS[idx % COLORS.length], strokeWidth: 2 }}
                   connectNulls
+                  animationDuration={800}
+                  animationEasing="ease-out"
+                  hide={hiddenMajors.has(major)}
                 />
               ))}
             </LineChart>
           </ResponsiveContainer>
+          )}
         </div>
       )}
 
       {/* ========== 分数趋势折线图 ========== */}
       {subView === 'score' && (
-        <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
+        <div className="bg-card rounded-xl border border-border/60 p-6 shadow-card card-shine">
           <h3 className="text-sm font-semibold mb-4 text-muted-foreground">
             最低录取分数趋势 · {yearStart}-{yearEnd}年（分数越高 = 竞争越激烈）
           </h3>
+          {chartData.length === 0 || majors.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
+              <Inbox className="h-10 w-10 mb-3 opacity-30" />
+              <p className="text-sm">暂无数据</p>
+              <p className="text-xs mt-1">请调整筛选条件或更换高校</p>
+            </div>
+          ) : (
           <ResponsiveContainer width="100%" height={460}>
             <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
@@ -383,15 +424,32 @@ export default function TrendChart({ university, category }: TrendChartProps) {
                 domain={['dataMin - 5', 'dataMax + 5']}
               />
               <Tooltip
-                contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}
-                formatter={(value: number, name: string) => {
-                  const major = majors.find(m => name === `${m}_score`);
-                  if (major) return [`分数: ${value}`, major];
-                  return [value, name];
-                }}
-                labelFormatter={label => `${label}年`}
+                content={
+                  <ChartTooltip
+                    labelFormatter={(l) => `${l}年`}
+                    valueFormatter={(value, name) => {
+                      const major = majors.find(m => name === `${m}_score`);
+                      if (major) return [`分数: ${value}`, major];
+                      return [String(value), name];
+                    }}
+                    colorMap={Object.fromEntries(majors.map((m, i) => [`${m}_score`, COLORS[i % COLORS.length]]))}
+                  />
+                }
               />
-              <Legend formatter={(value: string) => majors.find(m => value === `${m}_score`) || value} />
+              <Legend
+                formatter={(value: string) => majors.find(m => value === `${m}_score`) || value}
+                onClick={(data) => {
+                  const majorName = String(data.dataKey ?? '').replace('_score', '');
+                  if (majorName) {
+                    setHiddenMajors(prev => {
+                      const next = new Set(prev);
+                      next.has(majorName) ? next.delete(majorName) : next.add(majorName);
+                      return next;
+                    });
+                  }
+                }}
+                wrapperStyle={{ cursor: 'pointer' }}
+              />
               {majors.map((major, idx) => (
                 <Line
                   key={major}
@@ -399,20 +457,24 @@ export default function TrendChart({ university, category }: TrendChartProps) {
                   dataKey={`${major}_score`}
                   stroke={COLORS[idx % COLORS.length]}
                   strokeWidth={2.5}
-                  dot={{ r: 4, fill: COLORS[idx % COLORS.length] }}
+                  dot={{ r: 4, fill: COLORS[idx % COLORS.length], strokeWidth: 2, stroke: 'hsl(var(--card))' }}
                   activeDot={{ r: 6, stroke: COLORS[idx % COLORS.length], strokeWidth: 2 }}
                   connectNulls
+                  animationDuration={800}
+                  animationEasing="ease-out"
+                  hide={hiddenMajors.has(major)}
                 />
               ))}
             </LineChart>
           </ResponsiveContainer>
+          )}
         </div>
       )}
 
       {/* ========== 专业热度对比（柱状图）========== */}
       {subView === 'compare' && (
         <>
-          <div className="bg-card rounded-xl border border-border p-6 shadow-sm mb-4">
+          <div className="bg-card rounded-xl border border-border/60 p-6 shadow-card card-shine mb-4">
             <h3 className="text-sm font-semibold mb-4 text-muted-foreground">
               专业热度对比：{yearStart}-{yearEnd}年平均最低录取位次排名
             </h3>
@@ -466,16 +528,31 @@ export default function TrendChart({ university, category }: TrendChartProps) {
           {/* 趋势指标卡片 */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {compareData.map((item, idx) => (
-              <div key={idx} className="p-4 rounded-xl bg-card border border-border">
-                <div className="text-xs font-medium text-muted-foreground mb-1 truncate" title={item.major}>{item.major}</div>
+              <div
+                key={idx}
+                className={`p-4 rounded-xl border shadow-card card-shine hover:shadow-card-hover transition-all duration-300 cursor-default ${
+                  item.trend > 100
+                    ? 'bg-gradient-to-br from-red-500/8 to-orange-500/5 border-red-500/15'
+                    : item.trend < -100
+                    ? 'bg-gradient-to-br from-blue-500/8 to-cyan-500/5 border-blue-500/15'
+                    : 'bg-card border-border/60'
+                }`}
+              >
+                <div className="text-xs font-medium text-muted-foreground mb-1.5 truncate" title={item.major}>{item.major}</div>
                 <div className="text-lg font-bold">{formatRank(item.avgRank)}</div>
-                <div className="flex items-center gap-1 mt-1">
+                <div className="flex items-center gap-1 mt-1.5">
                   {item.trend > 100 ? (
-                    <span className="text-xs text-red-400">↑ 升温 (+{item.trend})</span>
+                    <span className="text-xs text-red-400 font-semibold flex items-center gap-0.5">
+                      <TrendingUp className="h-3 w-3" /> 升温 (+{item.trend})
+                    </span>
                   ) : item.trend < -100 ? (
-                    <span className="text-xs text-blue-400">↓ 降温 ({item.trend})</span>
+                    <span className="text-xs text-blue-400 font-semibold flex items-center gap-0.5">
+                      <Activity className="h-3 w-3" /> 降温 ({item.trend})
+                    </span>
                   ) : (
-                    <span className="text-xs text-muted-foreground">→ 稳定</span>
+                    <span className="text-xs text-muted-foreground flex items-center gap-0.5">
+                      <Activity className="h-3 w-3" /> 稳定
+                    </span>
                   )}
                 </div>
               </div>
@@ -486,7 +563,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
 
       {/* ========== 年度变化曲线 ========== */}
       {subView === 'change' && (
-        <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
+        <div className="bg-card rounded-xl border border-border/60 p-6 shadow-card card-shine">
           <h3 className="text-sm font-semibold mb-2 text-muted-foreground">
             年度位次变化量 · {yearStart}-{yearEnd}年
           </h3>
@@ -504,18 +581,35 @@ export default function TrendChart({ university, category }: TrendChartProps) {
                 label={{ value: '位次变化量', angle: -90, position: 'insideLeft', style: { fill: 'hsl(var(--muted-foreground))', fontSize: 11 } }}
               />
               <Tooltip
-                contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}
-                formatter={(value: number, name: string) => {
-                  const major = majors.find(m => name === `${m}_change`);
-                  if (major) {
-                    const direction = value > 0 ? '位次下降（降温）' : '位次上升（升温）';
-                    return [`${direction}: ${Math.abs(value).toLocaleString()}`, major];
-                  }
-                  return [value, name];
-                }}
-                labelFormatter={label => `${label}年 vs 上年`}
+                content={
+                  <ChartTooltip
+                    labelFormatter={(l) => `${l}年 vs 上年`}
+                    valueFormatter={(value, name) => {
+                      const major = majors.find(m => name === `${m}_change`);
+                      if (major) {
+                        const direction = value > 0 ? '位次下降（降温）' : '位次上升（升温）';
+                        return [`${direction}: ${Math.abs(value).toLocaleString()}`, major];
+                      }
+                      return [String(value), name];
+                    }}
+                    colorMap={Object.fromEntries(majors.map((m, i) => [`${m}_change`, COLORS[i % COLORS.length]]))}
+                  />
+                }
               />
-              <Legend formatter={(value: string) => majors.find(m => value === `${m}_change`) || value} />
+              <Legend
+                formatter={(value: string) => majors.find(m => value === `${m}_change`) || value}
+                onClick={(data) => {
+                  const majorName = String(data.dataKey ?? '').replace('_change', '');
+                  if (majorName) {
+                    setHiddenMajors(prev => {
+                      const next = new Set(prev);
+                      next.has(majorName) ? next.delete(majorName) : next.add(majorName);
+                      return next;
+                    });
+                  }
+                }}
+                wrapperStyle={{ cursor: 'pointer' }}
+              />
               {majors.map((major, idx) => (
                 <Bar key={major} dataKey={`${major}_change`} fill={COLORS[idx % COLORS.length]} radius={[4, 4, 0, 0]} barSize={majors.length > 5 ? 8 : 16} />
               ))}
@@ -573,7 +667,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
 
       {/* 招生人数突变提醒 */}
       {enrollmentChanges.length > 0 && (
-        <div className="mt-4 p-4 rounded-xl bg-card border border-border">
+        <div className="mt-4 p-4 rounded-xl bg-card border border-border/60 shadow-card">
           <div className="flex items-center gap-2 mb-3">
             <AlertTriangle className="h-4 w-4 text-chart-3" />
             <h3 className="text-sm font-semibold">招生人数突变提醒</h3>

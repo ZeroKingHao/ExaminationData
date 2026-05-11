@@ -1,6 +1,6 @@
 import { DATA_SOURCES, admissionData } from '../data/admissionData';
 import { detailedScoreRankTable, getRankByScore, getScoreByRank, getBachelorLine, SCORE_RANK_SOURCES, type ScoreRankEntry } from '../data/scoreRankData';
-import { BookOpen, ExternalLink, Table2, Search, ArrowRight, TrendingUp, Award, Target } from 'lucide-react';
+import { BookOpen, ExternalLink, Table2, Search, ArrowRight, TrendingUp, Award, Target, Shield, Zap, ShieldCheck } from 'lucide-react';
 import { useState, useMemo } from 'react';
 
 type QueryMode = 'score' | 'rank' | 'browse';
@@ -54,12 +54,21 @@ export default function DataSourceList() {
     if (!targetRank) return [];
 
     const yearData = admissionData.filter(d => d.year === queryYear);
-    // 找位次在 targetRank 附近的学校（±20%范围）
-    const range = targetRank * 0.2;
+    // 找位次在 targetRank 附近的学校（-30% ~ +50%范围，分冲/稳/保）
     return yearData
-      .filter(d => Math.abs(d.minRank - targetRank) <= range)
-      .sort((a, b) => Math.abs(a.minRank - targetRank) - Math.abs(b.minRank - targetRank))
-      .slice(0, 15);
+      .filter(d => {
+        const ratio = (d.minRank - targetRank) / targetRank;
+        return ratio >= -0.3 && ratio <= 0.5;
+      })
+      .sort((a, b) => a.minRank - b.minRank)
+      .slice(0, 20)
+      .map(d => {
+        const ratio = (d.minRank - targetRank) / targetRank;
+        let risk: '冲' | '稳' | '保' = '稳';
+        if (ratio > 0.1) risk = '保';
+        else if (ratio < -0.05) risk = '冲';
+        return { ...d, risk };
+      });
   }, [queryMode, scoreQueryResult, rankQueryResult, queryYear]);
 
   const formatRank = (value: number) => {
@@ -82,7 +91,7 @@ export default function DataSourceList() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {DATA_SOURCES.map((source, i) => (
-          <div key={i} className="p-5 rounded-xl bg-card border border-border hover:border-primary/30 transition-colors">
+          <div key={i} className="p-5 rounded-xl bg-card border border-border/60 hover:border-primary/30 hover:shadow-card-hover transition-all duration-300 shadow-card card-shine">
             <div className="flex items-start justify-between mb-2">
               <h3 className="font-semibold text-sm">{source.name}</h3>
               {source.url && (
@@ -113,7 +122,7 @@ export default function DataSourceList() {
 
         {/* Query Mode Tabs */}
         <div className="flex items-center gap-2 mb-4">
-          <div className="flex items-center gap-1 bg-secondary rounded-lg p-1">
+          <div className="flex items-center gap-1 bg-muted/60 rounded-lg p-1">
             {[
               { id: 'score' as QueryMode, label: '按分数查询', icon: Target },
               { id: 'rank' as QueryMode, label: '按位次查询', icon: Award },
@@ -122,10 +131,10 @@ export default function DataSourceList() {
               <button
                 key={mode.id}
                 onClick={() => setQueryMode(mode.id)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-300 ${
                   queryMode === mode.id
-                    ? 'bg-primary text-primary-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                    ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
                 }`}
               >
                 <mode.icon className="h-3 w-3" />
@@ -143,10 +152,10 @@ export default function DataSourceList() {
               <button
                 key={y}
                 onClick={() => { setQueryYear(y); setBrowseYear(y); }}
-                className={`px-2.5 py-1 rounded text-xs font-medium transition-all ${
+                className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-300 ${
                   (queryMode === 'browse' ? browseYear : queryYear) === y
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-secondary text-secondary-foreground hover:bg-accent'
+                    ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
+                    : 'bg-secondary/80 text-secondary-foreground hover:bg-accent hover:shadow-sm'
                 }`}
               >
                 {y}年
@@ -158,7 +167,7 @@ export default function DataSourceList() {
         {/* Score Query */}
         {queryMode === 'score' && (
           <div className="space-y-4">
-            <div className="bg-card rounded-xl border border-border p-5 shadow-sm">
+            <div className="bg-card rounded-xl border border-border/60 p-5 shadow-card card-shine">
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <label className="text-sm font-medium">输入分数：</label>
@@ -170,6 +179,14 @@ export default function DataSourceList() {
                     max={750}
                     className="h-9 w-24 rounded-lg border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                     placeholder="620"
+                  />
+                  <input
+                    type="range"
+                    value={queryScore}
+                    onChange={e => setQueryScore(e.target.value)}
+                    min={200}
+                    max={750}
+                    className="flex-1 max-w-[200px] h-2 accent-primary cursor-pointer"
                   />
                 </div>
                 <ArrowRight className="h-4 w-4 text-muted-foreground" />
@@ -227,7 +244,7 @@ export default function DataSourceList() {
         {/* Rank Query */}
         {queryMode === 'rank' && (
           <div className="space-y-4">
-            <div className="bg-card rounded-xl border border-border p-5 shadow-sm">
+            <div className="bg-card rounded-xl border border-border/60 p-5 shadow-card card-shine">
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <label className="text-sm font-medium">输入位次：</label>
@@ -291,10 +308,10 @@ export default function DataSourceList() {
                     <button
                       key={preset.label}
                       onClick={() => setBrowseScoreRange(preset.range)}
-                      className={`px-2 py-1 rounded text-xs transition-all ${
+                      className={`px-2.5 py-1 rounded-lg text-xs transition-all duration-300 ${
                         browseScoreRange[0] === preset.range[0] && browseScoreRange[1] === preset.range[1]
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-secondary text-secondary-foreground hover:bg-accent'
+                          ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
+                          : 'bg-secondary/80 text-secondary-foreground hover:bg-accent hover:shadow-sm'
                       }`}
                     >
                       {preset.label}
@@ -333,7 +350,7 @@ export default function DataSourceList() {
 
         {/* Matched Universities */}
         {(queryMode === 'score' || queryMode === 'rank') && matchedUniversities.length > 0 && (
-          <div className="mt-4 bg-card rounded-xl border border-border p-5 shadow-sm">
+          <div className="mt-4 bg-card rounded-xl border border-border/60 p-5 shadow-card card-shine">
             <div className="flex items-center gap-2 mb-3">
               <TrendingUp className="h-4 w-4 text-primary" />
               <h3 className="text-sm font-semibold">
@@ -347,6 +364,7 @@ export default function DataSourceList() {
                     <th className="text-left p-2 font-semibold text-muted-foreground border-b border-border">高校</th>
                     <th className="text-left p-2 font-semibold text-muted-foreground border-b border-border">专业</th>
                     <th className="text-center p-2 font-semibold text-muted-foreground border-b border-border">类型</th>
+                    <th className="text-center p-2 font-semibold text-muted-foreground border-b border-border">志愿</th>
                     <th className="text-right p-2 font-semibold text-muted-foreground border-b border-border">最低分</th>
                     <th className="text-right p-2 font-semibold text-muted-foreground border-b border-border">最低位次</th>
                     <th className="text-right p-2 font-semibold text-muted-foreground border-b border-border">位次差</th>
@@ -357,8 +375,16 @@ export default function DataSourceList() {
                     const targetRank = queryMode === 'score' && scoreQueryResult ? scoreQueryResult.rank
                       : rankQueryResult ? rankQueryResult.rank : 0;
                     const diff = u.minRank - targetRank;
+                    const riskConfig = {
+                      '冲': { icon: Zap, color: 'bg-red-500/15 text-red-500', border: 'border-red-500/20' },
+                      '稳': { icon: Shield, color: 'bg-blue-500/15 text-blue-500', border: 'border-blue-500/20' },
+                      '保': { icon: ShieldCheck, color: 'bg-emerald-500/15 text-emerald-500', border: 'border-emerald-500/20' },
+                    }[u.risk];
+                    const RiskIcon = riskConfig.icon;
                     return (
-                      <tr key={i} className="border-b border-border hover:bg-secondary/30">
+                      <tr key={i} className={`border-b border-border hover:bg-secondary/30 ${
+                        u.risk === '冲' ? 'bg-red-500/[0.02]' : u.risk === '保' ? 'bg-emerald-500/[0.02]' : ''
+                      }`}>
                         <td className="p-2 font-medium text-xs">{u.university}</td>
                         <td className="p-2 text-xs text-muted-foreground truncate max-w-[150px]" title={u.major}>{u.major}</td>
                         <td className="p-2 text-center">
@@ -366,6 +392,12 @@ export default function DataSourceList() {
                             u.tier === '985' ? 'bg-primary/10 text-primary' : 'bg-chart-2/10 text-chart-2'
                           }`}>
                             {u.tier}
+                          </span>
+                        </td>
+                        <td className="p-2 text-center">
+                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${riskConfig.color}`}>
+                            <RiskIcon className="h-3 w-3" />
+                            {u.risk}
                           </span>
                         </td>
                         <td className="p-2 text-right font-mono text-xs">{u.minScore}</td>
@@ -396,7 +428,7 @@ export default function DataSourceList() {
               href={s.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-1.5 p-2.5 rounded-lg bg-card border border-border hover:border-primary/30 transition-colors text-xs"
+              className="flex items-center justify-center gap-1.5 p-2.5 rounded-lg bg-card border border-border/60 hover:border-primary/30 hover:shadow-card-hover transition-all duration-300 shadow-card text-xs"
             >
               {s.year}年 <ExternalLink className="h-3 w-3 text-muted-foreground" />
             </a>
@@ -419,10 +451,10 @@ export default function DataSourceList() {
             <button
               key={y}
               onClick={() => setExpandedYear(expandedYear === y ? null : y)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+              className={`px-3 py-1.5 rounded-xl text-sm font-medium transition-all duration-300 ${
                 expandedYear === y
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-secondary text-secondary-foreground hover:bg-accent'
+                  ? 'gradient-primary text-white shadow-lg shadow-primary/20'
+                  : 'bg-secondary/80 text-secondary-foreground hover:bg-accent hover:shadow-sm'
               }`}
             >
               {y}年
@@ -431,7 +463,7 @@ export default function DataSourceList() {
         </div>
 
         {expandedYear && detailedScoreRankTable[expandedYear] && (
-          <div className="bg-card rounded-xl border border-border overflow-hidden animate-fade-in">
+          <div className="bg-card rounded-xl border border-border/60 overflow-hidden animate-fade-in shadow-card card-shine">
             <div className="overflow-x-auto scrollbar-thin max-h-[500px] overflow-y-auto">
               <table className="w-full text-sm">
                 <thead className="sticky top-0 bg-secondary/90 backdrop-blur-sm z-10">
@@ -477,7 +509,7 @@ export default function DataSourceList() {
             { label: '一分一段表', value: '5年', sub: '详细' },
             { label: '查询功能', value: '3种', sub: '模式' },
           ].map((stat, i) => (
-            <div key={i} className="p-4 rounded-xl bg-card border border-border text-center">
+            <div key={i} className="p-4 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-border/60 shadow-card text-center hover:shadow-card-hover hover:scale-[1.03] transition-all duration-300 animate-slide-up" style={{ animationDelay: `${i * 60}ms` }}>
               <div className="text-2xl font-bold text-primary">{stat.value}<span className="text-xs text-muted-foreground ml-0.5">{stat.sub}</span></div>
               <div className="text-xs text-muted-foreground mt-1">{stat.label}</div>
             </div>

@@ -10,6 +10,8 @@ import BarChart from './components/BarChart';
 // 懒加载：DataSourceList 包含 145KB+ 的一分一段表数据，只在用户点击"数据来源"时加载
 const DataSourceList = lazy(() => import('./components/DataSourceList'));
 
+import { SkeletonChart, SkeletonStats } from './components/Skeleton';
+
 import { GraduationCap, TrendingUp, BarChart3, Table2, BookOpen, Sun, Moon, Monitor, Loader2 } from 'lucide-react';
 
 export type TabType = 'trend' | 'heatmap' | 'bar' | 'table' | 'sources';
@@ -24,15 +26,15 @@ function ThemeToggle() {
   ];
 
   return (
-    <div className="flex items-center gap-0.5 bg-secondary rounded-lg p-0.5">
+    <div className="flex items-center gap-0.5 bg-muted/60 rounded-lg p-0.5">
       {options.map(opt => (
         <button
           key={opt.value}
           onClick={() => setTheme(opt.value)}
-          className={`p-1.5 rounded-md transition-all duration-200 ${
+          className={`p-1.5 rounded-md transition-all duration-300 ${
             theme === opt.value
-              ? 'bg-primary text-primary-foreground shadow-sm'
-              : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+              ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
+              : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
           }`}
           title={opt.label}
         >
@@ -48,6 +50,7 @@ function AppContent() {
   const [selectedCategory, setSelectedCategory] = useState<string>('全部');
   const [selectedYear, setSelectedYear] = useState<number>(2025);
   const [activeTab, setActiveTab] = useState<TabType>('trend');
+  const [prevTabIndex, setPrevTabIndex] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const universities = getUniversities();
@@ -61,6 +64,15 @@ function AppContent() {
     { id: 'table' as TabType, label: '数据表', icon: Table2 },
     { id: 'sources' as TabType, label: '数据来源', icon: BookOpen },
   ];
+
+  const handleTabChange = (tabId: TabType) => {
+    setPrevTabIndex(tabs.findIndex(t => t.id === activeTab));
+    setActiveTab(tabId);
+  };
+
+  const slideDirection = tabs.findIndex(t => t.id === activeTab) >= prevTabIndex
+    ? 'animate-slide-in-right'
+    : 'animate-slide-in-left';
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -78,33 +90,33 @@ function AppContent() {
         onToggle={() => setSidebarOpen(!sidebarOpen)}
       />
 
-      <main className={`flex-1 transition-all duration-300 ${sidebarOpen ? 'ml-72' : 'ml-16'}`}>
-        <header className="sticky top-0 z-30 glass-effect border-b border-border">
-          <div className="px-8 py-4">
+      <main className={`flex-1 transition-all duration-300 ease-out ${sidebarOpen ? 'ml-72' : 'ml-16'}`}>
+        <header className="sticky top-0 z-30 glass-effect border-b border-border/60">
+          <div className="px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-chart-6 flex items-center justify-center shrink-0">
-                  <GraduationCap className="h-5 w-5 text-primary-foreground" />
+                <div className="h-10 w-10 rounded-xl gradient-primary flex items-center justify-center shrink-0 shadow-lg shadow-primary/20 animate-glow">
+                  <GraduationCap className="h-5 w-5 text-white" />
                 </div>
-                <div className="min-w-0">
-                  <h1 className="text-xl font-bold tracking-tight truncate">河北省985/211高校录取数据分析</h1>
-                  <p className="text-xs text-muted-foreground">2021-2025年 物理类（理科）· 含分数线、位次、招生计划</p>
+                <div className="min-w-0 hidden sm:block">
+                  <h1 className="text-lg sm:text-xl font-bold tracking-tight truncate">河北省985/211高校录取数据分析</h1>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">2021-2025年 物理类（理科）· 含分数线、位次、招生计划</p>
                 </div>
               </div>
               <div className="flex items-center gap-2 shrink-0">
-                <div className="flex items-center gap-1 bg-secondary rounded-lg p-1">
+                <div className="flex items-center gap-0.5 bg-muted/60 rounded-lg p-1 overflow-x-auto scrollbar-thin max-w-[280px] sm:max-w-none">
                   {tabs.map(tab => (
                     <button
                       key={tab.id}
-                      onClick={() => setActiveTab(tab.id)}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 ${
+                      onClick={() => handleTabChange(tab.id)}
+                      className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all duration-300 whitespace-nowrap shrink-0 ${
                         activeTab === tab.id
-                          ? 'bg-primary text-primary-foreground shadow-sm'
-                          : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                          ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
                       }`}
                     >
                       <tab.icon className="h-3.5 w-3.5" />
-                      <span>{tab.label}</span>
+                      <span className="hidden sm:inline">{tab.label}</span>
                     </button>
                   ))}
                 </div>
@@ -114,7 +126,8 @@ function AppContent() {
           </div>
         </header>
 
-        <div className="p-8 animate-fade-in">
+        <div className="p-4 sm:p-6 lg:p-8" key={activeTab}>
+          <div className={slideDirection}>
           {activeTab === 'trend' && (
             <TrendChart university={selectedUniversity} category={selectedCategory} />
           )}
@@ -129,14 +142,15 @@ function AppContent() {
           )}
           {activeTab === 'sources' && (
             <Suspense fallback={
-              <div className="flex items-center justify-center py-20">
-                <Loader2 className="h-6 w-6 animate-spin text-primary mr-2" />
-                <span className="text-muted-foreground">加载一分一段表数据...</span>
+              <div className="space-y-6">
+                <SkeletonChart />
+                <SkeletonStats />
               </div>
             }>
               <DataSourceList />
             </Suspense>
           )}
+          </div>
         </div>
       </main>
     </div>

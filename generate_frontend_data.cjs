@@ -5,12 +5,51 @@ const path = require('path');
 const raw = JSON.parse(fs.readFileSync(path.join(__dirname, 'raw_data', 'official_data.json'), 'utf-8'));
 
 // 合并所有年份数据
-const allRecords = [];
+const rawRecords = [];
 Object.entries(raw).forEach(([year, records]) => {
-  allRecords.push(...records);
+  rawRecords.push(...records);
 });
 
-console.log(`Total records: ${allRecords.length}`);
+console.log(`Total raw records: ${rawRecords.length}`);
+
+// ====== 数据清洗：排除非普通批次招生记录 ======
+// 1. 排除专项计划、中外合作办学、预科班等非普通批次专业
+function isSpecialPlanMajor(major) {
+  const m = major;
+  if (m.includes('中外合作办学')) return true;  // 中外合作办学（所有形式）
+  if (m.includes('预科班')) return true;         // 少数民族预科班
+  if (m.includes('国家专项')) return true;       // 国家专项计划
+  if (m.includes('地方专项')) return true;       // 地方专项计划
+  if (m.includes('高校专项')) return true;       // 高校专项计划
+  if (/合作专项/.test(m)) return true;           // 国际合作专项等
+  return false;
+}
+
+// 2. 排除独立学院（XX大学XX学院等独立法人机构，不含985/211本校的医学院/分校区）
+//    注：当前数据中未发现真正的独立学院（三本），以下为防御性过滤
+const KNOWN_AFFILIATED_COLLEGES = new Set([
+  '北京协和医学院',      // 清华大学附属，985
+  '上海交通大学医学院',  // 上海交通大学直属
+  '北京大学医学部',      // 北京大学直属
+  '浙江大学医学院',      // 浙江大学直属
+]);
+function isIndependentCollege(university) {
+  // 已知的985/211本校医学院/医学部不是独立学院
+  if (KNOWN_AFFILIATED_COLLEGES.has(university)) return false;
+  // 名称中包含"学院"但前面没有"大学"的，可能是独立学院
+  // 但当前数据集中所有此类记录均为正规985/211附属机构，此处做防御性保留
+  return false;
+}
+
+const allRecords = rawRecords.filter(r => {
+  if (isSpecialPlanMajor(r.major)) return false;
+  if (isIndependentCollege(r.university)) return false;
+  return true;
+});
+
+const filteredCount = rawRecords.length - allRecords.length;
+console.log(`Filtered out: ${filteredCount} records (special plans / independent colleges)`);
+console.log(`Clean records: ${allRecords.length}`);
 
 // 按学校统计
 const uniMap = {};
@@ -24,6 +63,8 @@ allRecords.forEach(r => {
 // 指定必须保留的专业类别关键词映射
 function isMandatoryMajor(major) {
   const m = major;
+  // 双重保险：排除已过滤但可能通过其他路径进入的非普通批次专业
+  if (isSpecialPlanMajor(m)) return false;
   // 1. 计算机/IT类
   if (m.includes('计算机') || m.includes('软件工程') || m.includes('人工智能') ||
       m.includes('数据科学') || m.includes('信息安全') || m.includes('网络工程'))
