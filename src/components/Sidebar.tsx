@@ -1,5 +1,6 @@
-import { ChevronLeft, ChevronRight, Filter, School, Layers, Calendar, Sparkles, Search, X, Info, Hash } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Filter, School, Layers, Calendar, BookMarked, Search, X, Info, Hash, Star } from 'lucide-react';
 import { useState, useRef, useEffect, useMemo } from 'react';
+import { useAppContext } from '../context/AppContext';
 
 interface SidebarProps {
   universities: string[];
@@ -41,6 +42,7 @@ export default function Sidebar({
   isOpen,
   onToggle,
 }: SidebarProps) {
+  const { favorites, addFavorite, removeFavorite, compareList } = useAppContext();
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [showNotice, setShowNotice] = useState(false);
@@ -91,23 +93,21 @@ export default function Sidebar({
   return (
     <>
     <aside
-      className={`fixed left-0 top-0 h-full z-50 bg-card border-r border-border/60 transition-all duration-300 ease-out flex flex-col ${
+      className={`fixed left-0 top-0 h-full z-50 bg-card border-r border-border/50 transition-all duration-300 ease-out flex flex-col ${
         isOpen ? 'w-72' : 'w-16'
       } ${isMobile ? (isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full') : ''}`}
     >
       {/* Gradient Header Area */}
       {isOpen && (
         <div className="gradient-primary p-4 pb-5 relative overflow-hidden">
-          {/* Decorative elements */}
-          <div className="absolute -right-4 -top-4 w-20 h-20 rounded-full bg-white/5" />
-          <div className="absolute -right-2 -bottom-6 w-16 h-16 rounded-full bg-white/5" />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_39px,hsl(220_30%_8%/0.08)_39px,hsl(220_30%_8%/0.08)_41px,transparent_41px),linear-gradient(0deg,transparent_31px,hsl(220_30%_8%/0.08)_31px,hsl(220_30%_8%/0.08)_33px,transparent_33px)] bg-[length:40px_32px]" />
           <div className="flex items-center gap-2.5 relative z-10">
-            <div className="h-9 w-9 rounded-lg bg-white/20 flex items-center justify-center backdrop-blur-sm">
-              <Sparkles className="h-4.5 w-4.5 text-white" />
+            <div className="h-9 w-9 rounded-lg bg-white/12 flex items-center justify-center backdrop-blur-sm ring-1 ring-white/10">
+              <BookMarked className="h-4.5 w-4.5 text-white" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-white tracking-wide">数据筛选</h2>
-              <p className="text-[10px] text-white/70 mt-0.5">自定义查询条件</p>
+              <h2 className="text-sm font-serif-cn font-bold text-white tracking-wide">数据筛选</h2>
+              <p className="text-[10px] text-white/50 mt-0.5 tracking-wider">QUERY PARAMETERS</p>
             </div>
           </div>
         </div>
@@ -127,8 +127,8 @@ export default function Sidebar({
         <div className="p-4 overflow-y-auto scrollbar-thin flex-1 animate-fade-in">
           {/* University Selector with Search */}
           <div className="mb-5">
-            <label className="flex items-center gap-2 text-xs font-semibold text-muted-foreground mb-2.5 px-1 uppercase tracking-wider">
-              <School className="h-3.5 w-3.5 text-primary" />
+            <label className="academic-label flex items-center gap-2 mb-2 px-1">
+              <School className="h-3 w-3 text-primary" />
               选择高校
             </label>
             <div className="relative" ref={searchRef}>
@@ -156,7 +156,7 @@ export default function Sidebar({
                     }
                   }}
                   placeholder={selectedUniversity}
-                  className="w-full h-10 rounded-xl border border-input bg-background pl-9 pr-8 text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-primary/50 transition-all shadow-card"
+                  className="w-full h-10 rounded-lg border border-input bg-background pl-9 pr-8 text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
                 />
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
                 {searchQuery && (
@@ -173,19 +173,36 @@ export default function Sidebar({
                   {filteredUniversities.length === 0 ? (
                     <div className="px-3 py-4 text-xs text-muted-foreground text-center">未找到匹配的高校</div>
                   ) : (
-                    filteredUniversities.map((u, idx) => (
-                      <button
-                        key={u}
-                        onClick={() => { handleUniversityChange(u); setSearchQuery(''); setIsSearchOpen(false); }}
-                        className={`w-full text-left px-3 py-2 text-sm transition-all duration-150 ${
-                          u === selectedUniversity || idx === highlightIndex
-                            ? 'bg-primary/10 text-primary font-medium'
-                            : 'hover:bg-accent/50 text-foreground'
-                        }`}
-                      >
-                        {u}
-                      </button>
-                    ))
+                    filteredUniversities.map((u, idx) => {
+                      const isFav = favorites.some(f => f.university === u && f.major === 'all');
+                      return (
+                        <div
+                          key={u}
+                          className={`flex items-center justify-between w-full px-3 py-2 text-sm transition-all duration-150 ${
+                            u === selectedUniversity || idx === highlightIndex
+                              ? 'bg-primary/10 text-primary font-medium'
+                              : 'hover:bg-accent/50 text-foreground'
+                          }`}
+                        >
+                          <button
+                            onClick={() => { handleUniversityChange(u); setSearchQuery(''); setIsSearchOpen(false); }}
+                            className="flex-1 text-left truncate"
+                          >
+                            {u}
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              isFav ? removeFavorite(`${u}::all`) : addFavorite({ id: `${u}::all`, university: u, major: 'all' });
+                            }}
+                            className={`p-1 rounded transition-colors ${isFav ? 'text-chart-3' : 'text-muted-foreground/40 hover:text-chart-3'}`}
+                            title={isFav ? '取消收藏' : '收藏高校'}
+                          >
+                            <Star className="h-3 w-3" fill={isFav ? 'currentColor' : 'none'} />
+                          </button>
+                        </div>
+                      );
+                    })
                   )}
                 </div>
               )}
@@ -194,8 +211,8 @@ export default function Sidebar({
 
           {/* Category Selector */}
           <div className="mb-5">
-            <label className="flex items-center gap-2 text-xs font-semibold text-muted-foreground mb-2.5 px-1 uppercase tracking-wider">
-              <Layers className="h-3.5 w-3.5 text-primary" />
+            <label className="academic-label flex items-center gap-2 mb-2 px-1">
+              <Layers className="h-3 w-3 text-primary" />
               学科门类
             </label>
             <div className="flex flex-wrap gap-1.5">
@@ -203,10 +220,10 @@ export default function Sidebar({
                 <button
                   key={c}
                   onClick={() => handleCategoryChange(c)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 ${
+                  className={`px-3 py-1.5 rounded text-xs font-medium transition-all duration-200 ${
                     selectedCategory === c
-                      ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20 scale-[1.02]'
-                      : 'bg-secondary/80 text-secondary-foreground hover:bg-accent hover:shadow-sm hover:scale-[1.02]'
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'bg-secondary/60 text-secondary-foreground hover:bg-accent/60'
                   }`}
                 >
                   {c}
@@ -217,8 +234,8 @@ export default function Sidebar({
 
           {/* Year Selector */}
           <div className="mb-5">
-            <label className="flex items-center gap-2 text-xs font-semibold text-muted-foreground mb-2.5 px-1 uppercase tracking-wider">
-              <Calendar className="h-3.5 w-3.5 text-primary" />
+            <label className="academic-label flex items-center gap-2 mb-2 px-1">
+              <Calendar className="h-3 w-3 text-primary" />
               选择年份
             </label>
             <div className="grid grid-cols-5 gap-1.5">
@@ -226,10 +243,10 @@ export default function Sidebar({
                 <button
                   key={y}
                   onClick={() => handleYearChange(y)}
-                  className={`h-9 rounded-lg text-xs font-semibold transition-all duration-300 relative ${
+                  className={`h-9 rounded text-xs font-semibold font-mono transition-all duration-200 relative ${
                     selectedYear === y
-                      ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20 scale-[1.05]'
-                      : 'bg-secondary/80 text-secondary-foreground hover:bg-accent hover:shadow-sm'
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'bg-secondary/60 text-secondary-foreground hover:bg-accent/60'
                   }`}
                 >
                   {y}
@@ -245,39 +262,40 @@ export default function Sidebar({
           </div>
 
           {/* Divider */}
-          <div className="my-5 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+          <div className="my-5 academic-divider" />
 
           {/* Quick Stats */}
-          <div className="p-4 rounded-xl bg-gradient-to-br from-secondary/80 to-secondary/40 border border-border/60 shadow-card">
-            <h3 className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider">快速统计</h3>
+          <div className="p-4 rounded-lg bg-secondary/30 border border-border/40">
+            <h3 className="academic-label mb-3">统计摘要</h3>
             <div className="space-y-3 text-xs">
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground flex items-center gap-1.5">
                   <School className="h-3 w-3" />
                   高校总数
                 </span>
-                <span className="font-bold text-foreground animate-count-up">{universities.length} 所</span>
+                <span className="font-mono font-semibold tabular-nums text-foreground">{universities.length}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground flex items-center gap-1.5">
                   <Calendar className="h-3 w-3" />
                   数据年份
                 </span>
-                <span className="font-bold text-foreground">5 年</span>
+                <span className="font-mono font-semibold tabular-nums text-foreground">5 年</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground flex items-center gap-1.5">
                   <Layers className="h-3 w-3" />
                   学科门类
                 </span>
-                <span className="font-bold text-foreground">{categories.length - 1} 类</span>
+                <span className="font-mono font-semibold tabular-nums text-foreground">{categories.length - 1}</span>
               </div>
+              <div className="academic-divider my-1" />
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground flex items-center gap-1.5">
                   <Hash className="h-3 w-3" />
                   当前高校
                 </span>
-                <span className="font-bold text-primary text-[11px] truncate max-w-[120px]">{selectedUniversity}</span>
+                <span className="font-serif-cn font-semibold text-primary text-[11px] truncate max-w-[120px]">{selectedUniversity}</span>
               </div>
             </div>
           </div>
