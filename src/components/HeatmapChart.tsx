@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { admissionData } from '../data/admissionData';
 import { BarChart3, Table2, Search, X } from 'lucide-react';
+import UniversityCard from './UniversityCard';
 
 // Simple sparkline component using SVG
 function MiniSparkline({ data, years, width = 60, height = 20 }: { data: number[]; years?: number[]; width?: number; height?: number }) {
@@ -38,6 +39,7 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
   const [heatMode, setHeatMode] = useState<HeatMode>('rank');
   const [searchQuery, setSearchQuery] = useState('');
   const [hoveredCell, setHoveredCell] = useState<{ major: string; year: number } | null>(null);
+  const [showUniCard, setShowUniCard] = useState(false);
 
   const heatmapData = useMemo(() => {
     let filtered = admissionData.filter(d => d.university === university);
@@ -101,9 +103,9 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
         <div>
           <div className="flex items-center gap-2 mb-2">
             <BarChart3 className="h-5 w-5 text-primary" />
-            <h2 className="text-2xl font-bold">{university} · 专业热度迁移</h2>
+            <h2 className="text-2xl font-serif-cn font-bold ink-text"><button onClick={() => setShowUniCard(true)} className="hover:underline cursor-pointer">{university}</button> · 专业热度迁移</h2>
           </div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-xs text-muted-foreground tracking-wide">
             热力图：颜色越暖表示{heatMode === 'rank' ? '位次越靠前（热度越高）' : '分数越高（竞争越激烈）'}
             {category !== '全部' && ` · 已筛选：${category}`}
           </p>
@@ -259,6 +261,7 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
           </span>
         </div>
       </div>
+      {showUniCard && <UniversityCard university={university} onClose={() => setShowUniCard(false)} />}
     </div>
   );
 }

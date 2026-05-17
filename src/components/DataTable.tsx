@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback } from 'react';
 import { admissionData } from '../data/admissionData';
-import { Table2, Download, ArrowUpDown, ArrowUp, ArrowDown, ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { Table2, Download, ArrowUpDown, ArrowUp, ArrowDown, ChevronLeft, ChevronRight, Check, Printer } from 'lucide-react';
 
 type SortField = 'year' | 'major' | 'category' | 'tier' | 'minScore' | 'minRank' | 'avgScore' | 'avgRank' | 'enrollment';
 type SortDir = 'asc' | 'desc';
@@ -84,27 +84,36 @@ export default function DataTable({ university, category, year }: DataTableProps
         <div>
           <div className="flex items-center gap-2 mb-2">
             <Table2 className="h-5 w-5 text-primary" />
-            <h2 className="text-2xl font-bold">{university} · 结构化数据表</h2>
+            <h2 className="text-2xl font-serif-cn font-bold ink-text">{university} · 结构化数据表</h2>
           </div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-xs text-muted-foreground tracking-wide">
             全部年份录取数据明细
             {category !== '全部' && ` · 已筛选：${category}`}
           </p>
         </div>
-        <button
-          onClick={handleExport}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-white text-sm font-medium transition-all shadow-lg shadow-primary/20 ${
-            exportSuccess
-              ? 'bg-emerald-500 shadow-emerald-500/20'
-              : 'gradient-primary hover:opacity-90'
-          }`}
-        >
-          {exportSuccess ? (
-            <><Check className="h-4 w-4" /> 已导出</>
-          ) : (
-            <><Download className="h-4 w-4" /> 导出 CSV</>
-          )}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleExport}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-white text-sm font-medium transition-all shadow-lg shadow-primary/20 ${
+              exportSuccess
+                ? 'bg-emerald-500 shadow-emerald-500/20'
+                : 'gradient-primary hover:opacity-90'
+            }`}
+          >
+            {exportSuccess ? (
+              <><Check className="h-4 w-4" /> 已导出</>
+            ) : (
+              <><Download className="h-4 w-4" /> 导出 CSV</>
+            )}
+          </button>
+          <button
+            onClick={() => window.print()}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-secondary/80 hover:bg-accent transition-colors"
+          >
+            <Printer className="h-3.5 w-3.5" />
+            打印
+          </button>
+        </div>
       </div>
 
       <div className="bg-card rounded-xl border border-border/60 shadow-card card-shine overflow-hidden">
