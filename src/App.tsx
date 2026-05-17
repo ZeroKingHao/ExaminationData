@@ -14,10 +14,11 @@ import FavoritesPanel from './components/FavoritesPanel';
 // 懒加载：DataSourceList 包含 145KB+ 的一分一段表数据，只在用户点击"数据来源"时加载
 const DataSourceList = lazy(() => import('./components/DataSourceList'));
 const CompareView = lazy(() => import('./components/CompareView'));
+const RecommendView = lazy(() => import('./components/RecommendView'));
 
 import { SkeletonChart, SkeletonStats } from './components/Skeleton';
 
-import { GraduationCap, TrendingUp, BarChart3, Table2, BookOpen, Sun, Moon, Monitor, Loader2 } from 'lucide-react';
+import { GraduationCap, TrendingUp, BarChart3, Table2, BookOpen, Sun, Moon, Monitor, Target } from 'lucide-react';
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -71,6 +72,7 @@ function AppContent() {
   const tabs = [
     { id: 'trend' as TabType, label: '招生趋势', icon: TrendingUp },
     { id: 'compare' as TabType, label: '高校对比', icon: BarChart3 },
+    { id: 'recommend' as TabType, label: '智能推荐', icon: Target },
     { id: 'bar' as TabType, label: '热度排名', icon: BarChart3 },
     { id: 'heatmap' as TabType, label: '热力图', icon: BarChart3 },
     { id: 'table' as TabType, label: '数据表', icon: Table2 },
@@ -156,6 +158,11 @@ function AppContent() {
           {activeTab === 'compare' && (
             <Suspense fallback={<SkeletonChart />}>
               <CompareView />
+            </Suspense>
+          )}
+          {activeTab === 'recommend' && (
+            <Suspense fallback={<SkeletonStats />}>
+              <RecommendView />
             </Suspense>
           )}
           {activeTab === 'heatmap' && (
