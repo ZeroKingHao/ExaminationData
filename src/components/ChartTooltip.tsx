@@ -26,8 +26,8 @@ export function ChartTooltip({
   if (!active || !payload || payload.length === 0) return null;
 
   return (
-    <div className="animate-scale-in rounded-xl border border-border/60 bg-card/90 backdrop-blur-md px-4 py-3 shadow-card-xl">
-      <p className="text-xs font-semibold text-muted-foreground mb-2 border-b border-border/60 pb-1.5">
+    <div className="animate-scale-in rounded-xl border border-border/50 bg-card/92 backdrop-blur-xl px-4 py-3 shadow-card-xl ring-1 ring-foreground/[0.03]">
+      <p className="text-xs font-semibold text-muted-foreground mb-2 border-b border-border/50 pb-1.5">
         {labelFormatter(label ?? '')}
       </p>
       <div className="space-y-1">

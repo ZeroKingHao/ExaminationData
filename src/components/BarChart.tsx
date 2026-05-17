@@ -89,13 +89,13 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-2">
           <BarChart3 className="h-5 w-5 text-primary" />
-          <h2 className="text-2xl font-bold">{year}年 专业热度排名</h2>
+          <h2 className="text-2xl font-serif-cn font-bold ink-text">{year}年 专业热度排名</h2>
         </div>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs text-muted-foreground tracking-wide">
           横向柱状图：按各高校最低录取位次排序，位次越小热度越高
           {category !== '全部' && ` · 已筛选：${category}`}
         </p>
-        <p className="text-xs text-muted-foreground mt-1">
+        <p className="text-[10px] text-muted-foreground/60 mt-1 tracking-wide">
           热度指标：当年最低录取位次（位次数字越小 = 越难考 = 热度越高）
         </p>
       </div>
