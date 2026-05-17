@@ -15,6 +15,8 @@ import {
 import { getDataByUniversity, getMajorsByUniversity } from '../data/admissionData';
 import { TrendingUp, AlertTriangle, BarChart3, Activity, Filter, ChevronDown, ChevronUp, X, Search, Inbox } from 'lucide-react';
 import { ChartTooltip } from './ChartTooltip';
+import UniversityCard from './UniversityCard';
+import { predictNextYear } from '../utils/prediction';
 
 const COLORS = [
   'hsl(217, 80%, 58%)',
@@ -55,6 +57,8 @@ export default function TrendChart({ university, category }: TrendChartProps) {
   const [selectedMajors, setSelectedMajors] = useState<Set<string>>(new Set());
   const [hiddenMajors, setHiddenMajors] = useState<Set<string>>(new Set());
   const [filterOpen, setFilterOpen] = useState(false);
+  const [showUniCard, setShowUniCard] = useState(false);
+  const [showPrediction, setShowPrediction] = useState(true);
   const data = getDataByUniversity(university);
 
   // 所有可选专业
@@ -112,6 +116,41 @@ export default function TrendChart({ university, category }: TrendChartProps) {
       return row;
     });
   }, [data, majors, years]);
+
+  // 预测数据计算
+  const predictionData = useMemo(() => {
+    if (!showPrediction) return {} as Record<string, { value: number; r2: number }>;
+    const allYears = [2021, 2022, 2023, 2024, 2025];
+    const predictions: Record<string, { value: number; r2: number }> = {};
+    majors.forEach(major => {
+      const points = allYears
+        .map(year => {
+          const d = data.find(r => r.year === year && r.major === major);
+          if (!d) return null;
+          return { x: year, y: subView === 'rank' ? d.minRank : d.minScore };
+        })
+        .filter(Boolean) as { x: number; y: number }[];
+      if (points.length >= 3) {
+        const result = predictNextYear(points, 2026);
+        predictions[major] = { value: result.predictedValue, r2: result.r2 };
+      }
+    });
+    return predictions;
+  }, [data, majors, subView, showPrediction]);
+
+  // 包含预测年的扩展数据
+  const chartDataWithPrediction = useMemo(() => {
+    if (!showPrediction || Object.keys(predictionData).length === 0) return chartData;
+    const predictionRow: Record<string, number | string> = { year: 2026 };
+    majors.forEach(major => {
+      const pred = predictionData[major];
+      if (pred) {
+        const key = subView === 'rank' ? `${major}_rank` : `${major}_score`;
+        predictionRow[key] = pred.value;
+      }
+    });
+    return [...chartData, predictionRow];
+  }, [chartData, showPrediction, predictionData, majors, subView]);
 
   const changeData = useMemo(() => {
     return years.filter(y => y > yearStart).map(year => {
@@ -182,10 +221,15 @@ export default function TrendChart({ university, category }: TrendChartProps) {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <TrendingUp className="h-5 w-5 text-primary" />
-            <h2 className="text-2xl font-bold">{university}</h2>
+            <button
+            onClick={() => setShowUniCard(true)}
+            className="hover:underline cursor-pointer text-left"
+          >
+            {university}
+          </button>
           </div>
-          <p className="text-sm text-muted-foreground">
-            各专业录取数据多维度趋势分析 · {yearStart}-{yearEnd}年
+          <p className="text-xs text-muted-foreground tracking-wide">
+            各专业录取数据多维度趋势分析 · {yearStart}–{yearEnd}年
             {category !== '全部' && ` · ${category}`}
             {selectedMajors.size > 0 && ` · 已选${selectedMajors.size}个专业`}
           </p>
@@ -267,6 +311,19 @@ export default function TrendChart({ university, category }: TrendChartProps) {
               </select>
             </div>
           </div>
+
+          {/* 预测开关 */}
+          {(subView === 'rank' || subView === 'score') && (
+            <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer ml-2">
+              <input
+                type="checkbox"
+                checked={showPrediction}
+                onChange={e => setShowPrediction(e.target.checked)}
+                className="rounded"
+              />
+              显示预测
+            </label>
+          )}
         </div>
 
         {/* Expanded filter: Major selection */}
@@ -340,18 +397,19 @@ export default function TrendChart({ university, category }: TrendChartProps) {
               <p className="text-xs mt-1">请调整筛选条件或更换高校</p>
             </div>
           ) : (
-          <ResponsiveContainer width="100%" height={460}>
-            <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-              <XAxis dataKey="year" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} axisLine={{ stroke: 'hsl(var(--border))' }} />
-              <YAxis
-                reversed
-                tickFormatter={formatRank}
-                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
-                axisLine={{ stroke: 'hsl(var(--border))' }}
-                label={{ value: '最低录取位次', angle: -90, position: 'insideLeft', style: { fill: 'hsl(var(--muted-foreground))', fontSize: 11 } }}
-                domain={['dataMin', 'dataMax']}
-              />
+          <>
+            <ResponsiveContainer width="100%" height={460}>
+              <LineChart data={chartDataWithPrediction} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="year" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} axisLine={{ stroke: 'hsl(var(--border))' }} />
+                <YAxis
+                  reversed
+                  tickFormatter={formatRank}
+                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                  label={{ value: '最低录取位次', angle: -90, position: 'insideLeft', style: { fill: 'hsl(var(--muted-foreground))', fontSize: 11 } }}
+                  domain={['dataMin', 'dataMax']}
+                />
               <Tooltip
                 content={
                   <ChartTooltip
@@ -394,8 +452,33 @@ export default function TrendChart({ university, category }: TrendChartProps) {
                   hide={hiddenMajors.has(major)}
                 />
               ))}
+              {showPrediction && majors.map((major, idx) => {
+                const pred = predictionData[major];
+                if (!pred) return null;
+                const dataKey = `${major}_rank`;
+                return (
+                  <Line
+                    key={`pred-${major}`}
+                    type="monotone"
+                    dataKey={dataKey}
+                    stroke={COLORS[idx % COLORS.length]}
+                    strokeWidth={2}
+                    strokeDasharray="8 4"
+                    strokeOpacity={0.5}
+                    dot={{ r: 5, fill: COLORS[idx % COLORS.length], strokeWidth: 2, stroke: 'hsl(var(--card))', strokeDasharray: '0' }}
+                    connectNulls
+                    name={`${major} 预测`}
+                  />
+                );
+              })}
             </LineChart>
           </ResponsiveContainer>
+          {showPrediction && (
+            <p className="mt-2 text-[10px] text-muted-foreground/60 text-center">
+              预测基于线性回归模型，仅供参考。实际录取受招生计划、试卷难度、报考人数等多因素影响。
+            </p>
+          )}
+          </>
           )}
         </div>
       )}
@@ -413,16 +496,17 @@ export default function TrendChart({ university, category }: TrendChartProps) {
               <p className="text-xs mt-1">请调整筛选条件或更换高校</p>
             </div>
           ) : (
-          <ResponsiveContainer width="100%" height={460}>
-            <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-              <XAxis dataKey="year" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} axisLine={{ stroke: 'hsl(var(--border))' }} />
-              <YAxis
-                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
-                axisLine={{ stroke: 'hsl(var(--border))' }}
-                label={{ value: '最低录取分数', angle: -90, position: 'insideLeft', style: { fill: 'hsl(var(--muted-foreground))', fontSize: 11 } }}
-                domain={['dataMin - 5', 'dataMax + 5']}
-              />
+          <>
+            <ResponsiveContainer width="100%" height={460}>
+              <LineChart data={chartDataWithPrediction} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="year" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} axisLine={{ stroke: 'hsl(var(--border))' }} />
+                <YAxis
+                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                  label={{ value: '最低录取分数', angle: -90, position: 'insideLeft', style: { fill: 'hsl(var(--muted-foreground))', fontSize: 11 } }}
+                  domain={['dataMin - 5', 'dataMax + 5']}
+                />
               <Tooltip
                 content={
                   <ChartTooltip
@@ -465,8 +549,33 @@ export default function TrendChart({ university, category }: TrendChartProps) {
                   hide={hiddenMajors.has(major)}
                 />
               ))}
+              {showPrediction && majors.map((major, idx) => {
+                const pred = predictionData[major];
+                if (!pred) return null;
+                const dataKey = `${major}_score`;
+                return (
+                  <Line
+                    key={`pred-${major}`}
+                    type="monotone"
+                    dataKey={dataKey}
+                    stroke={COLORS[idx % COLORS.length]}
+                    strokeWidth={2}
+                    strokeDasharray="8 4"
+                    strokeOpacity={0.5}
+                    dot={{ r: 5, fill: COLORS[idx % COLORS.length], strokeWidth: 2, stroke: 'hsl(var(--card))', strokeDasharray: '0' }}
+                    connectNulls
+                    name={`${major} 预测`}
+                  />
+                );
+              })}
             </LineChart>
           </ResponsiveContainer>
+          {showPrediction && (
+            <p className="mt-2 text-[10px] text-muted-foreground/60 text-center">
+              预测基于线性回归模型，仅供参考。实际录取受招生计划、试卷难度、报考人数等多因素影响。
+            </p>
+          )}
+          </>
           )}
         </div>
       )}
@@ -693,6 +802,11 @@ export default function TrendChart({ university, category }: TrendChartProps) {
         <span className="flex items-center gap-1.5"><span className="inline-block w-2 h-2 rounded-full bg-emerald-400" /> 位次上升（升温）</span>
         <span className="flex items-center gap-1.5"><span className="inline-block w-2 h-2 rounded-full bg-red-400" /> 位次下降（降温）</span>
       </div>
+
+      {/* UniversityCard Modal */}
+      {showUniCard && (
+        <UniversityCard university={university} onClose={() => setShowUniCard(false)} />
+      )}
     </div>
   );
 }
