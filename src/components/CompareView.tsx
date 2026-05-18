@@ -28,11 +28,11 @@ import {
 } from 'lucide-react';
 
 const COMPARE_COLORS = [
-  'hsl(217, 80%, 58%)',
-  'hsl(340, 75%, 60%)',
-  'hsl(160, 60%, 50%)',
-  'hsl(30, 85%, 58%)',
-  'hsl(280, 65%, 65%)',
+  { base: 'hsl(217, 80%, 58%)', bg: 'hsla(217, 80%, 58%, 0.15)', border: 'hsla(217, 80%, 58%, 0.4)' },
+  { base: 'hsl(340, 75%, 60%)', bg: 'hsla(340, 75%, 60%, 0.15)', border: 'hsla(340, 75%, 60%, 0.4)' },
+  { base: 'hsl(160, 60%, 50%)', bg: 'hsla(160, 60%, 50%, 0.15)', border: 'hsla(160, 60%, 50%, 0.4)' },
+  { base: 'hsl(30, 85%, 58%)', bg: 'hsla(30, 85%, 58%, 0.15)', border: 'hsla(30, 85%, 58%, 0.4)' },
+  { base: 'hsl(280, 65%, 65%)', bg: 'hsla(280, 65%, 65%, 0.15)', border: 'hsla(280, 65%, 65%, 0.4)' },
 ];
 
 const YEARS = [2021, 2022, 2023, 2024, 2025];
@@ -67,7 +67,7 @@ export default function CompareView() {
     return compareList.map((uni) => ({
       university: uni,
       data: getDataByUniversity(uni),
-      color: COMPARE_COLORS[compareList.indexOf(uni) % COMPARE_COLORS.length],
+      color: COMPARE_COLORS[compareList.indexOf(uni) % COMPARE_COLORS.length].base,
     }));
   }, [compareList]);
 
@@ -237,18 +237,18 @@ export default function CompareView() {
         {/* 高校标签区 */}
         <div className="flex flex-wrap items-center gap-2 mb-3">
           {compareList.map((uni) => {
-            const color = COMPARE_COLORS[compareList.indexOf(uni) % COMPARE_COLORS.length];
+            const colorObj = COMPARE_COLORS[compareList.indexOf(uni) % COMPARE_COLORS.length];
             return (
               <span
                 key={uni}
                 className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs sm:text-sm font-medium border shadow-sm"
                 style={{
-                  backgroundColor: `${color}15`,
-                  borderColor: `${color}40`,
-                  color: color,
+                  backgroundColor: colorObj.bg,
+                  borderColor: colorObj.border,
+                  color: colorObj.base,
                 }}
               >
-                <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: color }} />
+                <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: colorObj.base }} />
                 <span className="truncate max-w-[120px]">{uni}</span>
                 <button
                   onClick={() => removeFromCompare(uni)}
