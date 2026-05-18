@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { Search, X, School, BookOpen, Star } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { admissionData } from '../data/admissionData';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function GlobalSearch() {
   const { setSelectedUniversity, setActiveTab, favorites, addFavorite, removeFavorite } = useAppContext();
@@ -10,6 +11,7 @@ export default function GlobalSearch() {
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedQuery(query), 300);
@@ -72,7 +74,7 @@ export default function GlobalSearch() {
   const hasResults = results.universities.length > 0 || results.majors.length > 0;
 
   return (
-    <div className="relative">
+    <div className="relative w-full md:w-auto">
       <div className="relative">
         <input
           ref={inputRef}
@@ -81,7 +83,7 @@ export default function GlobalSearch() {
           onChange={e => { setQuery(e.target.value); setIsOpen(true); }}
           onFocus={() => setIsOpen(true)}
           placeholder="搜索高校或专业..."
-          className="h-9 w-40 sm:w-56 rounded-lg border border-input bg-background pl-9 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
+          className="h-9 w-full md:w-40 sm:md:w-56 rounded-lg border border-input bg-background pl-9 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
         />
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
         {query && (
@@ -97,7 +99,7 @@ export default function GlobalSearch() {
       {isOpen && (
         <div
           ref={panelRef}
-          className="absolute top-full right-0 mt-1 w-80 sm:w-96 bg-card border border-border rounded-xl shadow-xl shadow-foreground/10 z-50 max-h-[70vh] overflow-y-auto scrollbar-thin animate-scale-in"
+          className="absolute top-full right-0 mt-1 w-[calc(100vw-2rem)] md:w-80 sm:md:w-96 bg-card border border-border rounded-xl shadow-xl shadow-foreground/10 z-50 max-h-[70vh] overflow-y-auto scrollbar-thin animate-scale-in"
         >
           {!debouncedQuery.trim() ? (
             <div className="px-4 py-6 text-center">

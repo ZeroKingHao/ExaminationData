@@ -17,7 +17,9 @@ const RecommendView = lazy(() => import('./components/RecommendView'));
 
 import { SkeletonChart, SkeletonStats } from './components/Skeleton';
 
-import { GraduationCap, TrendingUp, BarChart3, Table2, BookOpen, Sun, Moon, Monitor, Target, ChevronDown } from 'lucide-react';
+import { GraduationCap, TrendingUp, BarChart3, Table2, BookOpen, Sun, Moon, Monitor, Target, ChevronDown, SlidersHorizontal } from 'lucide-react';
+import MobileTabBar from './components/MobileTabBar';
+import FilterDrawer from './components/FilterDrawer';
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -61,6 +63,7 @@ function AppContent() {
   } = useAppContext();
 
   const [prevTabIndex, setPrevTabIndex] = useState(0);
+  const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
 
   const categories = ['全部', ...getCategories()];
   const years = getYears();
@@ -111,7 +114,7 @@ function AppContent() {
             <div className="academic-divider" />
             {/* 第二行：Tabs + 筛选 + 搜索 */}
             <div className="flex items-center gap-2 py-2 flex-wrap">
-              <div className="flex items-center gap-px bg-secondary/50 rounded-lg p-0.5 overflow-x-auto scrollbar-thin max-w-full ring-1 ring-border/30">
+              <div className="hidden md:flex items-center gap-px bg-secondary/50 rounded-lg p-0.5 overflow-x-auto scrollbar-thin max-w-full ring-1 ring-border/30">
                 {tabs.map(tab => (
                   <button
                     key={tab.id}
@@ -127,7 +130,7 @@ function AppContent() {
                   </button>
                 ))}
               </div>
-              <div className="flex items-center gap-1.5 ml-auto shrink-0">
+              <div className="hidden md:flex items-center gap-1.5 ml-auto shrink-0">
                 <div className="relative">
                   <select
                     value={selectedCategory}
@@ -156,11 +159,17 @@ function AppContent() {
                 <FavoritesPanel />
                 <ThemeToggle />
               </div>
+              <button
+                onClick={() => setFilterDrawerOpen(true)}
+                className="md:hidden p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-all"
+              >
+                <SlidersHorizontal className="h-4 w-4" />
+              </button>
             </div>
           </div>
         </header>
 
-        <div className="p-4 sm:p-6 lg:p-8" key={activeTab}>
+        <div className="p-4 pb-20 md:pb-4 sm:p-6 sm:md:pb-6 lg:p-8 lg:md:pb-8" key={activeTab}>
           <div className={slideDirection}>
           {activeTab === 'trend' && (
             <TrendChart university={selectedUniversity} category={selectedCategory} />
@@ -197,6 +206,8 @@ function AppContent() {
           </div>
         </div>
       </main>
+      <MobileTabBar activeTab={activeTab} onTabChange={handleTabChange} />
+      <FilterDrawer isOpen={filterDrawerOpen} onClose={() => setFilterDrawerOpen(false)} />
     </div>
   );
 }

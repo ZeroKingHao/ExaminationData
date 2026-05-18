@@ -3,6 +3,7 @@ import { X, MapPin, School, Award, TrendingUp, Star, ArrowLeftRight, ExternalLin
 import { getUniversityInfo } from '../data/universityInfo';
 import { getDataByUniversity } from '../data/admissionData';
 import { useAppContext } from '../context/AppContext';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 interface UniversityCardProps {
   university: string;
@@ -14,6 +15,7 @@ const formatRank = (v: number) => v >= 10000 ? `${(v / 10000).toFixed(1)}万` : 
 export default function UniversityCard({ university, onClose }: UniversityCardProps) {
   const { addFavorite, removeFavorite, favorites, compareList, addToCompare, setSelectedUniversity, setActiveTab } = useAppContext();
   const overlayRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   const info = getUniversityInfo(university);
 
@@ -47,11 +49,11 @@ export default function UniversityCard({ university, onClose }: UniversityCardPr
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 backdrop-blur-sm animate-fade-in"
       onClick={(e) => { if (e.target === overlayRef.current) onClose(); }}
     >
-      <div className="bg-card rounded-2xl border border-border shadow-2xl w-full max-w-lg mx-4 max-h-[85vh] overflow-y-auto scrollbar-thin animate-scale-in">
+      <div className={`bg-card rounded-2xl border border-border shadow-2xl w-full ${isMobile ? 'h-full rounded-none' : 'max-w-lg mx-4 max-h-[85vh]'} overflow-y-auto scrollbar-thin animate-scale-in`}>
         <div className="gradient-primary p-5 rounded-t-2xl relative">
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+            className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
           >
             <X className="h-4 w-4" />
           </button>

@@ -105,6 +105,8 @@
     font-feature-settings: "rlig" 1, "calt" 1, "tnum" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior: contain;
   }
 }
 
@@ -223,5 +225,8 @@
   }
   .paper-bg {
     background-color: hsl(var(--paper));
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 }

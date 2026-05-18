@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { admissionData } from '../data/admissionData';
 import { BarChart3, Table2, Search, X } from 'lucide-react';
 import UniversityCard from './UniversityCard';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 // Simple sparkline component using SVG
 function MiniSparkline({ data, years, width = 60, height = 20 }: { data: number[]; years?: number[]; width?: number; height?: number }) {
@@ -40,6 +41,8 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
   const [searchQuery, setSearchQuery] = useState('');
   const [hoveredCell, setHoveredCell] = useState<{ major: string; year: number } | null>(null);
   const [showUniCard, setShowUniCard] = useState(false);
+  const isMobile = useIsMobile();
+  const [mobileViewMode, setMobileViewMode] = useState<'card' | 'table'>('card');
 
   const heatmapData = useMemo(() => {
     let filtered = admissionData.filter(d => d.university === university);
@@ -99,7 +102,7 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
 
   return (
     <div className="animate-fade-in">
-      <div className="mb-6 flex items-start justify-between">
+      <div className="mb-4 md:mb-6 flex flex-col md:flex-row md:items-start md:justify-between gap-3">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <BarChart3 className="h-5 w-5 text-primary" />
@@ -157,6 +160,137 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
         </span>
       </div>
 
+      {/* 移动端卡片列表模式 */}
+      {isMobile && mobileViewMode === 'card' ? (
+        <div className="space-y-3">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs text-muted-foreground">
+              {displayMajors.length} 个专业
+            </span>
+            <button
+              onClick={() => setMobileViewMode('table')}
+              className="text-xs text-primary hover:underline"
+            >
+              切换到表格视图
+            </button>
+          </div>
+          {displayMajors.map(major => {
+            const cells = years.map(y => getCellData(major, y));
+            const validCells = cells.filter((c): c is NonNullable<typeof c> => c !== null);
+            const latestCell = validCells[validCells.length - 1];
+            return (
+              <div key={major} className="bg-card rounded-xl border border-border/60 p-3 shadow-card-sm">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium">{major}</span>
+                  {latestCell && (
+                    <span className="text-xs font-mono text-muted-foreground">
+                      {latestCell.enrollment || '-'}人
+                    </span>
+                  )}
+                </div>
+                <div className="flex gap-1.5 overflow-x-auto scrollbar-thin">
+                  {years.map((y, yi) => {
+                    const cell = cells[yi];
+                    if (!cell) return null;
+                    const color = heatMode === 'rank' ? getRankColor(cell.minRank) : getScoreColor(cell.minScore);
+                    const mainValue = heatMode === 'rank' ? formatRank(cell.minRank) : cell.minScore;
+                    return (
+                      <div
+                        key={y}
+                        className="flex flex-col items-center rounded-lg px-2 py-1.5 min-w-[56px] shrink-0"
+                        style={{ backgroundColor: color.bg, color: color.text }}
+                      >
+                        <span className="text-[10px] font-bold">{mainValue}</span>
+                        <span className="text-[9px] opacity-60">{y}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : isMobile && mobileViewMode === 'table' ? (
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs text-muted-foreground">
+              {displayMajors.length} 个专业 · 横向滚动查看
+            </span>
+            <button
+              onClick={() => setMobileViewMode('card')}
+              className="text-xs text-primary hover:underline"
+            >
+              切换到卡片视图
+            </button>
+          </div>
+          <div className="bg-card rounded-xl border border-border/60 p-3 shadow-card card-shine overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr>
+                  <th className="text-left text-xs font-semibold text-muted-foreground p-3 border-b border-border min-w-[200px]">
+                    专业名称
+                  </th>
+                  {years.map(y => (
+                    <th key={y} className="text-center text-xs font-semibold text-muted-foreground p-3 border-b border-border min-w-[110px]">
+                      {y}年
+                    </th>
+                  ))}
+                  <th className="text-center text-xs font-semibold text-muted-foreground p-3 border-b border-border min-w-[80px]">
+                    5年趋势
+                  </th>
+                  <th className="text-center text-xs font-semibold text-muted-foreground p-3 border-b border-border min-w-[80px]">
+                    招生
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {displayMajors.map(major => {
+                  const cells = years.map(y => getCellData(major, y));
+                  const validRanks = cells.filter((c): c is NonNullable<typeof c> => c !== null).map(c => c.minRank);
+                  const trend = validRanks.length >= 2 ? validRanks[validRanks.length - 1] - validRanks[0] : 0;
+                  const latestEnrollment = cells.filter((c): c is NonNullable<typeof c> => c !== null).pop()?.enrollment;
+                  return (
+                    <tr key={major} className="hover:bg-secondary/30 transition-colors">
+                      <td className="text-sm font-medium p-3 border-b border-border">{major}</td>
+                      {years.map((y, yi) => {
+                        const cell = cells[yi];
+                        if (!cell) {
+                          return (
+                            <td key={y} className="text-center p-2 border-b border-border">
+                              <span className="inline-flex items-center justify-center w-[90px] h-[42px] rounded-lg border-2 border-dashed border-border/60 text-xs text-muted-foreground/40">-</span>
+                            </td>
+                          );
+                        }
+                        const color = heatMode === 'rank' ? getRankColor(cell.minRank) : getScoreColor(cell.minScore);
+                        const mainValue = heatMode === 'rank' ? formatRank(cell.minRank) : cell.minScore;
+                        const subValue = heatMode === 'rank' ? cell.minScore : formatRank(cell.minRank);
+                        return (
+                          <td key={y} className="text-center p-2 border-b border-border">
+                            <div
+                              className="inline-flex flex-col items-center justify-center rounded-lg p-2 min-w-[90px] transition-all duration-200 cursor-default"
+                              style={{ backgroundColor: color.bg, color: color.text }}
+                            >
+                              <span className="text-xs font-bold">{mainValue}</span>
+                              <span className="text-[10px] opacity-75">{subValue}{heatMode === 'rank' ? '分' : '位'}</span>
+                            </div>
+                          </td>
+                        );
+                      })}
+                      <td className="text-center p-3 border-b border-border">
+                        <MiniSparkline data={validRanks} years={years} />
+                      </td>
+                      <td className="text-center p-3 border-b border-border">
+                        <span className="text-xs font-mono">{latestEnrollment || '-'}人</span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ) : (
+      /* 桌面端原表格 */
       <div className="bg-card rounded-xl border border-border/60 p-6 shadow-card card-shine overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
@@ -238,6 +372,7 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
           </tbody>
         </table>
       </div>
+      )}
 
       {/* Color Scale Legend */}
       <div className="mt-4 p-4 rounded-xl bg-card border border-border/60 shadow-card card-shine">

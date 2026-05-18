@@ -13,6 +13,7 @@ import {
 import { admissionData } from '../data/admissionData';
 import { BarChart3, Search, X, Award, Star, Filter } from 'lucide-react';
 import { ChartTooltip } from './ChartTooltip';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 interface BarChartComponentProps {
   year: number;
@@ -22,6 +23,7 @@ interface BarChartComponentProps {
 export default function BarChartComponent({ year, category }: BarChartComponentProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [displayCount, setDisplayCount] = useState<'10' | '20' | 'all'>('all');
+  const isMobile = useIsMobile();
 
   const allChartData = useMemo(() => {
     let filtered = admissionData.filter(d => d.year === year);
@@ -102,7 +104,7 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
 
       {/* Search and Filter Bar */}
       <div className="mb-4 flex flex-wrap items-center gap-3 bg-card rounded-xl border border-border/60 p-4 shadow-card">
-        <div className="relative flex-1 min-w-[200px] max-w-xs">
+        <div className="relative flex-1 min-w-0 md:min-w-[200px] md:flex-initial md:max-w-xs">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
           <input
             type="text"
@@ -144,7 +146,7 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
         </span>
       </div>
 
-      <div className="bg-card rounded-xl border border-border/60 p-6 shadow-card card-shine">
+      <div className="bg-card rounded-xl border border-border/60 p-3 md:p-6 shadow-card card-shine">
         {chartData.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
             <BarChart3 className="h-10 w-10 mb-3 opacity-30" />
@@ -152,11 +154,14 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
             <p className="text-xs mt-1">请调整搜索关键词或筛选条件</p>
           </div>
         ) : (
-        <ResponsiveContainer width="100%" height={Math.max(chartData.length * 40, 400)}>
+        <ResponsiveContainer width="100%" height={isMobile ? Math.max(chartData.length * 60, 400) : Math.max(chartData.length * 40, 400)}>
           <BarChart
             data={chartData}
-            layout="vertical"
-            margin={{ top: 10, right: 60, left: 160, bottom: 20 }}
+            layout={isMobile ? undefined : 'vertical'}
+            margin={isMobile
+              ? { top: 10, right: 10, left: 10, bottom: 60 }
+              : { top: 10, right: 60, left: 160, bottom: 20 }
+            }
           >
             <defs>
               <linearGradient id="goldGradient" x1="0" y1="0" x2="1" y2="0">
@@ -172,26 +177,46 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
                 <stop offset="100%" stopColor="#b85c05" />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" horizontal={false} />
-            <XAxis
-              type="number"
-              tickFormatter={formatRank}
-              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
-              axisLine={{ stroke: 'hsl(var(--border))' }}
-              label={{
-                value: '最低录取位次',
-                position: 'insideBottom',
-                offset: -5,
-                style: { fill: 'hsl(var(--muted-foreground))', fontSize: 11 },
-              }}
-            />
-            <YAxis
-              type="category"
-              dataKey="label"
-              width={155}
-              tick={{ fill: 'hsl(var(--foreground))', fontSize: 11 }}
-              axisLine={{ stroke: 'hsl(var(--border))' }}
-            />
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" horizontal={isMobile} vertical={!isMobile} />
+            {isMobile ? (
+              <>
+                <XAxis
+                  dataKey="university"
+                  tick={{ fill: 'hsl(var(--foreground))', fontSize: 10 }}
+                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                  interval={0}
+                  height={80}
+                />
+                <YAxis
+                  type="number"
+                  tickFormatter={formatRank}
+                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                />
+              </>
+            ) : (
+              <>
+                <XAxis
+                  type="number"
+                  tickFormatter={formatRank}
+                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                  label={{
+                    value: '最低录取位次',
+                    position: 'insideBottom',
+                    offset: -5,
+                    style: { fill: 'hsl(var(--muted-foreground))', fontSize: 11 },
+                  }}
+                />
+                <YAxis
+                  type="category"
+                  dataKey="label"
+                  width={155}
+                  tick={{ fill: 'hsl(var(--foreground))', fontSize: 11 }}
+                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                />
+              </>
+            )}
             <Tooltip
               content={
                 <ChartTooltip
@@ -205,11 +230,22 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
                 />
               }
             />
-            <Bar dataKey="minRank" radius={[0, 6, 6, 0]} barSize={24} animationDuration={800} animationEasing="ease-out">
+            <Bar
+              dataKey="minRank"
+              radius={isMobile ? [4, 4, 0, 0] : [0, 6, 6, 0]}
+              barSize={24}
+              animationDuration={800}
+              animationEasing="ease-out"
+            >
               {chartData.map((entry, index) => (
                 <Cell key={index} fill={getBarColor(entry.minRank, index)} />
               ))}
-              <LabelList dataKey="minRank" position="insideRight" formatter={(v: number) => formatRank(v)} style={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }} />
+              <LabelList
+                dataKey="minRank"
+                position={isMobile ? 'top' : 'insideRight'}
+                formatter={(v: number) => formatRank(v)}
+                style={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+              />
             </Bar>
           </BarChart>
         </ResponsiveContainer>
