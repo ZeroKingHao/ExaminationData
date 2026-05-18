@@ -82,11 +82,16 @@ export default function TrendChart({ university, category }: TrendChartProps) {
   }, [university, category, data]);
 
   // 实际显示的专业（用户选择 or 全部），排除被Legend点击隐藏的
+  // 同时过滤掉不属于当前学校的陈旧选项，防止切换学校时显示异常
   const majors = useMemo(() => {
-    let visible = selectedMajors.size > 0
-      ? allMajors.filter(m => selectedMajors.has(m))
+    const allMajorsSet = new Set(allMajors);
+    const validSelected = new Set(
+      Array.from(selectedMajors).filter(m => allMajorsSet.has(m))
+    );
+    let visible = validSelected.size > 0
+      ? allMajors.filter(m => validSelected.has(m))
       : allMajors;
-    return visible.filter(m => !hiddenMajors.has(m));
+    return visible.filter(m => !hiddenMajors.has(m) && allMajorsSet.has(m));
   }, [allMajors, selectedMajors, hiddenMajors]);
 
   // 年份范围
