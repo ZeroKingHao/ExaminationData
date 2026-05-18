@@ -233,27 +233,28 @@ export default function CompareView() {
       </div>
 
       {/* 选校栏 */}
-      <div className="mb-6 bg-card rounded-xl border border-border/60 p-4 shadow-card">
-        <div className="flex flex-wrap items-center gap-3">
+      <div className="mb-6 bg-card rounded-xl border border-border/60 p-3 sm:p-4 shadow-card">
+        {/* 高校标签区 */}
+        <div className="flex flex-wrap items-center gap-2 mb-3">
           {compareList.map((uni) => {
             const color = COMPARE_COLORS[compareList.indexOf(uni) % COMPARE_COLORS.length];
             return (
               <span
                 key={uni}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium border shadow-sm"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs sm:text-sm font-medium border shadow-sm"
                 style={{
                   backgroundColor: `${color}15`,
                   borderColor: `${color}40`,
                   color: color,
                 }}
               >
-                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
-                {uni}
+                <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: color }} />
+                <span className="truncate max-w-[120px]">{uni}</span>
                 <button
                   onClick={() => removeFromCompare(uni)}
-                  className="ml-1 hover:opacity-70 transition-opacity"
+                  className="ml-0.5 hover:opacity-70 transition-opacity shrink-0"
                 >
-                  <X className="h-3.5 w-3.5" />
+                  <X className="h-3 w-3" />
                 </button>
               </span>
             );
@@ -262,13 +263,13 @@ export default function CompareView() {
             <div className="relative">
               <button
                 onClick={() => setShowSearch(!showSearch)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium border border-dashed border-border hover:border-primary/50 hover:bg-accent/50 transition-all text-muted-foreground hover:text-foreground"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs sm:text-sm font-medium border border-dashed border-border hover:border-primary/50 hover:bg-accent/50 transition-all text-muted-foreground hover:text-foreground"
               >
-                <Plus className="h-3.5 w-3.5" />
-                添加高校
+                <Plus className="h-3 w-3" />
+                添加
               </button>
               {showSearch && (
-                <div className="absolute top-full left-0 mt-2 bg-card rounded-xl border border-border/60 shadow-card-xl z-50 w-64 max-h-64 overflow-y-auto">
+                <div className="absolute top-full left-0 mt-2 bg-card rounded-xl border border-border/60 shadow-card-xl z-50 w-[calc(100vw-2rem)] sm:w-64 max-h-64 overflow-y-auto">
                   <input
                     type="text"
                     value={searchQuery}
@@ -301,26 +302,27 @@ export default function CompareView() {
               )}
             </div>
           )}
-          <div className="ml-auto flex items-center gap-2">
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="h-8 px-3 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-1 focus:ring-ring"
-            >
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-            <button
-              onClick={handlePrint}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border hover:bg-accent/50 transition-all text-sm"
-            >
-              <Printer className="h-3.5 w-3.5" />
-              打印
-            </button>
-          </div>
+        </div>
+        {/* 筛选操作区 */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="h-8 px-2 sm:px-3 rounded-lg border border-input bg-background text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-ring"
+          >
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+          <button
+            onClick={handlePrint}
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border hover:bg-accent/50 transition-all text-xs sm:text-sm"
+          >
+            <Printer className="h-3.5 w-3.5" />
+            打印
+          </button>
         </div>
       </div>
 
