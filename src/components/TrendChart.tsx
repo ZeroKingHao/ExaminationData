@@ -449,7 +449,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
                     });
                   }
                 }}
-                wrapperStyle={{ cursor: 'pointer' }}
+                wrapperStyle={isMobile ? { cursor: 'pointer', maxHeight: '100px', overflowY: 'auto' as const } : { cursor: 'pointer' }}
               />
               {majors.map((major, idx) => (
                 <Line
@@ -546,7 +546,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
                     });
                   }
                 }}
-                wrapperStyle={{ cursor: 'pointer' }}
+                wrapperStyle={isMobile ? { cursor: 'pointer', maxHeight: '100px', overflowY: 'auto' as const } : { cursor: 'pointer' }}
               />
               {majors.map((major, idx) => (
                 <Line
@@ -731,7 +731,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
                     });
                   }
                 }}
-                wrapperStyle={{ cursor: 'pointer' }}
+                wrapperStyle={isMobile ? { cursor: 'pointer', maxHeight: '100px', overflowY: 'auto' as const } : { cursor: 'pointer' }}
               />
               {majors.map((major, idx) => (
                 <Bar key={major} dataKey={`${major}_change`} fill={COLORS[idx % COLORS.length]} radius={[4, 4, 0, 0]} barSize={majors.length > 5 ? 8 : 16} />
