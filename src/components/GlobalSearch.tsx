@@ -1,10 +1,10 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
-import { Search, X, School, BookOpen } from 'lucide-react';
+import { Search, X, School, BookOpen, Star } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { admissionData } from '../data/admissionData';
 
 export default function GlobalSearch() {
-  const { setSelectedUniversity, setActiveTab } = useAppContext();
+  const { setSelectedUniversity, setActiveTab, favorites, addFavorite, removeFavorite } = useAppContext();
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [debouncedQuery, setDebouncedQuery] = useState('');
@@ -118,18 +118,30 @@ export default function GlobalSearch() {
                   </h4>
                   {results.universities.map(u => {
                     const tier = admissionData.find(d => d.university === u)?.tier || '211';
+                    const isFav = favorites.some(f => f.university === u && f.major === 'all');
                     return (
-                      <button
-                        key={u}
-                        onClick={() => handleSelectUniversity(u)}
-                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm hover:bg-accent/50 transition-colors text-left"
-                      >
-                        <School className="h-4 w-4 text-primary shrink-0" />
-                        <span className="flex-1 font-medium">{u}</span>
-                        <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${
-                          tier === '985' ? 'bg-chart-3/10 text-chart-3' : 'bg-chart-1/10 text-chart-1'
-                        }`}>{tier}</span>
-                      </button>
+                      <div key={u} className="flex items-center w-full rounded-lg hover:bg-accent/50 transition-colors">
+                        <button
+                          onClick={() => handleSelectUniversity(u)}
+                          className="flex-1 flex items-center gap-3 px-3 py-2 text-sm text-left"
+                        >
+                          <School className="h-4 w-4 text-primary shrink-0" />
+                          <span className="flex-1 font-medium">{u}</span>
+                          <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${
+                            tier === '985' ? 'bg-chart-3/10 text-chart-3' : 'bg-chart-1/10 text-chart-1'
+                          }`}>{tier}</span>
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            isFav ? removeFavorite(`${u}::all`) : addFavorite({ id: `${u}::all`, university: u, major: 'all' });
+                          }}
+                          className={`p-1.5 mr-1 rounded transition-colors ${isFav ? 'text-chart-3' : 'text-muted-foreground/30 hover:text-chart-3'}`}
+                          title={isFav ? '取消收藏' : '收藏高校'}
+                        >
+                          <Star className="h-3.5 w-3.5" fill={isFav ? 'currentColor' : 'none'} />
+                        </button>
+                      </div>
                     );
                   })}
                 </div>

@@ -150,8 +150,8 @@ export default function CompareView() {
   if (compareList.length === 0) {
     return (
       <div className="animate-fade-in">
-        <div className="mb-6">
-          <div className="flex items-center gap-2 mb-2">
+        <div className="mb-4">
+          <div className="flex items-center gap-2 mb-1">
             <Scale className="h-5 w-5 text-primary" />
             <h2 className="text-2xl font-serif-cn font-bold ink-text">高校对比</h2>
           </div>
@@ -160,60 +160,58 @@ export default function CompareView() {
           </p>
         </div>
 
-        <div className="bg-card rounded-xl border border-border/60 p-8 shadow-card card-shine">
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <Scale className="h-16 w-16 text-muted-foreground/30 mb-4" />
-            <h3 className="text-lg font-semibold mb-2">开始对比高校</h3>
-            <p className="text-sm text-muted-foreground mb-6 max-w-md">
-              添加高校到对比列表，即可查看位次趋势、分数分布和详细数据汇总
-            </p>
-            <div className="relative w-full max-w-md">
-              <button
-                onClick={() => setShowSearch(!showSearch)}
-                className="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-input bg-background hover:border-primary/50 hover:bg-accent/50 transition-all"
-              >
-                <div className="flex items-center gap-2">
-                  <Search className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">
-                    {showSearch ? '收起搜索' : '搜索并添加高校...'}
-                  </span>
+        <div className="relative w-full max-w-lg">
+          <button
+            onClick={() => setShowSearch(!showSearch)}
+            className="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-input bg-card hover:border-primary/50 hover:bg-accent/50 transition-all shadow-card-sm"
+          >
+            <div className="flex items-center gap-2">
+              <Search className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">
+                {showSearch ? '收起搜索' : '搜索并添加高校...'}
+              </span>
+            </div>
+            <Plus className="h-4 w-4 text-muted-foreground" />
+          </button>
+          {showSearch && (
+            <div className="absolute top-full left-0 right-0 mt-2 bg-card rounded-xl border border-border/60 shadow-card-xl z-50 max-h-64 overflow-y-auto">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="输入高校名称搜索..."
+                className="w-full px-4 py-3 border-b border-border bg-background rounded-t-xl focus:outline-none focus:ring-1 focus:ring-ring"
+                autoFocus
+              />
+              {searchQuery && searchResults.length > 0 ? (
+                searchResults.map((uni) => (
+                  <button
+                    key={uni}
+                    onClick={() => handleAddUniversity(uni)}
+                    className="w-full px-4 py-2.5 text-left text-sm hover:bg-accent/50 transition-colors flex items-center gap-2"
+                  >
+                    <Plus className="h-3.5 w-3.5 text-primary" />
+                    {uni}
+                  </button>
+                ))
+              ) : searchQuery ? (
+                <div className="px-4 py-6 text-center text-sm text-muted-foreground">
+                  未找到匹配的高校
                 </div>
-                <Plus className="h-4 w-4 text-muted-foreground" />
-              </button>
-              {showSearch && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-card rounded-xl border border-border/60 shadow-card-xl z-50 max-h-64 overflow-y-auto">
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="输入高校名称搜索..."
-                    className="w-full px-4 py-3 border-b border-border bg-background focus:outline-none focus:ring-1 focus:ring-ring"
-                    autoFocus
-                  />
-                  {searchQuery && searchResults.length > 0 ? (
-                    searchResults.map((uni) => (
-                      <button
-                        key={uni}
-                        onClick={() => handleAddUniversity(uni)}
-                        className="w-full px-4 py-2.5 text-left text-sm hover:bg-accent/50 transition-colors flex items-center gap-2"
-                      >
-                        <Plus className="h-3.5 w-3.5 text-primary" />
-                        {uni}
-                      </button>
-                    ))
-                  ) : searchQuery ? (
-                    <div className="px-4 py-8 text-center text-sm text-muted-foreground">
-                      未找到匹配的高校
-                    </div>
-                  ) : (
-                    <div className="px-4 py-8 text-center text-sm text-muted-foreground">
-                      输入高校名称开始搜索
-                    </div>
-                  )}
+              ) : (
+                <div className="px-4 py-6 text-center text-sm text-muted-foreground">
+                  输入高校名称开始搜索
                 </div>
               )}
             </div>
-          </div>
+          )}
+        </div>
+
+        <div className="mt-4 bg-card/50 rounded-xl border border-dashed border-border/60 p-8 text-center">
+          <Scale className="h-10 w-10 text-muted-foreground/20 mx-auto mb-2" />
+          <p className="text-sm text-muted-foreground">
+            添加高校后，即可查看位次趋势、分数分布和详细数据汇总
+          </p>
         </div>
       </div>
     );

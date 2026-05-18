@@ -17,8 +17,6 @@ interface AppContextType {
   setSelectedYear: (y: number) => void;
   activeTab: TabType;
   setActiveTab: (t: TabType) => void;
-  sidebarOpen: boolean;
-  setSidebarOpen: (v: boolean) => void;
 
   favorites: FavoriteItem[];
   addFavorite: (item: FavoriteItem) => void;
@@ -38,7 +36,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [selectedCategory, setSelectedCategory] = useState<string>('全部');
   const [selectedYear, setSelectedYear] = useState<number>(2025);
   const [activeTab, setActiveTab] = useState<TabType>('trend');
-  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
   const [compareList, setCompareList] = useState<string[]>([]);
@@ -80,7 +77,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
       selectedCategory, setSelectedCategory,
       selectedYear, setSelectedYear,
       activeTab, setActiveTab,
-      sidebarOpen, setSidebarOpen,
       favorites, addFavorite, removeFavorite, clearFavorites,
       compareList, addToCompare, removeFromCompare, clearCompare,
     }}>

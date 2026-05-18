@@ -1,9 +1,8 @@
 import { useState, lazy, Suspense } from 'react';
-import { getUniversities, getCategories, getYears } from './data/admissionData';
+import { getCategories, getYears } from './data/admissionData';
 import { ThemeProvider, useTheme } from './components/ThemeProvider';
 import { AppProvider, useAppContext } from './context/AppContext';
 import type { TabType } from './context/AppContext';
-import Sidebar from './components/Sidebar';
 import TrendChart from './components/TrendChart';
 import HeatmapChart from './components/HeatmapChart';
 import DataTable from './components/DataTable';
@@ -18,7 +17,7 @@ const RecommendView = lazy(() => import('./components/RecommendView'));
 
 import { SkeletonChart, SkeletonStats } from './components/Skeleton';
 
-import { GraduationCap, TrendingUp, BarChart3, Table2, BookOpen, Sun, Moon, Monitor, Target } from 'lucide-react';
+import { GraduationCap, TrendingUp, BarChart3, Table2, BookOpen, Sun, Moon, Monitor, Target, ChevronDown } from 'lucide-react';
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -59,13 +58,10 @@ function AppContent() {
     setSelectedYear,
     activeTab,
     setActiveTab,
-    sidebarOpen,
-    setSidebarOpen,
   } = useAppContext();
 
   const [prevTabIndex, setPrevTabIndex] = useState(0);
 
-  const universities = getUniversities();
   const categories = ['全部', ...getCategories()];
   const years = getYears();
 
@@ -89,58 +85,72 @@ function AppContent() {
     : 'animate-slide-in-left';
 
   return (
-    <div className="min-h-screen bg-background bg-grid-paper flex">
-      <Sidebar
-        universities={universities}
-        categories={categories}
-        years={years}
-        selectedUniversity={selectedUniversity}
-        selectedCategory={selectedCategory}
-        selectedYear={selectedYear}
-        onUniversityChange={setSelectedUniversity}
-        onCategoryChange={setSelectedCategory}
-        onYearChange={setSelectedYear}
-        isOpen={sidebarOpen}
-        onToggle={() => setSidebarOpen(!sidebarOpen)}
-      />
-
-      <main className={`flex-1 transition-all duration-300 ease-out ${sidebarOpen ? 'ml-72' : 'ml-16'}`}>
+    <div className="min-h-screen bg-background bg-grid-paper">
+      <main className="flex-1">
         <header className="sticky top-0 z-30 glass-effect border-b border-border/60">
-          <div className="px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3 min-w-0">
-                <div className="h-10 w-10 rounded-lg gradient-primary flex items-center justify-center shrink-0 shadow-md shadow-primary/20 ring-1 ring-white/10">
-                  <GraduationCap className="h-5 w-5 text-white" />
-                </div>
-                <div className="min-w-0 hidden sm:block">
-                  <h1 className="text-lg sm:text-xl font-serif-cn font-bold tracking-tight truncate ink-text">
-                    河北省985/211高校录取数据分析
-                  </h1>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <span className="text-[10px] text-muted-foreground tracking-wider">2021–2025</span>
-                    <span className="text-[10px] text-muted-foreground/40">|</span>
-                    <span className="text-[10px] text-muted-foreground tracking-wide">物理类（理科）</span>
-                    <span className="text-[10px] text-muted-foreground/40">|</span>
-                    <span className="text-[10px] text-muted-foreground tracking-wide">分数线 · 位次 · 招生计划</span>
-                  </div>
+          <div className="px-4 sm:px-6 lg:px-8">
+            {/* 第一行：Logo + 标题 */}
+            <div className="flex items-center gap-3 py-3">
+              <div className="h-10 w-10 rounded-lg gradient-primary flex items-center justify-center shrink-0 shadow-md shadow-primary/20 ring-1 ring-white/10">
+                <GraduationCap className="h-5 w-5 text-white" />
+              </div>
+              <div className="min-w-0">
+                <h1 className="text-lg sm:text-xl font-serif-cn font-bold tracking-tight truncate ink-text">
+                  河北省985/211高校录取数据分析
+                </h1>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <span className="text-[10px] text-muted-foreground tracking-wider">2021–2025</span>
+                  <span className="text-[10px] text-muted-foreground/40">|</span>
+                  <span className="text-[10px] text-muted-foreground tracking-wide">物理类（理科）</span>
+                  <span className="text-[10px] text-muted-foreground/40">|</span>
+                  <span className="text-[10px] text-muted-foreground tracking-wide">分数线 · 位次 · 招生计划</span>
                 </div>
               </div>
-              <div className="flex items-center gap-2 shrink-0">
-                <div className="flex items-center gap-px bg-secondary/50 rounded-lg p-0.5 overflow-x-auto scrollbar-thin max-w-[280px] sm:max-w-none ring-1 ring-border/30">
-                  {tabs.map(tab => (
-                    <button
-                      key={tab.id}
-                      onClick={() => handleTabChange(tab.id)}
-                      className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all duration-300 whitespace-nowrap shrink-0 ${
-                        activeTab === tab.id
-                          ? 'bg-primary text-primary-foreground shadow-sm'
-                          : 'text-muted-foreground hover:text-foreground hover:bg-accent/40'
-                      }`}
-                    >
-                      <tab.icon className="h-3.5 w-3.5" />
-                      <span className="hidden sm:inline">{tab.label}</span>
-                    </button>
-                  ))}
+            </div>
+            {/* 分割线 */}
+            <div className="academic-divider" />
+            {/* 第二行：Tabs + 筛选 + 搜索 */}
+            <div className="flex items-center gap-2 py-2 flex-wrap">
+              <div className="flex items-center gap-px bg-secondary/50 rounded-lg p-0.5 overflow-x-auto scrollbar-thin max-w-full ring-1 ring-border/30">
+                {tabs.map(tab => (
+                  <button
+                    key={tab.id}
+                    onClick={() => handleTabChange(tab.id)}
+                    className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all duration-300 whitespace-nowrap shrink-0 ${
+                      activeTab === tab.id
+                        ? 'bg-primary text-primary-foreground shadow-sm'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-accent/40'
+                    }`}
+                  >
+                    <tab.icon className="h-3.5 w-3.5" />
+                    <span className="hidden sm:inline">{tab.label}</span>
+                  </button>
+                ))}
+              </div>
+              <div className="flex items-center gap-1.5 ml-auto shrink-0">
+                <div className="relative">
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="h-8 pl-2.5 pr-7 rounded-lg border border-input bg-background text-xs sm:text-sm appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-ring"
+                  >
+                    {categories.map(cat => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground pointer-events-none" />
+                </div>
+                <div className="relative">
+                  <select
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(Number(e.target.value))}
+                    className="h-8 pl-2.5 pr-7 rounded-lg border border-input bg-background text-xs sm:text-sm font-mono appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-ring"
+                  >
+                    {years.map(y => (
+                      <option key={y} value={y}>{y}年</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground pointer-events-none" />
                 </div>
                 <GlobalSearch />
                 <FavoritesPanel />
