@@ -4,7 +4,12 @@ import { useAppContext } from '../context/AppContext';
 import { admissionData } from '../data/admissionData';
 import { useIsMobile } from '../hooks/useIsMobile';
 
-export default function GlobalSearch() {
+interface GlobalSearchProps {
+  externalOpen?: boolean;
+  onExternalClose?: () => void;
+}
+
+export default function GlobalSearch({ externalOpen, onExternalClose }: GlobalSearchProps) {
   const { setSelectedUniversity, setActiveTab, favorites, addFavorite, removeFavorite } = useAppContext();
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
@@ -12,6 +17,14 @@ export default function GlobalSearch() {
   const inputRef = useRef<HTMLInputElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
+
+  // 外部控制：移动端搜索按钮打开时自动聚焦并展开
+  useEffect(() => {
+    if (externalOpen) {
+      setIsOpen(true);
+      setTimeout(() => inputRef.current?.focus(), 50);
+    }
+  }, [externalOpen]);
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedQuery(query), 300);
@@ -31,11 +44,14 @@ export default function GlobalSearch() {
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsOpen(false);
+      if (e.key === 'Escape') {
+        setIsOpen(false);
+        onExternalClose?.();
+      }
     };
     document.addEventListener('keydown', handler);
     return () => document.removeEventListener('keydown', handler);
-  }, []);
+  }, [onExternalClose]);
 
   const results = useMemo(() => {
     const q = debouncedQuery.trim().toLowerCase();
@@ -62,14 +78,16 @@ export default function GlobalSearch() {
     setActiveTab('trend');
     setQuery('');
     setIsOpen(false);
-  }, [setSelectedUniversity, setActiveTab]);
+    onExternalClose?.();
+  }, [setSelectedUniversity, setActiveTab, onExternalClose]);
 
   const handleSelectMajor = useCallback((university: string, _major: string) => {
     setSelectedUniversity(university);
     setActiveTab('heatmap');
     setQuery('');
     setIsOpen(false);
-  }, [setSelectedUniversity, setActiveTab]);
+    onExternalClose?.();
+  }, [setSelectedUniversity, setActiveTab, onExternalClose]);
 
   const hasResults = results.universities.length > 0 || results.majors.length > 0;
 

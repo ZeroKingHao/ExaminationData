@@ -17,7 +17,7 @@ const RecommendView = lazy(() => import('./components/RecommendView'));
 
 import { SkeletonChart, SkeletonStats } from './components/Skeleton';
 
-import { GraduationCap, TrendingUp, BarChart3, Table2, BookOpen, Sun, Moon, Monitor, Target, ChevronDown, SlidersHorizontal } from 'lucide-react';
+import { GraduationCap, TrendingUp, BarChart3, Table2, BookOpen, Sun, Moon, Monitor, Target, ChevronDown, SlidersHorizontal, Search } from 'lucide-react';
 import MobileTabBar from './components/MobileTabBar';
 import FilterDrawer from './components/FilterDrawer';
 
@@ -64,6 +64,7 @@ function AppContent() {
 
   const [prevTabIndex, setPrevTabIndex] = useState(0);
   const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
   const categories = ['全部', ...getCategories()];
   const years = getYears();
@@ -160,12 +161,23 @@ function AppContent() {
                 <ThemeToggle />
               </div>
               <button
+                onClick={() => setMobileSearchOpen(true)}
+                className="md:hidden p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-all"
+              >
+                <Search className="h-4 w-4" />
+              </button>
+              <button
                 onClick={() => setFilterDrawerOpen(true)}
                 className="md:hidden p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-all"
               >
                 <SlidersHorizontal className="h-4 w-4" />
               </button>
             </div>
+            {mobileSearchOpen && (
+              <div className="md:hidden pb-3">
+                <GlobalSearch externalOpen={mobileSearchOpen} onExternalClose={() => setMobileSearchOpen(false)} />
+              </div>
+            )}
           </div>
         </header>
 
