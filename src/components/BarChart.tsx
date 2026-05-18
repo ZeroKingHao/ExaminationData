@@ -25,6 +25,9 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
   const [displayCount, setDisplayCount] = useState<'10' | '20' | 'all'>('all');
   const isMobile = useIsMobile();
 
+  // 移动端默认显示前10
+  const effectiveDisplayCount = isMobile && displayCount === 'all' ? '10' : displayCount;
+
   const allChartData = useMemo(() => {
     let filtered = admissionData.filter(d => d.year === year);
     if (category !== '全部') {
@@ -53,6 +56,7 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
       .map(d => ({
         ...d,
         label: `${d.university} ${d.tier === '985' ? '🌟' : '📌'}`,
+        shortLabel: d.university.length > 5 ? d.university.slice(0, 4) + '…' : d.university,
         majorCount: d.majors.length,
       }));
   }, [year, category]);
@@ -63,11 +67,11 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
     if (searchQuery.trim()) {
       data = data.filter(d => d.university.toLowerCase().includes(searchQuery.toLowerCase()));
     }
-    if (displayCount !== 'all') {
-      data = data.slice(0, parseInt(displayCount));
+    if (effectiveDisplayCount !== 'all') {
+      data = data.slice(0, parseInt(effectiveDisplayCount));
     }
     return data;
-  }, [allChartData, searchQuery, displayCount]);
+  }, [allChartData, searchQuery, effectiveDisplayCount]);
 
   const formatRank = (value: number) => {
     if (value >= 10000) return `${(value / 10000).toFixed(1)}万`;
@@ -88,22 +92,19 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
 
   return (
     <div className="animate-fade-in">
-      <div className="mb-6">
-        <div className="flex items-center gap-2 mb-2">
-          <BarChart3 className="h-5 w-5 text-primary" />
-          <h2 className="text-2xl font-serif-cn font-bold ink-text">{year}年 专业热度排名</h2>
+      <div className="mb-4 sm:mb-6">
+        <div className="flex items-center gap-2 mb-1 sm:mb-2">
+          <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+          <h2 className="text-lg sm:text-2xl font-serif-cn font-bold ink-text">{year}年 专业热度排名</h2>
         </div>
-        <p className="text-xs text-muted-foreground tracking-wide">
-          横向柱状图：按各高校最低录取位次排序，位次越小热度越高
+        <p className="text-[10px] sm:text-xs text-muted-foreground tracking-wide">
+          按最低录取位次排序，位次越小热度越高
           {category !== '全部' && ` · 已筛选：${category}`}
-        </p>
-        <p className="text-[10px] text-muted-foreground/60 mt-1 tracking-wide">
-          热度指标：当年最低录取位次（位次数字越小 = 越难考 = 热度越高）
         </p>
       </div>
 
       {/* Search and Filter Bar */}
-      <div className="mb-4 flex flex-wrap items-center gap-3 bg-card rounded-xl border border-border/60 p-4 shadow-card">
+      <div className="mb-4 flex flex-wrap items-center gap-2 sm:gap-3 bg-card rounded-xl border border-border/60 p-3 sm:p-4 shadow-card">
         <div className="relative flex-1 min-w-0 md:min-w-[200px] md:flex-initial md:max-w-xs">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
           <input
@@ -111,7 +112,7 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             placeholder="搜索高校名称..."
-            className="w-full h-9 rounded-lg border border-input bg-background pl-9 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-ring/50 transition-all"
+            className="w-full h-8 sm:h-9 rounded-lg border border-input bg-background pl-9 pr-8 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-ring/50 transition-all"
           />
           {searchQuery && (
             <button
@@ -131,7 +132,7 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
             <button
               key={opt.id}
               onClick={() => setDisplayCount(opt.id)}
-              className={`px-3 py-1 rounded-md text-xs font-medium transition-all duration-300 ${
+              className={`px-2.5 sm:px-3 py-1 rounded-md text-xs font-medium transition-all duration-300 ${
                 displayCount === opt.id
                   ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
                   : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
@@ -154,12 +155,12 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
             <p className="text-xs mt-1">请调整搜索关键词或筛选条件</p>
           </div>
         ) : (
-        <ResponsiveContainer width="100%" height={isMobile ? Math.max(chartData.length * 60, 400) : Math.max(chartData.length * 40, 400)}>
+        <ResponsiveContainer width="100%" height={Math.max(chartData.length * (isMobile ? 32 : 40), 300)}>
           <BarChart
             data={chartData}
-            layout={isMobile ? undefined : 'vertical'}
+            layout="vertical"
             margin={isMobile
-              ? { top: 10, right: 10, left: 10, bottom: 60 }
+              ? { top: 5, right: 40, left: 0, bottom: 5 }
               : { top: 10, right: 60, left: 160, bottom: 20 }
             }
           >
@@ -177,46 +178,28 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
                 <stop offset="100%" stopColor="#b85c05" />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" horizontal={isMobile} vertical={!isMobile} />
-            {isMobile ? (
-              <>
-                <XAxis
-                  dataKey="university"
-                  tick={{ fill: 'hsl(var(--foreground))', fontSize: 10 }}
-                  axisLine={{ stroke: 'hsl(var(--border))' }}
-                  interval={0}
-                  height={80}
-                />
-                <YAxis
-                  type="number"
-                  tickFormatter={formatRank}
-                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
-                  axisLine={{ stroke: 'hsl(var(--border))' }}
-                />
-              </>
-            ) : (
-              <>
-                <XAxis
-                  type="number"
-                  tickFormatter={formatRank}
-                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
-                  axisLine={{ stroke: 'hsl(var(--border))' }}
-                  label={{
-                    value: '最低录取位次',
-                    position: 'insideBottom',
-                    offset: -5,
-                    style: { fill: 'hsl(var(--muted-foreground))', fontSize: 11 },
-                  }}
-                />
-                <YAxis
-                  type="category"
-                  dataKey="label"
-                  width={155}
-                  tick={{ fill: 'hsl(var(--foreground))', fontSize: 11 }}
-                  axisLine={{ stroke: 'hsl(var(--border))' }}
-                />
-              </>
-            )}
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" horizontal={false} vertical />
+            <XAxis
+              type="number"
+              tickFormatter={formatRank}
+              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: isMobile ? 9 : 11 }}
+              axisLine={{ stroke: 'hsl(var(--border))' }}
+              {...(!isMobile && {
+                label: {
+                  value: '最低录取位次',
+                  position: 'insideBottom' as const,
+                  offset: -5,
+                  style: { fill: 'hsl(var(--muted-foreground))', fontSize: 11 },
+                },
+              })}
+            />
+            <YAxis
+              type="category"
+              dataKey={isMobile ? 'shortLabel' : 'label'}
+              width={isMobile ? 72 : 155}
+              tick={{ fill: 'hsl(var(--foreground))', fontSize: isMobile ? 9 : 11 }}
+              axisLine={{ stroke: 'hsl(var(--border))' }}
+            />
             <Tooltip
               content={
                 <ChartTooltip
@@ -232,8 +215,8 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
             />
             <Bar
               dataKey="minRank"
-              radius={isMobile ? [4, 4, 0, 0] : [0, 6, 6, 0]}
-              barSize={24}
+              radius={isMobile ? [0, 4, 4, 0] : [0, 6, 6, 0]}
+              barSize={isMobile ? 16 : 24}
               animationDuration={800}
               animationEasing="ease-out"
             >
@@ -242,9 +225,9 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
               ))}
               <LabelList
                 dataKey="minRank"
-                position={isMobile ? 'top' : 'insideRight'}
+                position="right"
                 formatter={(v: number) => formatRank(v)}
-                style={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+                style={{ fill: 'hsl(var(--muted-foreground))', fontSize: isMobile ? 8 : 10 }}
               />
             </Bar>
           </BarChart>
@@ -252,9 +235,9 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
         )}
       </div>
 
-      {/* Color Legend - Gradient Bar */}
-      <div className="mt-4 p-4 rounded-xl bg-card border border-border/60 shadow-card card-shine">
-        <h3 className="text-xs font-semibold text-muted-foreground mb-3">热度色阶说明</h3>
+      {/* Color Legend */}
+      <div className="mt-4 p-3 sm:p-4 rounded-xl bg-card border border-border/60 shadow-card card-shine">
+        <h3 className="text-[10px] sm:text-xs font-semibold text-muted-foreground mb-2 sm:mb-3">热度色阶</h3>
         <div className="flex items-center gap-3">
           <span className="text-xs text-muted-foreground whitespace-nowrap">热</span>
           <div
