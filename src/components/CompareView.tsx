@@ -14,6 +14,7 @@ import {
 import { admissionData, getCategories, getDataByUniversity } from '../data/admissionData';
 import { useAppContext } from '../context/AppContext';
 import { ChartTooltip } from './ChartTooltip';
+import { useIsMobile } from '../hooks/useIsMobile';
 import {
   Scale,
   Search,
@@ -43,6 +44,7 @@ export default function CompareView() {
     useAppContext();
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearch, setShowSearch] = useState(false);
+  const isMobile = useIsMobile();
 
   // 获取所有高校列表（用于搜索）
   const allUniversities = useMemo(() => {
@@ -153,7 +155,7 @@ export default function CompareView() {
         <div className="mb-4">
           <div className="flex items-center gap-2 mb-1">
             <Scale className="h-5 w-5 text-primary" />
-            <h2 className="text-2xl font-serif-cn font-bold ink-text">高校对比</h2>
+            <h2 className="text-lg md:text-2xl font-serif-cn font-bold ink-text">高校对比</h2>
           </div>
           <p className="text-xs text-muted-foreground tracking-wide">
             最多选择5所高校，对比位次趋势、分数分布和录取数据
@@ -223,7 +225,7 @@ export default function CompareView() {
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-2">
           <Scale className="h-5 w-5 text-primary" />
-          <h2 className="text-2xl font-serif-cn font-bold ink-text">高校对比</h2>
+          <h2 className="text-lg md:text-2xl font-serif-cn font-bold ink-text">高校对比</h2>
         </div>
         <p className="text-xs text-muted-foreground tracking-wide">
           最多5所高校录取数据叠加对比 · 位次趋势 · 分数分布 · 数据汇总
@@ -323,12 +325,12 @@ export default function CompareView() {
       </div>
 
       {/* 位次趋势叠加图 */}
-      <div className="mb-6 bg-card rounded-xl border border-border/60 p-6 shadow-card card-shine">
+      <div className="mb-6 bg-card rounded-xl border border-border/60 p-3 md:p-6 shadow-card card-shine">
         <h3 className="text-sm font-semibold mb-4 text-muted-foreground">
           位次趋势叠加图（Y轴逆序：越靠上 = 位次越靠前 = 热度越高）
         </h3>
-        <ResponsiveContainer width="100%" height={400}>
-          <LineChart data={rankTrendData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+        <ResponsiveContainer width="100%" height={isMobile ? 280 : 400}>
+          <LineChart data={rankTrendData} margin={{ top: 10, right: isMobile ? 10 : 30, left: isMobile ? 10 : 20, bottom: 10 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
             <XAxis
               dataKey="year"
@@ -378,12 +380,12 @@ export default function CompareView() {
       </div>
 
       {/* 分数分布对比 */}
-      <div className="mb-6 bg-card rounded-xl border border-border/60 p-6 shadow-card card-shine">
+      <div className="mb-6 bg-card rounded-xl border border-border/60 p-3 md:p-6 shadow-card card-shine">
         <h3 className="text-sm font-semibold mb-4 text-muted-foreground">
           分数分布对比（每年最低分）
         </h3>
-        <ResponsiveContainer width="100%" height={400}>
-          <BarChart data={scoreComparisonData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+        <ResponsiveContainer width="100%" height={isMobile ? 280 : 400}>
+          <BarChart data={scoreComparisonData} margin={{ top: 10, right: isMobile ? 10 : 30, left: isMobile ? 10 : 20, bottom: 10 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
             <XAxis
               dataKey="year"
@@ -426,7 +428,7 @@ export default function CompareView() {
       </div>
 
       {/* 汇总对比表格 */}
-      <div className="bg-card rounded-xl border border-border/60 p-6 shadow-card card-shine">
+      <div className="bg-card rounded-xl border border-border/60 p-3 md:p-6 shadow-card card-shine">
         <h3 className="text-sm font-semibold mb-4 text-muted-foreground">数据汇总对比</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">

@@ -119,6 +119,10 @@ const config: Config = {
           from: { opacity: "0", transform: "translateX(16px)" },
           to: { opacity: "1", transform: "translateX(0)" },
         },
+        "slide-in-bottom": {
+          from: { opacity: "0", transform: "translateY(100%)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
       },
       animation: {
         "fade-in": "fade-in 0.45s cubic-bezier(0.22, 1, 0.36, 1)",
@@ -132,6 +136,7 @@ const config: Config = {
         "count-up": "count-up 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
         "slide-in-left": "slide-in-left 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
         "slide-in-right": "slide-in-right 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
+        "slide-in-bottom": "slide-in-bottom 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
       },
     },
   },

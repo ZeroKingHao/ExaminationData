@@ -1,6 +1,7 @@
 import { useMemo, useState, useCallback } from 'react';
 import { admissionData } from '../data/admissionData';
-import { Table2, Download, ArrowUpDown, ArrowUp, ArrowDown, ChevronLeft, ChevronRight, Check, Printer } from 'lucide-react';
+import { Table2, Download, ArrowUpDown, ArrowUp, ArrowDown, ChevronLeft, ChevronRight, Check, Printer, ChevronDown as ChevronDownIcon } from 'lucide-react';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 type SortField = 'year' | 'major' | 'category' | 'tier' | 'minScore' | 'minRank' | 'avgScore' | 'avgRank' | 'enrollment';
 type SortDir = 'asc' | 'desc';
@@ -18,6 +19,8 @@ export default function DataTable({ university, category, year }: DataTableProps
   const [sortDir, setSortDir] = useState<SortDir>('desc');
   const [page, setPage] = useState(0);
   const [exportSuccess, setExportSuccess] = useState(false);
+  const isMobile = useIsMobile();
+  const [expandedRow, setExpandedRow] = useState<number | null>(null);
 
   const filteredData = useMemo(() => {
     let data = admissionData.filter(d => d.university === university);
@@ -108,7 +111,7 @@ export default function DataTable({ university, category, year }: DataTableProps
           </button>
           <button
             onClick={() => window.print()}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-secondary/80 hover:bg-accent transition-colors"
+            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-secondary/80 hover:bg-accent transition-colors"
           >
             <Printer className="h-3.5 w-3.5" />
             打印
@@ -117,6 +120,68 @@ export default function DataTable({ university, category, year }: DataTableProps
       </div>
 
       <div className="bg-card rounded-xl border border-border/60 shadow-card card-shine overflow-hidden">
+        {isMobile ? (
+          <div className="divide-y divide-border">
+            {paginatedData.map((d, i) => (
+              <div key={`${d.year}-${d.major}-${i}`}>
+                <button
+                  onClick={() => setExpandedRow(expandedRow === i ? null : i)}
+                  className={`w-full text-left p-3 flex items-center justify-between transition-colors ${
+                    d.year === year ? 'bg-primary/5' : ''
+                  }`}
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-mono text-muted-foreground">{d.year}</span>
+                      <span className="text-sm font-medium truncate">{d.major}</span>
+                    </div>
+                    <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+                      <span>最低分 <strong className="text-foreground">{d.minScore}</strong></span>
+                      <span>位次 <strong className="text-foreground">{d.minRank.toLocaleString()}</strong></span>
+                    </div>
+                  </div>
+                  <span className={`text-muted-foreground transition-transform ${expandedRow === i ? 'rotate-180' : ''}`}>
+                    <ChevronDownIcon className="h-4 w-4" />
+                  </span>
+                </button>
+                {expandedRow === i && (
+                  <div className="px-3 pb-3 animate-slide-up">
+                    <div className="grid grid-cols-2 gap-2 p-3 rounded-lg bg-secondary/30 text-xs">
+                      <div>
+                        <span className="text-muted-foreground">学科</span>
+                        <div className="font-medium mt-0.5">{d.category}</div>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">层次</span>
+                        <div className="mt-0.5">
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                            d.tier === '985' ? 'bg-chart-1/15 text-chart-1' : 'bg-chart-2/15 text-chart-2'
+                          }`}>{d.tier}</span>
+                        </div>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">平均分</span>
+                        <div className="font-mono font-medium mt-0.5">{d.avgScore || '-'}</div>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">平均位次</span>
+                        <div className="font-mono font-medium mt-0.5">{d.avgRank?.toLocaleString() || '-'}</div>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">招生人数</span>
+                        <div className="font-mono font-medium mt-0.5">{d.enrollment || '-'}</div>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">来源</span>
+                        <div className="mt-0.5">{d.source}</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
         <div className="overflow-auto max-h-[600px] scrollbar-thin">
           <table className="w-full text-xs sm:text-sm">
             <thead className="sticky top-0 z-20">
@@ -176,9 +241,8 @@ export default function DataTable({ university, category, year }: DataTableProps
             </tbody>
           </table>
         </div>
+        )}
       </div>
-
-      {/* Pagination */}
       {totalPages > 1 && (
         <div className="mt-4 flex items-center justify-between">
           <span className="text-xs text-muted-foreground">

@@ -2,11 +2,13 @@ import { useState, useRef, useEffect } from 'react';
 import { Star, X, ArrowLeftRight, Trash2 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { admissionData } from '../data/admissionData';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function FavoritesPanel() {
   const { favorites, removeFavorite, clearFavorites, compareList, addToCompare } = useAppContext();
   const [isOpen, setIsOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -48,7 +50,11 @@ export default function FavoritesPanel() {
 
           <div
             ref={panelRef}
-            className="fixed top-0 right-0 h-full w-80 bg-card border-l border-border shadow-2xl z-50 animate-slide-in-right overflow-y-auto scrollbar-thin"
+            className={`${
+              isMobile
+                ? 'fixed bottom-0 left-0 right-0 h-[70vh] bg-card rounded-t-2xl border-t border-border shadow-2xl z-50 animate-slide-in-bottom overflow-y-auto scrollbar-thin'
+                : 'fixed top-0 right-0 h-full w-80 bg-card border-l border-border shadow-2xl z-50 animate-slide-in-right overflow-y-auto scrollbar-thin'
+            }`}
           >
             <div className="p-4">
               <div className="flex items-center justify-between mb-4">

@@ -17,6 +17,7 @@ import { TrendingUp, AlertTriangle, BarChart3, Activity, Filter, ChevronDown, Ch
 import { ChartTooltip } from './ChartTooltip';
 import UniversityCard from './UniversityCard';
 import { predictNextYear } from '../utils/prediction';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const COLORS = [
   'hsl(217, 80%, 58%)',
@@ -59,6 +60,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
   const [filterOpen, setFilterOpen] = useState(false);
   const [showUniCard, setShowUniCard] = useState(false);
   const [showPrediction, setShowPrediction] = useState(true);
+  const isMobile = useIsMobile();
   const data = getDataByUniversity(university);
 
   // 所有可选专业
@@ -217,7 +219,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
   return (
     <div className="animate-fade-in">
       {/* Header */}
-      <div className="mb-4 flex items-start justify-between">
+      <div className="mb-4 flex flex-col md:flex-row md:items-start md:justify-between gap-3">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <TrendingUp className="h-5 w-5 text-primary" />
@@ -234,7 +236,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
             {selectedMajors.size > 0 && ` · 已选${selectedMajors.size}个专业`}
           </p>
         </div>
-        <div className="flex items-center gap-1 bg-muted/60 rounded-lg p-1">
+        <div className="flex items-center gap-1 bg-muted/60 rounded-lg p-1 overflow-x-auto scrollbar-thin w-full md:w-auto shrink-0">
           {subViews.map(v => (
             <button
               key={v.id}
@@ -254,7 +256,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
 
       {/* Filter Bar */}
       <div className="mb-4 bg-card rounded-xl border border-border/60 p-4 shadow-card">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <button
             onClick={() => setFilterOpen(!filterOpen)}
             className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
@@ -314,7 +316,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
 
           {/* 预测开关 */}
           {(subView === 'rank' || subView === 'score') && (
-            <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer ml-2">
+            <label className="hidden md:flex items-center gap-2 text-xs text-muted-foreground cursor-pointer ml-2">
               <input
                 type="checkbox"
                 checked={showPrediction}
@@ -386,7 +388,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
 
       {/* ========== 位次趋势折线图 ========== */}
       {subView === 'rank' && (
-        <div className="bg-card rounded-xl border border-border/60 p-6 shadow-card card-shine">
+        <div className="bg-card rounded-xl border border-border/60 p-3 md:p-6 shadow-card card-shine">
           <h3 className="text-sm font-semibold mb-4 text-muted-foreground">
             最低录取位次趋势 · {yearStart}-{yearEnd}年（Y轴逆序：越靠上 = 位次越靠前 = 热度越高）
           </h3>
@@ -398,8 +400,8 @@ export default function TrendChart({ university, category }: TrendChartProps) {
             </div>
           ) : (
           <>
-            <ResponsiveContainer width="100%" height={460}>
-              <LineChart data={chartDataWithPrediction} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+            <ResponsiveContainer width="100%" height={isMobile ? 300 : 460}>
+              <LineChart data={chartDataWithPrediction} margin={{ top: 10, right: isMobile ? 10 : 30, left: isMobile ? 10 : 20, bottom: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                 <XAxis dataKey="year" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} axisLine={{ stroke: 'hsl(var(--border))' }} />
                 <YAxis
@@ -485,7 +487,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
 
       {/* ========== 分数趋势折线图 ========== */}
       {subView === 'score' && (
-        <div className="bg-card rounded-xl border border-border/60 p-6 shadow-card card-shine">
+        <div className="bg-card rounded-xl border border-border/60 p-3 md:p-6 shadow-card card-shine">
           <h3 className="text-sm font-semibold mb-4 text-muted-foreground">
             最低录取分数趋势 · {yearStart}-{yearEnd}年（分数越高 = 竞争越激烈）
           </h3>
@@ -497,8 +499,8 @@ export default function TrendChart({ university, category }: TrendChartProps) {
             </div>
           ) : (
           <>
-            <ResponsiveContainer width="100%" height={460}>
-              <LineChart data={chartDataWithPrediction} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+            <ResponsiveContainer width="100%" height={isMobile ? 300 : 460}>
+              <LineChart data={chartDataWithPrediction} margin={{ top: 10, right: isMobile ? 10 : 30, left: isMobile ? 10 : 20, bottom: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                 <XAxis dataKey="year" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} axisLine={{ stroke: 'hsl(var(--border))' }} />
                 <YAxis
@@ -588,7 +590,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
               专业热度对比：{yearStart}-{yearEnd}年平均最低录取位次排名
             </h3>
             <ResponsiveContainer width="100%" height={Math.max(majors.length * 50, 250)}>
-              <BarChart data={compareData} layout="vertical" margin={{ top: 10, right: 40, left: 200, bottom: 10 }}>
+              <BarChart data={compareData} layout="vertical" margin={{ top: 10, right: 20, left: isMobile ? 100 : 200, bottom: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" horizontal={false} />
                 <XAxis
                   type="number"
@@ -600,7 +602,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
                 <YAxis
                   type="category"
                   dataKey="major"
-                  width={195}
+                  width={isMobile ? 95 : 195}
                   tick={{ fill: 'hsl(var(--foreground))', fontSize: 11 }}
                   axisLine={{ stroke: 'hsl(var(--border))' }}
                 />
@@ -672,15 +674,15 @@ export default function TrendChart({ university, category }: TrendChartProps) {
 
       {/* ========== 年度变化曲线 ========== */}
       {subView === 'change' && (
-        <div className="bg-card rounded-xl border border-border/60 p-6 shadow-card card-shine">
+        <div className="bg-card rounded-xl border border-border/60 p-3 md:p-6 shadow-card card-shine">
           <h3 className="text-sm font-semibold mb-2 text-muted-foreground">
             年度位次变化量 · {yearStart}-{yearEnd}年
           </h3>
           <p className="text-xs text-muted-foreground mb-4">
             正数=位次下降/降温，负数=位次上升/升温
           </p>
-          <ResponsiveContainer width="100%" height={400}>
-            <BarChart data={changeData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+          <ResponsiveContainer width="100%" height={isMobile ? 300 : 400}>
+            <BarChart data={changeData} margin={{ top: 10, right: isMobile ? 10 : 30, left: isMobile ? 10 : 20, bottom: 10 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
               <XAxis dataKey="year" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} axisLine={{ stroke: 'hsl(var(--border))' }} />
               <YAxis
