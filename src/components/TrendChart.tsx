@@ -58,7 +58,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
   const [selectedMajors, setSelectedMajors] = useState<Set<string>>(new Set());
   const [filterOpen, setFilterOpen] = useState(false);
   const [showUniCard, setShowUniCard] = useState(false);
-  const [showPrediction, setShowPrediction] = useState(true);
+  const [showPrediction, setShowPrediction] = useState(false);
   const isMobile = useIsMobile();
   const data = getDataByUniversity(university);
 
@@ -330,8 +330,8 @@ export default function TrendChart({ university, category }: TrendChartProps) {
 
         {/* Expanded filter: Major selection (checkbox style) */}
         <div
-          className={`overflow-hidden transition-all duration-300 ease-out ${
-            filterOpen ? 'max-h-96 opacity-100 mt-3' : 'max-h-0 opacity-0'
+          className={`transition-all duration-300 ease-out ${
+            filterOpen ? 'max-h-[500px] opacity-100 mt-3' : 'max-h-0 opacity-0 overflow-hidden'
           }`}
         >
           <div className="pt-3 border-t border-border">
