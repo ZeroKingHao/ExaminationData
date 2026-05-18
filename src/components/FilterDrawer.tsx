@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { X, SlidersHorizontal, Sun, Moon, Monitor } from 'lucide-react';
-import { getCategories, getYears } from '../data/admissionData';
+import { X, SlidersHorizontal, Sun, Moon, Monitor, Search } from 'lucide-react';
+import { getCategories, getYears, getUniversities } from '../data/admissionData';
 import { useTheme } from './ThemeProvider';
 import { useAppContext } from '../context/AppContext';
 
@@ -11,12 +11,17 @@ interface FilterDrawerProps {
 
 export default function FilterDrawer({ isOpen, onClose }: FilterDrawerProps) {
   const { theme, setTheme } = useTheme();
-  const { selectedCategory, setSelectedCategory, selectedYear, setSelectedYear } = useAppContext();
+  const { selectedUniversity, setSelectedUniversity, selectedCategory, setSelectedCategory, selectedYear, setSelectedYear } = useAppContext();
   const drawerRef = useRef<HTMLDivElement>(null);
   const [startY, setStartY] = useState(0);
+  const [uniSearch, setUniSearch] = useState('');
 
   const categories = ['全部', ...getCategories()];
   const years = getYears();
+  const universities = getUniversities();
+  const filteredUnis = uniSearch
+    ? universities.filter(u => u.includes(uniSearch))
+    : universities;
 
   const handleTouchStart = (e: React.TouchEvent) => {
     setStartY(e.touches[0].clientY);
@@ -68,6 +73,35 @@ export default function FilterDrawer({ isOpen, onClose }: FilterDrawerProps) {
             <button onClick={onClose} className="p-2 rounded-lg hover:bg-accent/50 transition-colors">
               <X className="h-4 w-4" />
             </button>
+          </div>
+
+          <div>
+            <label className="text-xs font-medium text-muted-foreground mb-2 block">选择高校</label>
+            <div className="relative mb-2">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+              <input
+                type="text"
+                value={uniSearch}
+                onChange={e => setUniSearch(e.target.value)}
+                placeholder="搜索高校名称..."
+                className="w-full h-9 rounded-lg border border-input bg-background pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/50"
+              />
+            </div>
+            <div className="max-h-40 overflow-y-auto scrollbar-thin rounded-lg border border-border/60">
+              {filteredUnis.map(uni => (
+                <button
+                  key={uni}
+                  onClick={() => { setSelectedUniversity(uni); onClose(); }}
+                  className={`w-full text-left px-3 py-2 text-sm transition-all ${
+                    selectedUniversity === uni
+                      ? 'bg-primary/10 text-primary font-medium'
+                      : 'text-foreground hover:bg-accent/50'
+                  }`}
+                >
+                  {uni}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div>

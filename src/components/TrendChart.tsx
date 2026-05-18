@@ -60,7 +60,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
   const [showUniCard, setShowUniCard] = useState(false);
   const [showPrediction, setShowPrediction] = useState(false);
   const isMobile = useIsMobile();
-  const data = getDataByUniversity(university);
+  const data = useMemo(() => getDataByUniversity(university), [university]);
 
   // 所有可选专业
   const allMajors = useMemo(() => {
@@ -73,11 +73,18 @@ export default function TrendChart({ university, category }: TrendChartProps) {
     return majorList;
   }, [university, category, data]);
 
-  // 切换学校/门类时，将所有专业设为选中（打勾=展示）
+  // 切换学校/门类时，默认选择前5个专业，不足5个显示全部
   useEffect(() => {
-    setSelectedMajors(new Set(allMajors));
-    setFilterOpen(false);
+    const defaultMajors = allMajors.length > 5
+      ? new Set(allMajors.slice(0, 5))
+      : new Set(allMajors);
+    setSelectedMajors(defaultMajors);
   }, [allMajors]);
+
+  // 切换学校/门类时关闭筛选面板
+  useEffect(() => {
+    setFilterOpen(false);
+  }, [university, category]);
 
   // 实际显示的专业：打勾的展示，未打勾的隐藏
   const majors = useMemo(() => {
@@ -328,49 +335,96 @@ export default function TrendChart({ university, category }: TrendChartProps) {
           )}
         </div>
 
-        {/* Expanded filter: Major selection (checkbox style) */}
+        {/* Expanded filter: Major selection */}
         <div
           className={`transition-all duration-300 ease-out ${
             filterOpen ? 'max-h-[500px] opacity-100 mt-3' : 'max-h-0 opacity-0 overflow-hidden'
           }`}
         >
           <div className="pt-3 border-t border-border">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-medium text-muted-foreground">
-                勾选要展示的专业（共{allMajors.length}个）
-              </span>
-              <div className="flex gap-2">
-                <button onClick={selectAllMajors} className="text-xs text-primary hover:underline">
-                  全选
-                </button>
-                <button onClick={clearMajorFilter} className="text-xs text-primary hover:underline">
-                  全不选
-                </button>
+            {/* 移动端：下拉框样式 */}
+            {isMobile ? (
+              <div className="relative">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-medium text-muted-foreground">
+                    点击选择要展示的专业
+                  </span>
+                  <div className="flex gap-2">
+                    <button onClick={selectAllMajors} className="text-xs text-primary hover:underline">
+                      全选
+                    </button>
+                    <button onClick={clearMajorFilter} className="text-xs text-primary hover:underline">
+                      全不选
+                    </button>
+                  </div>
+                </div>
+                <div
+                  className="flex flex-wrap gap-1.5 max-h-48 overflow-y-auto scrollbar-thin p-2 rounded-lg border border-input bg-background"
+                >
+                  {allMajors.map(major => {
+                    const isChecked = selectedMajors.has(major);
+                    return (
+                      <label
+                        key={major}
+                        className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer ${
+                          isChecked
+                            ? 'bg-primary/15 text-primary border border-primary/30'
+                            : 'bg-secondary/50 text-muted-foreground border border-transparent'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() => toggleMajor(major)}
+                          className="rounded border-input"
+                        />
+                        {major}
+                      </label>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-            <div className="flex flex-wrap gap-1.5 max-h-40 overflow-y-auto scrollbar-thin">
-              {allMajors.map(major => {
-                const isChecked = selectedMajors.has(major);
-                return (
-                  <label
-                    key={major}
-                    className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-300 cursor-pointer ${
-                      isChecked
-                        ? 'bg-primary/15 text-primary border border-primary/30'
-                        : 'bg-secondary/50 text-muted-foreground border border-transparent hover:bg-accent/50'
-                    }`}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={isChecked}
-                      onChange={() => toggleMajor(major)}
-                      className="rounded border-input"
-                    />
-                    {major}
-                  </label>
-                );
-              })}
-            </div>
+            ) : (
+              /* 桌面端：复选框列表 */
+              <>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-medium text-muted-foreground">
+                    勾选要展示的专业（共{allMajors.length}个）
+                  </span>
+                  <div className="flex gap-2">
+                    <button onClick={selectAllMajors} className="text-xs text-primary hover:underline">
+                      全选
+                    </button>
+                    <button onClick={clearMajorFilter} className="text-xs text-primary hover:underline">
+                      全不选
+                    </button>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-1.5 max-h-40 overflow-y-auto scrollbar-thin">
+                  {allMajors.map(major => {
+                    const isChecked = selectedMajors.has(major);
+                    return (
+                      <label
+                        key={major}
+                        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-300 cursor-pointer ${
+                          isChecked
+                            ? 'bg-primary/15 text-primary border border-primary/30'
+                            : 'bg-secondary/50 text-muted-foreground border border-transparent hover:bg-accent/50'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() => toggleMajor(major)}
+                          className="rounded border-input"
+                        />
+                        {major}
+                      </label>
+                    );
+                  })}
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -433,7 +487,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
                     });
                   }
                 }}
-                wrapperStyle={isMobile ? { cursor: 'pointer', maxHeight: '100px', overflowY: 'auto' as const } : { cursor: 'pointer' }}
+                wrapperStyle={isMobile ? { cursor: 'pointer', maxHeight: '80px', overflowY: 'auto' as const, fontSize: '10px' } : { cursor: 'pointer' }}
               />
               {majors.map((major, idx) => (
                 <Line
@@ -530,7 +584,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
                     });
                   }
                 }}
-                wrapperStyle={isMobile ? { cursor: 'pointer', maxHeight: '100px', overflowY: 'auto' as const } : { cursor: 'pointer' }}
+                wrapperStyle={isMobile ? { cursor: 'pointer', maxHeight: '80px', overflowY: 'auto' as const, fontSize: '10px' } : { cursor: 'pointer' }}
               />
               {majors.map((major, idx) => (
                 <Line
@@ -715,7 +769,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
                     });
                   }
                 }}
-                wrapperStyle={isMobile ? { cursor: 'pointer', maxHeight: '100px', overflowY: 'auto' as const } : { cursor: 'pointer' }}
+                wrapperStyle={isMobile ? { cursor: 'pointer', maxHeight: '80px', overflowY: 'auto' as const, fontSize: '10px' } : { cursor: 'pointer' }}
               />
               {majors.map((major, idx) => (
                 <Bar key={major} dataKey={`${major}_change`} fill={COLORS[idx % COLORS.length]} radius={[4, 4, 0, 0]} barSize={majors.length > 5 ? 8 : 16} />

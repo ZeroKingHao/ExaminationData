@@ -46,11 +46,11 @@ export default function UniversityCard({ university, onClose }: UniversityCardPr
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/30 backdrop-blur-sm animate-fade-in"
       onClick={(e) => { if (e.target === overlayRef.current) onClose(); }}
     >
-      <div className={`bg-card rounded-2xl border border-border shadow-2xl w-full ${isMobile ? 'h-full rounded-none' : 'max-w-lg mx-4 max-h-[85vh]'} overflow-y-auto scrollbar-thin animate-scale-in`}>
-        <div className="gradient-primary p-5 rounded-t-2xl relative">
+      <div className={`bg-card rounded-2xl border border-border shadow-2xl w-full ${isMobile ? 'max-h-[90vh] rounded-b-none' : 'max-w-lg mx-4 max-h-[85vh]'} flex flex-col animate-scale-in`}>
+        <div className="gradient-primary p-5 rounded-t-2xl relative flex-shrink-0">
           <button
             onClick={onClose}
             className="absolute top-4 right-4 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
@@ -70,7 +70,7 @@ export default function UniversityCard({ university, onClose }: UniversityCardPr
           </div>
         </div>
 
-        <div className="p-5 space-y-4">
+        <div className="p-5 space-y-4 overflow-y-auto scrollbar-thin flex-1">
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             {info?.location ? (
               <span className="flex items-center gap-1.5">
@@ -158,38 +158,39 @@ export default function UniversityCard({ university, onClose }: UniversityCardPr
             </div>
           </div>
 
-          <div className="flex items-center gap-2 pt-2">
-            <button
-              onClick={() => { isFav ? removeFavorite(`${university}::all`) : addFavorite({ id: `${university}::all`, university, major: 'all' }); }}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                isFav
-                  ? 'bg-chart-3/10 text-chart-3 border border-chart-3/20'
-                  : 'bg-secondary/60 text-secondary-foreground hover:bg-accent/60 border border-border/40'
-              }`}
-            >
-              <Star className="h-4 w-4" fill={isFav ? 'currentColor' : 'none'} />
-              {isFav ? '已收藏' : '加入收藏'}
-            </button>
-            <button
-              onClick={() => addToCompare(university)}
-              disabled={isInCompare || compareList.length >= 5}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                isInCompare
-                  ? 'bg-primary/10 text-primary border border-primary/20'
-                  : 'bg-secondary/60 text-secondary-foreground hover:bg-accent/60 border border-border/40'
-              }`}
-            >
-              <ArrowLeftRight className="h-4 w-4" />
-              {isInCompare ? '已在对比' : '加入对比'}
-            </button>
-            <button
-              onClick={() => { setSelectedUniversity(university); setActiveTab('trend'); onClose(); }}
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium bg-secondary/60 text-secondary-foreground hover:bg-accent/60 border border-border/40 transition-all"
-            >
-              <ExternalLink className="h-4 w-4" />
-              查看详情
-            </button>
-          </div>
+        </div>
+
+        <div className="flex items-center gap-2 p-5 pt-0 flex-shrink-0">
+          <button
+            onClick={() => { isFav ? removeFavorite(`${university}::all`) : addFavorite({ id: `${university}::all`, university, major: 'all' }); }}
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all ${
+              isFav
+                ? 'bg-chart-3/10 text-chart-3 border border-chart-3/20'
+                : 'bg-secondary/60 text-secondary-foreground hover:bg-accent/60 border border-border/40'
+            }`}
+          >
+            <Star className="h-4 w-4" fill={isFav ? 'currentColor' : 'none'} />
+            {isFav ? '已收藏' : '加入收藏'}
+          </button>
+          <button
+            onClick={() => addToCompare(university)}
+            disabled={isInCompare || compareList.length >= 5}
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all ${
+              isInCompare
+                ? 'bg-primary/10 text-primary border border-primary/20'
+                : 'bg-secondary/60 text-secondary-foreground hover:bg-accent/60 border border-border/40'
+            }`}
+          >
+            <ArrowLeftRight className="h-4 w-4" />
+            {isInCompare ? '已在对比' : '加入对比'}
+          </button>
+          <button
+            onClick={() => { setSelectedUniversity(university); setActiveTab('trend'); onClose(); }}
+            className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium bg-secondary/60 text-secondary-foreground hover:bg-accent/60 border border-border/40 transition-all"
+          >
+            <ExternalLink className="h-4 w-4" />
+            查看详情
+          </button>
         </div>
       </div>
     </div>

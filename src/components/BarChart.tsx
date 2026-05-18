@@ -46,7 +46,7 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
           tier: d.tier,
           majors: existing ? [...existing.majors, d.major] : [d.major],
         });
-      } else if (existing) {
+      } else {
         existing.majors = [...new Set([...existing.majors, d.major])];
       }
     });
@@ -56,7 +56,7 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
       .map(d => ({
         ...d,
         label: `${d.university} ${d.tier === '985' ? '🌟' : '📌'}`,
-        shortLabel: d.university.length > 5 ? d.university.slice(0, 4) + '…' : d.university,
+        shortLabel: d.university.length > 7 ? d.university.slice(0, 6) + '…' : d.university,
         majorCount: d.majors.length,
       }));
   }, [year, category]);
@@ -147,7 +147,7 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
         </span>
       </div>
 
-      <div className="bg-card rounded-xl border border-border/60 p-3 md:p-6 shadow-card card-shine">
+      <div className={`bg-card rounded-xl border border-border/60 p-3 md:p-6 shadow-card ${isMobile ? '' : 'card-shine'}`}>
         {chartData.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
             <BarChart3 className="h-10 w-10 mb-3 opacity-30" />
@@ -196,11 +196,12 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
             <YAxis
               type="category"
               dataKey={isMobile ? 'shortLabel' : 'label'}
-              width={isMobile ? 72 : 155}
+              width={isMobile ? 88 : 155}
               tick={{ fill: 'hsl(var(--foreground))', fontSize: isMobile ? 9 : 11 }}
               axisLine={{ stroke: 'hsl(var(--border))' }}
             />
             <Tooltip
+              position={isMobile ? { x: 10, y: 0 } : undefined}
               content={
                 <ChartTooltip
                   valueFormatter={(value, _name, props) => {
@@ -216,7 +217,7 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
             <Bar
               dataKey="minRank"
               radius={isMobile ? [0, 4, 4, 0] : [0, 6, 6, 0]}
-              barSize={isMobile ? 16 : 24}
+              barSize={isMobile ? 14 : 24}
               animationDuration={800}
               animationEasing="ease-out"
             >
@@ -226,8 +227,22 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
               <LabelList
                 dataKey="minRank"
                 position="right"
-                formatter={(v: number) => formatRank(v)}
-                style={{ fill: 'hsl(var(--muted-foreground))', fontSize: isMobile ? 8 : 10 }}
+                content={({ x, y, width, height, value }) => {
+                  const num = Number(value);
+                  const text = isNaN(num) || value == null ? '--' : formatRank(num);
+                  return (
+                    <text
+                      x={Number(x || 0) + Number(width || 0) + 8}
+                      y={Number(y || 0) + Number(height || 0) / 2}
+                      textAnchor="start"
+                      dominantBaseline="central"
+                      fill="hsl(var(--muted-foreground))"
+                      fontSize={isMobile ? 8 : 10}
+                    >
+                      {text}
+                    </text>
+                  );
+                }}
               />
             </Bar>
           </BarChart>
