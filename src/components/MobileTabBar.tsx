@@ -1,4 +1,4 @@
-import { TrendingUp, BarChart3, Target, Table2, BookOpen } from 'lucide-react';
+import { TrendingUp, BarChart3, Target, Table2, BookOpen, ArrowLeftRight, Grid3x3 } from 'lucide-react';
 import type { TabType } from '../context/AppContext';
 
 interface MobileTabBarProps {
@@ -8,8 +8,10 @@ interface MobileTabBarProps {
 
 const tabs = [
   { id: 'trend' as TabType, label: '趋势', icon: TrendingUp },
-  { id: 'bar' as TabType, label: '排名', icon: BarChart3 },
+  { id: 'compare' as TabType, label: '对比', icon: ArrowLeftRight },
   { id: 'recommend' as TabType, label: '推荐', icon: Target },
+  { id: 'bar' as TabType, label: '排名', icon: BarChart3 },
+  { id: 'heatmap' as TabType, label: '热力', icon: Grid3x3 },
   { id: 'table' as TabType, label: '数据', icon: Table2 },
   { id: 'sources' as TabType, label: '来源', icon: BookOpen },
 ];
@@ -24,14 +26,14 @@ export default function MobileTabBar({ activeTab, onTabChange }: MobileTabBarPro
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`flex flex-col items-center justify-center gap-0.5 flex-1 h-full transition-colors ${
+              className={`flex flex-col items-center justify-center gap-0.5 flex-1 h-full transition-colors min-w-0 ${
                 isActive
                   ? 'text-primary'
                   : 'text-muted-foreground active:text-foreground'
               }`}
             >
-              <tab.icon className="h-5 w-5" />
-              <span className="text-[10px] font-medium">{tab.label}</span>
+              <tab.icon className="h-4.5 w-4.5" />
+              <span className="text-[10px] font-medium leading-tight">{tab.label}</span>
             </button>
           );
         })}

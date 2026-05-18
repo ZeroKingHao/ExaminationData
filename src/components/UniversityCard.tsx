@@ -53,9 +53,9 @@ export default function UniversityCard({ university, onClose }: UniversityCardPr
         <div className="gradient-primary p-5 rounded-t-2xl relative">
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+            className="absolute top-4 right-4 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
           >
-            <X className="h-4 w-4" />
+            <X className="h-5 w-5" />
           </button>
           <h2 className="text-xl font-serif-cn font-bold text-white">{university}</h2>
           <div className="flex items-center gap-2 mt-2">
