@@ -39,7 +39,7 @@ export function SkeletonChart() {
           <SkeletonBlock className="h-7 w-14" />
         </div>
       </div>
-      <SkeletonBlock className="h-[400px] w-full rounded-xl" />
+      <SkeletonBlock className="h-[300px] md:h-[400px] w-full rounded-xl" />
     </div>
   );
 }

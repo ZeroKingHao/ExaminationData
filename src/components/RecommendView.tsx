@@ -152,23 +152,23 @@ export default function RecommendView() {
   return (
     <div className="space-y-6">
       {/* 输入区 */}
-      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+      <div className="bg-secondary/30 rounded-lg p-6 border border-border/60">
         <div className="flex items-center gap-2 mb-4">
-          <SlidersHorizontal className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">志愿推荐设置</h2>
+          <SlidersHorizontal className="w-5 h-5 text-muted-foreground" />
+          <h2 className="text-lg font-semibold text-foreground">志愿推荐设置</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
           {/* 输入模式切换 */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">输入方式</label>
+            <label className="block text-sm font-medium text-muted-foreground mb-1">输入方式</label>
             <div className="flex rounded-md shadow-sm">
               <button
                 onClick={() => setInputMode('score')}
                 className={`flex-1 px-3 py-2 text-sm font-medium rounded-l-lg border ${
                   inputMode === 'score'
-                    ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-500 text-blue-700 dark:text-blue-300'
-                    : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    ? 'bg-primary/10 border-primary text-primary'
+                    : 'bg-background border-input text-foreground hover:bg-accent/50'
                 }`}
               >
                 分数
@@ -177,8 +177,8 @@ export default function RecommendView() {
                 onClick={() => setInputMode('rank')}
                 className={`flex-1 px-3 py-2 text-sm font-medium rounded-r-lg border-t border-b border-r ${
                   inputMode === 'rank'
-                    ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-500 text-blue-700 dark:text-blue-300'
-                    : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    ? 'bg-primary/10 border-primary text-primary'
+                    : 'bg-background border-input text-foreground hover:bg-accent/50'
                 }`}
               >
                 位次
@@ -188,7 +188,7 @@ export default function RecommendView() {
 
           {/* 分数/位次输入 */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-muted-foreground mb-1">
               {inputMode === 'score' ? '高考分数' : '全省位次'}
             </label>
             <input
@@ -196,17 +196,17 @@ export default function RecommendView() {
               value={inputMode === 'score' ? scoreInput : rankInput}
               onChange={e => inputMode === 'score' ? setScoreInput(e.target.value) : setRankInput(e.target.value)}
               placeholder={inputMode === 'score' ? '200-750' : '例如：5000'}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 border border-input rounded-lg bg-background text-foreground"
             />
           </div>
 
           {/* 年份选择 */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">参考年份</label>
+            <label className="block text-sm font-medium text-muted-foreground mb-1">参考年份</label>
             <select
               value={selectedYear}
               onChange={e => setSelectedYear(Number(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 border border-input rounded-lg bg-background text-foreground"
             >
               {YEAR_OPTIONS.map(year => (
                 <option key={year} value={year}>{year}年</option>
@@ -216,11 +216,11 @@ export default function RecommendView() {
 
           {/* 类型筛选 */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">院校类型</label>
+            <label className="block text-sm font-medium text-muted-foreground mb-1">院校类型</label>
             <select
               value={tierFilter}
               onChange={e => setTierFilter(e.target.value as TierFilter)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 border border-input rounded-lg bg-background text-foreground"
             >
               <option value="all">全部</option>
               <option value="985">仅985</option>
@@ -231,7 +231,7 @@ export default function RecommendView() {
 
         {/* 门类多选 */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">学科门类（可多选）</label>
+          <label className="block text-sm font-medium text-muted-foreground mb-2">学科门类（可多选）</label>
           <div className="flex flex-wrap gap-2">
             {categories.map(category => (
               <button
@@ -239,8 +239,8 @@ export default function RecommendView() {
                 onClick={() => toggleCategory(category)}
                 className={`px-3 py-1 text-sm rounded-full border transition-colors ${
                   selectedCategories.includes(category)
-                    ? 'bg-blue-500 text-white border-blue-500'
-                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    ? 'bg-primary text-primary-foreground border-primary'
+                    : 'bg-background text-foreground border-input hover:bg-accent/50'
                 }`}
               >
                 {category}
@@ -252,7 +252,7 @@ export default function RecommendView() {
         {/* 生成按钮 */}
         <button
           onClick={generateRecommendations}
-          className="w-full md:w-auto px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors"
+          className="w-full md:w-auto px-6 py-2 gradient-primary hover:opacity-90 text-white font-medium rounded-lg transition-colors shadow-lg shadow-primary/20"
         >
           生成推荐方案
         </button>
@@ -261,22 +261,22 @@ export default function RecommendView() {
       {/* 空状态 */}
       {!hasSearched && (
         <div className="text-center py-12">
-          <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
-            <SlidersHorizontal className="w-8 h-8 text-gray-400" />
+          <div className="w-16 h-16 bg-secondary/50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <SlidersHorizontal className="w-8 h-8 text-muted-foreground/50" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">开始智能推荐</h3>
-          <p className="text-gray-600 dark:text-gray-400">输入您的分数或位次，我们将为您推荐合适的院校和专业</p>
+          <h3 className="text-lg font-medium text-foreground mb-2">开始智能推荐</h3>
+          <p className="text-muted-foreground">输入您的分数或位次，我们将为您推荐合适的院校和专业</p>
         </div>
       )}
 
       {/* 推荐结果 */}
       {hasSearched && results.length === 0 && (
         <div className="text-center py-12">
-          <div className="w-16 h-16 bg-yellow-50 dark:bg-yellow-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Zap className="w-8 h-8 text-yellow-500" />
+          <div className="w-16 h-16 bg-chart-3/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Zap className="w-8 h-8 text-chart-3" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">未找到匹配结果</h3>
-          <p className="text-gray-600 dark:text-gray-400">请尝试调整筛选条件或输入范围</p>
+          <h3 className="text-lg font-medium text-foreground mb-2">未找到匹配结果</h3>
+          <p className="text-muted-foreground">请尝试调整筛选条件或输入范围</p>
         </div>
       )}
 
@@ -284,21 +284,21 @@ export default function RecommendView() {
         <>
           {/* 统计摘要 */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-              <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">推荐方案</div>
+            <div className="bg-secondary/30 rounded-lg p-4 border border-border/60">
+              <div className="text-2xl font-bold text-foreground">{stats.total}</div>
+              <div className="text-sm text-muted-foreground">推荐方案</div>
             </div>
             <div className={`rounded-lg p-4 border ${riskConfig['冲'].bg}`}>
               <div className={`text-2xl font-bold ${riskConfig['冲'].color}`}>{stats.冲}</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">冲刺院校</div>
+              <div className="text-sm text-muted-foreground">冲刺院校</div>
             </div>
             <div className={`rounded-lg p-4 border ${riskConfig['稳'].bg}`}>
               <div className={`text-2xl font-bold ${riskConfig['稳'].color}`}>{stats.稳}</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">稳妥院校</div>
+              <div className="text-sm text-muted-foreground">稳妥院校</div>
             </div>
             <div className={`rounded-lg p-4 border ${riskConfig['保'].bg}`}>
               <div className={`text-2xl font-bold ${riskConfig['保'].color}`}>{stats.保}</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">保底院校</div>
+              <div className="text-sm text-muted-foreground">保底院校</div>
             </div>
           </div>
 
@@ -329,43 +329,43 @@ export default function RecommendView() {
                       return (
                         <div
                           key={`${item.university}-${item.major}-${index}`}
-                          className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow"
+                          className="bg-card rounded-lg p-4 border border-border/60 hover:shadow-md transition-shadow"
                         >
                           <div className="flex items-start justify-between mb-2">
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-1">
-                                <span className="font-semibold text-gray-900 dark:text-white">
+                                <span className="font-semibold text-foreground">
                                   {item.university}
                                 </span>
                                 <span className={`px-2 py-0.5 text-xs rounded ${
                                   item.tier === '985'
-                                    ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'
-                                    : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                                    ? 'bg-chart-1/15 text-chart-1'
+                                    : 'bg-chart-2/15 text-chart-2'
                                 }`}>
                                   {item.tier}
                                 </span>
                               </div>
-                              <div className="text-sm text-gray-700 dark:text-gray-300">
+                              <div className="text-sm text-muted-foreground">
                                 {item.major}
                               </div>
                             </div>
                           </div>
 
-                          <div className="grid grid-cols-2 gap-2 text-sm text-gray-600 dark:text-gray-400 mb-3">
+                          <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground mb-3">
                             <div>
-                              <span className="text-gray-500 dark:text-gray-500">分数：</span>
+                              <span className="text-muted-foreground/60">分数：</span>
                               {item.minScore}
                             </div>
                             <div>
-                              <span className="text-gray-500 dark:text-gray-500">位次：</span>
+                              <span className="text-muted-foreground/60">位次：</span>
                               {formatRank(item.minRank)}
                             </div>
                             <div>
-                              <span className="text-gray-500 dark:text-gray-500">门类：</span>
+                              <span className="text-muted-foreground/60">门类：</span>
                               {item.category}
                             </div>
                             <div className={riskConfig[level].color}>
-                              <span className="text-gray-500 dark:text-gray-500">风险：</span>
+                              <span className="text-muted-foreground/60">风险：</span>
                               {(item.riskRatio * 100).toFixed(1)}%
                             </div>
                           </div>
@@ -374,10 +374,10 @@ export default function RecommendView() {
                             <button
                               onClick={() => handleFavorite(item.university, item.major)}
                               disabled={isFavorited}
-                              className={`flex-1 flex items-center justify-center gap-1 px-2 py-1.5 text-sm rounded-lg transition-colors ${
+                              className={`flex-1 flex items-center justify-center gap-1 px-2 py-2 text-sm rounded-lg transition-colors ${
                                 isFavorited
-                                  ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 cursor-default'
-                                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                  ? 'bg-chart-3/15 text-chart-3 cursor-default'
+                                  : 'bg-secondary/60 text-secondary-foreground hover:bg-accent/60'
                               }`}
                             >
                               <Star className="w-4 h-4" />
@@ -386,10 +386,10 @@ export default function RecommendView() {
                             <button
                               onClick={() => handleCompare(item.university)}
                               disabled={isInCompare}
-                              className={`flex-1 flex items-center justify-center gap-1 px-2 py-1.5 text-sm rounded-lg transition-colors ${
+                              className={`flex-1 flex items-center justify-center gap-1 px-2 py-2 text-sm rounded-lg transition-colors ${
                                 isInCompare
-                                  ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 cursor-default'
-                                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                  ? 'bg-primary/15 text-primary cursor-default'
+                                  : 'bg-secondary/60 text-secondary-foreground hover:bg-accent/60'
                               }`}
                             >
                               <GitCompare className="w-4 h-4" />

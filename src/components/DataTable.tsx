@@ -271,7 +271,7 @@ export default function DataTable({ university, category, year }: DataTableProps
                 <button
                   key={pageNum}
                   onClick={() => setPage(pageNum)}
-                  className={`w-8 h-8 rounded-lg text-xs font-medium transition-all duration-200 ${
+                  className={`w-9 h-9 rounded-lg text-xs font-medium transition-all duration-200 ${
                     page === pageNum
                       ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
                       : 'border border-border bg-card hover:bg-accent'

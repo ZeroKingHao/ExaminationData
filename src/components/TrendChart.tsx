@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, useEffect } from 'react';
 import {
   LineChart,
   Line,
@@ -62,6 +62,13 @@ export default function TrendChart({ university, category }: TrendChartProps) {
   const [showPrediction, setShowPrediction] = useState(true);
   const isMobile = useIsMobile();
   const data = getDataByUniversity(university);
+
+  // 切换学校时重置筛选状态
+  useEffect(() => {
+    setSelectedMajors(new Set());
+    setHiddenMajors(new Set());
+    setFilterOpen(false);
+  }, [university]);
 
   // 所有可选专业
   const allMajors = useMemo(() => {
@@ -272,7 +279,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
           </button>
 
           {/* Quick year range presets */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="text-xs text-muted-foreground">年份范围：</span>
             {[
               { label: '近5年', start: 2021, end: 2025 },
@@ -316,7 +323,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
 
           {/* 预测开关 */}
           {(subView === 'rank' || subView === 'score') && (
-            <label className="hidden md:flex items-center gap-2 text-xs text-muted-foreground cursor-pointer ml-2">
+            <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer ml-2">
               <input
                 type="checkbox"
                 checked={showPrediction}

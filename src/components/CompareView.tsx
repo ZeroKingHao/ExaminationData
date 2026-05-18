@@ -430,86 +430,129 @@ export default function CompareView() {
       {/* 汇总对比表格 */}
       <div className="bg-card rounded-xl border border-border/60 p-3 md:p-6 shadow-card card-shine">
         <h3 className="text-sm font-semibold mb-4 text-muted-foreground">数据汇总对比</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-secondary/50">
-                <th className="text-left p-3 font-semibold text-muted-foreground border-b border-border">
-                  高校名称
-                </th>
-                <th className="text-center p-3 font-semibold text-muted-foreground border-b border-border">
-                  类型
-                </th>
-                <th className="text-center p-3 font-semibold text-muted-foreground border-b border-border">
-                  5年平均位次
-                </th>
-                <th className="text-center p-3 font-semibold text-muted-foreground border-b border-border">
-                  2025最低分
-                </th>
-                <th className="text-center p-3 font-semibold text-muted-foreground border-b border-border">
-                  2025最低位次
-                </th>
-                <th className="text-center p-3 font-semibold text-muted-foreground border-b border-border">
-                  专业数
-                </th>
-                <th className="text-center p-3 font-semibold text-muted-foreground border-b border-border">
-                  5年趋势
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {summaryData.map((item) => (
-                <tr key={item.university} className="border-b border-border hover:bg-secondary/30">
-                  <td className="p-3 font-medium">
-                    <span
-                      className="inline-block w-2 h-2 rounded-full mr-2"
-                      style={{ backgroundColor: item.color }}
-                    />
-                    {item.university}
-                  </td>
-                  <td className="text-center p-3">
-                    <span
-                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${
-                        item.tier === '985'
-                          ? 'bg-gradient-to-r from-amber-500/15 to-orange-500/15 text-amber-600 border border-amber-500/20'
-                          : 'bg-gradient-to-r from-blue-500/15 to-cyan-500/15 text-blue-600 border border-blue-500/20'
-                      }`}
-                    >
-                      <BookOpen className="h-3 w-3" />
-                      {item.tier}
+        {isMobile ? (
+          <div className="space-y-3">
+            {summaryData.map((item) => (
+              <div key={item.university} className="p-3 rounded-lg bg-secondary/30 border border-border/40">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
+                    <span className="font-medium text-sm">{item.university}</span>
+                  </div>
+                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium ${
+                    item.tier === '985'
+                      ? 'bg-chart-3/15 text-chart-3'
+                      : 'bg-chart-1/15 text-chart-1'
+                  }`}>
+                    {item.tier}
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div><span className="text-muted-foreground">平均位次：</span><span className="font-mono">{formatRank(item.avgRank)}</span></div>
+                  <div><span className="text-muted-foreground">2025最低分：</span><span className="font-mono font-semibold">{item.score2025 !== '-' ? item.score2025 : '-'}</span></div>
+                  <div><span className="text-muted-foreground">2025位次：</span><span className="font-mono">{item.rank2025 !== '-' ? formatRank(Number(item.rank2025)) : '-'}</span></div>
+                  <div><span className="text-muted-foreground">专业数：</span>{item.majorCount}</div>
+                </div>
+                <div className="mt-2 text-xs">
+                  {item.trend > 100 ? (
+                    <span className="inline-flex items-center gap-1 text-red-400 font-semibold">
+                      <TrendingUp className="h-3 w-3" /> 升温 +{item.trend}
                     </span>
-                  </td>
-                  <td className="text-center p-3 font-mono">{formatRank(item.avgRank)}</td>
-                  <td className="text-center p-3 font-mono font-semibold">
-                    {item.score2025 !== '-' ? item.score2025 : '-'}
-                  </td>
-                  <td className="text-center p-3 font-mono">
-                    {item.rank2025 !== '-' ? formatRank(Number(item.rank2025)) : '-'}
-                  </td>
-                  <td className="text-center p-3">{item.majorCount}</td>
-                  <td className="text-center p-3">
-                    {item.trend > 100 ? (
-                      <span className="inline-flex items-center gap-1 text-red-400 font-semibold text-xs">
-                        <TrendingUp className="h-3 w-3" />
-                        升温 +{item.trend}
-                      </span>
-                    ) : item.trend < -100 ? (
-                      <span className="inline-flex items-center gap-1 text-emerald-400 font-semibold text-xs">
-                        <TrendingDown className="h-3 w-3" />
-                        降温 {item.trend}
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 text-muted-foreground text-xs">
-                        <Minus className="h-3 w-3" />
-                        稳定
-                      </span>
-                    )}
-                  </td>
+                  ) : item.trend < -100 ? (
+                    <span className="inline-flex items-center gap-1 text-emerald-400 font-semibold">
+                      <TrendingDown className="h-3 w-3" /> 降温 {item.trend}
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 text-muted-foreground">
+                      <Minus className="h-3 w-3" /> 稳定
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-secondary/50">
+                  <th className="text-left p-3 font-semibold text-muted-foreground border-b border-border">
+                    高校名称
+                  </th>
+                  <th className="text-center p-3 font-semibold text-muted-foreground border-b border-border">
+                    类型
+                  </th>
+                  <th className="text-center p-3 font-semibold text-muted-foreground border-b border-border">
+                    5年平均位次
+                  </th>
+                  <th className="text-center p-3 font-semibold text-muted-foreground border-b border-border">
+                    2025最低分
+                  </th>
+                  <th className="text-center p-3 font-semibold text-muted-foreground border-b border-border">
+                    2025最低位次
+                  </th>
+                  <th className="text-center p-3 font-semibold text-muted-foreground border-b border-border">
+                    专业数
+                  </th>
+                  <th className="text-center p-3 font-semibold text-muted-foreground border-b border-border">
+                    5年趋势
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {summaryData.map((item) => (
+                  <tr key={item.university} className="border-b border-border hover:bg-secondary/30">
+                    <td className="p-3 font-medium">
+                      <span
+                        className="inline-block w-2 h-2 rounded-full mr-2"
+                        style={{ backgroundColor: item.color }}
+                      />
+                      {item.university}
+                    </td>
+                    <td className="text-center p-3">
+                      <span
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${
+                          item.tier === '985'
+                            ? 'bg-gradient-to-r from-amber-500/15 to-orange-500/15 text-amber-600 border border-amber-500/20'
+                            : 'bg-gradient-to-r from-blue-500/15 to-cyan-500/15 text-blue-600 border border-blue-500/20'
+                        }`}
+                      >
+                        <BookOpen className="h-3 w-3" />
+                        {item.tier}
+                      </span>
+                    </td>
+                    <td className="text-center p-3 font-mono">{formatRank(item.avgRank)}</td>
+                    <td className="text-center p-3 font-mono font-semibold">
+                      {item.score2025 !== '-' ? item.score2025 : '-'}
+                    </td>
+                    <td className="text-center p-3 font-mono">
+                      {item.rank2025 !== '-' ? formatRank(Number(item.rank2025)) : '-'}
+                    </td>
+                    <td className="text-center p-3">{item.majorCount}</td>
+                    <td className="text-center p-3">
+                      {item.trend > 100 ? (
+                        <span className="inline-flex items-center gap-1 text-red-400 font-semibold text-xs">
+                          <TrendingUp className="h-3 w-3" />
+                          升温 +{item.trend}
+                        </span>
+                      ) : item.trend < -100 ? (
+                        <span className="inline-flex items-center gap-1 text-emerald-400 font-semibold text-xs">
+                          <TrendingDown className="h-3 w-3" />
+                          降温 {item.trend}
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-muted-foreground text-xs">
+                          <Minus className="h-3 w-3" />
+                          稳定
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       {/* 图例说明 */}

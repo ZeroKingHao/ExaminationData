@@ -200,8 +200,8 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
                         className="flex flex-col items-center rounded-lg px-2 py-1.5 min-w-[56px] shrink-0"
                         style={{ backgroundColor: color.bg, color: color.text }}
                       >
-                        <span className="text-[10px] font-bold">{mainValue}</span>
-                        <span className="text-[9px] opacity-60">{y}</span>
+                        <span className="text-[11px] font-bold">{mainValue}</span>
+                        <span className="text-[10px] opacity-60">{y}</span>
                       </div>
                     );
                   })}

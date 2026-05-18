@@ -1,7 +1,8 @@
 import { DATA_SOURCES, admissionData } from '../data/admissionData';
 import { detailedScoreRankTable, getRankByScore, getScoreByRank, getBachelorLine, SCORE_RANK_SOURCES, type ScoreRankEntry } from '../data/scoreRankData';
-import { BookOpen, ExternalLink, Table2, Search, ArrowRight, TrendingUp, Award, Target, Shield, Zap, ShieldCheck } from 'lucide-react';
+import { BookOpen, ExternalLink, Table2, Search, ArrowRight, TrendingUp, Award, Target, Shield, Zap, ShieldCheck, ChevronDown as ChevronDownIcon } from 'lucide-react';
 import { useState, useMemo } from 'react';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 type QueryMode = 'score' | 'rank' | 'browse';
 
@@ -13,6 +14,8 @@ export default function DataSourceList() {
   const [queryRank, setQueryRank] = useState<string>('10000');
   const [browseYear, setBrowseYear] = useState(2025);
   const [browseScoreRange, setBrowseScoreRange] = useState<[number, number]>([550, 700]);
+  const [expandedMatched, setExpandedMatched] = useState<number | null>(null);
+  const isMobile = useIsMobile();
 
   // 分数查询结果
   const scoreQueryResult = useMemo(() => {
@@ -145,9 +148,9 @@ export default function DataSourceList() {
         </div>
 
         {/* Year Selector */}
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-4 flex-wrap">
           <span className="text-xs text-muted-foreground">查询年份：</span>
-          <div className="flex gap-1">
+          <div className="flex gap-1 flex-wrap">
             {[2021, 2022, 2023, 2024, 2025].map(y => (
               <button
                 key={y}
@@ -168,7 +171,7 @@ export default function DataSourceList() {
         {queryMode === 'score' && (
           <div className="space-y-4">
             <div className="bg-card rounded-xl border border-border/60 p-5 shadow-card card-shine">
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center gap-3">
                 <div className="flex items-center gap-2">
                   <label className="text-sm font-medium">输入分数：</label>
                   <input
@@ -177,7 +180,7 @@ export default function DataSourceList() {
                     onChange={e => setQueryScore(e.target.value)}
                     min={200}
                     max={750}
-                    className="h-9 w-24 rounded-lg border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                    className="h-10 w-24 rounded-lg border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                     placeholder="620"
                   />
                   <input
@@ -189,9 +192,9 @@ export default function DataSourceList() {
                     className="flex-1 max-w-[200px] h-2 accent-primary cursor-pointer"
                   />
                 </div>
-                <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                <ArrowRight className="h-4 w-4 text-muted-foreground hidden sm:block" />
                 {scoreQueryResult && (
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-4 flex-wrap">
                     <div className="text-center">
                       <div className="text-xs text-muted-foreground">对应位次</div>
                       <div className="text-lg font-bold text-primary">{formatRank(scoreQueryResult.rank)}</div>
@@ -245,7 +248,7 @@ export default function DataSourceList() {
         {queryMode === 'rank' && (
           <div className="space-y-4">
             <div className="bg-card rounded-xl border border-border/60 p-5 shadow-card card-shine">
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center gap-3">
                 <div className="flex items-center gap-2">
                   <label className="text-sm font-medium">输入位次：</label>
                   <input
@@ -253,13 +256,13 @@ export default function DataSourceList() {
                     value={queryRank}
                     onChange={e => setQueryRank(e.target.value)}
                     min={1}
-                    className="h-9 w-32 rounded-lg border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                    className="h-10 w-32 rounded-lg border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                     placeholder="10000"
                   />
                 </div>
-                <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                <ArrowRight className="h-4 w-4 text-muted-foreground hidden sm:block" />
                 {rankQueryResult && (
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-4 flex-wrap">
                     <div className="text-center">
                       <div className="text-xs text-muted-foreground">对应分数</div>
                       <div className="text-lg font-bold text-primary">{rankQueryResult.score}分</div>
@@ -281,24 +284,24 @@ export default function DataSourceList() {
         {queryMode === 'browse' && (
           <div className="space-y-4">
             <div className="bg-card rounded-xl border border-border p-4 shadow-sm">
-              <div className="flex items-center gap-4 mb-3">
+              <div className="flex flex-wrap items-center gap-3 mb-3">
                 <span className="text-sm font-medium">分数范围：</span>
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
                     value={browseScoreRange[0]}
                     onChange={e => setBrowseScoreRange([Number(e.target.value), browseScoreRange[1]])}
-                    className="h-8 w-20 rounded border border-input bg-background px-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
+                    className="h-10 w-20 rounded border border-input bg-background px-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
                   />
                   <span className="text-xs text-muted-foreground">至</span>
                   <input
                     type="number"
                     value={browseScoreRange[1]}
                     onChange={e => setBrowseScoreRange([browseScoreRange[0], Number(e.target.value)])}
-                    className="h-8 w-20 rounded border border-input bg-background px-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
+                    className="h-10 w-20 rounded border border-input bg-background px-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
                   />
                 </div>
-                <div className="flex gap-1">
+                <div className="flex gap-1 flex-wrap">
                   {[
                     { label: '高分段', range: [650, 750] as [number, number] },
                     { label: '中高分段', range: [580, 650] as [number, number] },
@@ -357,60 +360,112 @@ export default function DataSourceList() {
                 可报考的985/211高校参考（{queryYear}年，位次±20%范围）
               </h3>
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="bg-secondary/50">
-                    <th className="text-left p-2 font-semibold text-muted-foreground border-b border-border">高校</th>
-                    <th className="text-left p-2 font-semibold text-muted-foreground border-b border-border">专业</th>
-                    <th className="text-center p-2 font-semibold text-muted-foreground border-b border-border">类型</th>
-                    <th className="text-center p-2 font-semibold text-muted-foreground border-b border-border">志愿</th>
-                    <th className="text-right p-2 font-semibold text-muted-foreground border-b border-border">最低分</th>
-                    <th className="text-right p-2 font-semibold text-muted-foreground border-b border-border">最低位次</th>
-                    <th className="text-right p-2 font-semibold text-muted-foreground border-b border-border">位次差</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {matchedUniversities.map((u, i) => {
-                    const targetRank = queryMode === 'score' && scoreQueryResult ? scoreQueryResult.rank
-                      : rankQueryResult ? rankQueryResult.rank : 0;
-                    const diff = u.minRank - targetRank;
-                    const riskConfig = {
-                      '冲': { icon: Zap, color: 'bg-red-500/15 text-red-500', border: 'border-red-500/20' },
-                      '稳': { icon: Shield, color: 'bg-blue-500/15 text-blue-500', border: 'border-blue-500/20' },
-                      '保': { icon: ShieldCheck, color: 'bg-emerald-500/15 text-emerald-500', border: 'border-emerald-500/20' },
-                    }[u.risk];
-                    const RiskIcon = riskConfig.icon;
-                    return (
-                      <tr key={i} className={`border-b border-border hover:bg-secondary/30 ${
-                        u.risk === '冲' ? 'bg-red-500/[0.02]' : u.risk === '保' ? 'bg-emerald-500/[0.02]' : ''
-                      }`}>
-                        <td className="p-2 font-medium text-xs">{u.university}</td>
-                        <td className="p-2 text-xs text-muted-foreground truncate max-w-[150px]" title={u.major}>{u.major}</td>
-                        <td className="p-2 text-center">
-                          <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${
-                            u.tier === '985' ? 'bg-primary/10 text-primary' : 'bg-chart-2/10 text-chart-2'
-                          }`}>
-                            {u.tier}
-                          </span>
-                        </td>
-                        <td className="p-2 text-center">
-                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${riskConfig.color}`}>
-                            <RiskIcon className="h-3 w-3" />
-                            {u.risk}
-                          </span>
-                        </td>
-                        <td className="p-2 text-right font-mono text-xs">{u.minScore}</td>
-                        <td className="p-2 text-right font-mono text-xs">{formatRank(u.minRank)}</td>
-                        <td className={`p-2 text-right font-mono text-xs font-semibold ${diff <= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                          {diff <= 0 ? '安全' : `+${formatRank(diff)}`}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+            {isMobile ? (
+              <div className="divide-y divide-border">
+                {matchedUniversities.map((u, i) => {
+                  const targetRank = queryMode === 'score' && scoreQueryResult ? scoreQueryResult.rank
+                    : rankQueryResult ? rankQueryResult.rank : 0;
+                  const diff = u.minRank - targetRank;
+                  const riskConfig = {
+                    '冲': { icon: Zap, color: 'bg-red-500/15 text-red-500', border: 'border-red-500/20' },
+                    '稳': { icon: Shield, color: 'bg-blue-500/15 text-blue-500', border: 'border-blue-500/20' },
+                    '保': { icon: ShieldCheck, color: 'bg-emerald-500/15 text-emerald-500', border: 'border-emerald-500/20' },
+                  }[u.risk];
+                  const RiskIcon = riskConfig.icon;
+                  return (
+                    <div key={i}>
+                      <button
+                        onClick={() => setExpandedMatched(expandedMatched === i ? null : i)}
+                        className="w-full text-left p-3 flex items-center justify-between"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-medium truncate">{u.university}</span>
+                            <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${
+                              u.tier === '985' ? 'bg-primary/10 text-primary' : 'bg-chart-2/10 text-chart-2'
+                            }`}>{u.tier}</span>
+                            <span className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[10px] font-semibold ${riskConfig.color}`}>
+                              <RiskIcon className="h-2.5 w-2.5" />
+                              {u.risk}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+                            <span>最低分 <strong className="text-foreground">{u.minScore}</strong></span>
+                            <span>位次 <strong className="text-foreground">{formatRank(u.minRank)}</strong></span>
+                            <span className={diff <= 0 ? 'text-emerald-400' : 'text-red-400'}>
+                              {diff <= 0 ? '安全' : `+${formatRank(diff)}`}
+                            </span>
+                          </div>
+                        </div>
+                        <ChevronDownIcon className={`h-4 w-4 text-muted-foreground transition-transform ${expandedMatched === i ? 'rotate-180' : ''}`} />
+                      </button>
+                      {expandedMatched === i && (
+                        <div className="px-3 pb-3 animate-slide-up">
+                          <div className="p-3 rounded-lg bg-secondary/30 text-xs space-y-1">
+                            <div><span className="text-muted-foreground">专业：</span>{u.major}</div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-secondary/50">
+                      <th className="text-left p-2 font-semibold text-muted-foreground border-b border-border">高校</th>
+                      <th className="text-left p-2 font-semibold text-muted-foreground border-b border-border">专业</th>
+                      <th className="text-center p-2 font-semibold text-muted-foreground border-b border-border">类型</th>
+                      <th className="text-center p-2 font-semibold text-muted-foreground border-b border-border">志愿</th>
+                      <th className="text-right p-2 font-semibold text-muted-foreground border-b border-border">最低分</th>
+                      <th className="text-right p-2 font-semibold text-muted-foreground border-b border-border">最低位次</th>
+                      <th className="text-right p-2 font-semibold text-muted-foreground border-b border-border">位次差</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {matchedUniversities.map((u, i) => {
+                      const targetRank = queryMode === 'score' && scoreQueryResult ? scoreQueryResult.rank
+                        : rankQueryResult ? rankQueryResult.rank : 0;
+                      const diff = u.minRank - targetRank;
+                      const riskConfig = {
+                        '冲': { icon: Zap, color: 'bg-red-500/15 text-red-500', border: 'border-red-500/20' },
+                        '稳': { icon: Shield, color: 'bg-blue-500/15 text-blue-500', border: 'border-blue-500/20' },
+                        '保': { icon: ShieldCheck, color: 'bg-emerald-500/15 text-emerald-500', border: 'border-emerald-500/20' },
+                      }[u.risk];
+                      const RiskIcon = riskConfig.icon;
+                      return (
+                        <tr key={i} className={`border-b border-border hover:bg-secondary/30 ${
+                          u.risk === '冲' ? 'bg-red-500/[0.02]' : u.risk === '保' ? 'bg-emerald-500/[0.02]' : ''
+                        }`}>
+                          <td className="p-2 font-medium text-xs">{u.university}</td>
+                          <td className="p-2 text-xs text-muted-foreground truncate max-w-[150px]" title={u.major}>{u.major}</td>
+                          <td className="p-2 text-center">
+                            <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${
+                              u.tier === '985' ? 'bg-primary/10 text-primary' : 'bg-chart-2/10 text-chart-2'
+                            }`}>
+                              {u.tier}
+                            </span>
+                          </td>
+                          <td className="p-2 text-center">
+                            <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${riskConfig.color}`}>
+                              <RiskIcon className="h-3 w-3" />
+                              {u.risk}
+                            </span>
+                          </td>
+                          <td className="p-2 text-right font-mono text-xs">{u.minScore}</td>
+                          <td className="p-2 text-right font-mono text-xs">{formatRank(u.minRank)}</td>
+                          <td className={`p-2 text-right font-mono text-xs font-semibold ${diff <= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                            {diff <= 0 ? '安全' : `+${formatRank(diff)}`}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
             <p className="text-xs text-muted-foreground mt-2">
               * 位次差为负（安全）表示你的位次高于该专业最低位次，为正则需要冲刺
             </p>

@@ -29,7 +29,7 @@ export default function FavoritesPanel() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-all"
+        className="relative p-2.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-all"
         title="收藏清单"
       >
         <Star
@@ -106,21 +106,21 @@ export default function FavoritesPanel() {
                             <button
                               onClick={() => addToCompare(item.university)}
                               disabled={compareList.length >= 5 || compareList.includes(item.university)}
-                              className={`p-1 rounded transition-colors ${
+                              className={`p-2 rounded transition-colors ${
                                 compareList.includes(item.university)
                                   ? 'text-primary'
                                   : 'text-muted-foreground/40 hover:text-primary'
                               }`}
                               title={compareList.includes(item.university) ? '已加入对比' : '加入对比'}
                             >
-                              <ArrowLeftRight className="h-3.5 w-3.5" />
+                              <ArrowLeftRight className="h-4 w-4" />
                             </button>
                             <button
                               onClick={() => removeFavorite(item.id)}
-                              className="p-1 rounded text-muted-foreground/40 hover:text-destructive transition-colors"
+                              className="p-2 rounded text-muted-foreground/40 hover:text-destructive transition-colors"
                               title="移除"
                             >
-                              <X className="h-3.5 w-3.5" />
+                              <X className="h-4 w-4" />
                             </button>
                           </div>
                         </div>

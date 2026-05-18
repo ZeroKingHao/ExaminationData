@@ -101,13 +101,13 @@ export default function GlobalSearch({ externalOpen, onExternalClose }: GlobalSe
           onChange={e => { setQuery(e.target.value); setIsOpen(true); }}
           onFocus={() => setIsOpen(true)}
           placeholder="搜索高校或专业..."
-          className="h-9 w-full md:w-40 sm:md:w-56 rounded-lg border border-input bg-background pl-9 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
+          className="h-10 w-full md:w-40 sm:md:w-56 rounded-lg border border-input bg-background pl-9 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
         />
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
         {query && (
           <button
             onClick={() => { setQuery(''); setDebouncedQuery(''); }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground hover:text-foreground"
+            className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded text-muted-foreground hover:text-foreground"
           >
             <X className="h-3.5 w-3.5" />
           </button>
@@ -156,10 +156,10 @@ export default function GlobalSearch({ externalOpen, onExternalClose }: GlobalSe
                             e.stopPropagation();
                             isFav ? removeFavorite(`${u}::all`) : addFavorite({ id: `${u}::all`, university: u, major: 'all' });
                           }}
-                          className={`p-1.5 mr-1 rounded transition-colors ${isFav ? 'text-chart-3' : 'text-muted-foreground/30 hover:text-chart-3'}`}
+                          className={`p-2 mr-1 rounded transition-colors ${isFav ? 'text-chart-3' : 'text-muted-foreground/30 hover:text-chart-3'}`}
                           title={isFav ? '取消收藏' : '收藏高校'}
                         >
-                          <Star className="h-3.5 w-3.5" fill={isFav ? 'currentColor' : 'none'} />
+                          <Star className="h-4 w-4" fill={isFav ? 'currentColor' : 'none'} />
                         </button>
                       </div>
                     );
