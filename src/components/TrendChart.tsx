@@ -56,19 +56,11 @@ export default function TrendChart({ university, category }: TrendChartProps) {
   const [yearStart, setYearStart] = useState(2021);
   const [yearEnd, setYearEnd] = useState(2025);
   const [selectedMajors, setSelectedMajors] = useState<Set<string>>(new Set());
-  const [hiddenMajors, setHiddenMajors] = useState<Set<string>>(new Set());
   const [filterOpen, setFilterOpen] = useState(false);
   const [showUniCard, setShowUniCard] = useState(false);
   const [showPrediction, setShowPrediction] = useState(true);
   const isMobile = useIsMobile();
   const data = getDataByUniversity(university);
-
-  // 切换学校时重置筛选状态
-  useEffect(() => {
-    setSelectedMajors(new Set());
-    setHiddenMajors(new Set());
-    setFilterOpen(false);
-  }, [university]);
 
   // 所有可选专业
   const allMajors = useMemo(() => {
@@ -81,18 +73,16 @@ export default function TrendChart({ university, category }: TrendChartProps) {
     return majorList;
   }, [university, category, data]);
 
-  // 实际显示的专业（用户选择 or 全部），排除被Legend点击隐藏的
-  // 同时过滤掉不属于当前学校的陈旧选项，防止切换学校时显示异常
+  // 切换学校/门类时，将所有专业设为选中（打勾=展示）
+  useEffect(() => {
+    setSelectedMajors(new Set(allMajors));
+    setFilterOpen(false);
+  }, [allMajors]);
+
+  // 实际显示的专业：打勾的展示，未打勾的隐藏
   const majors = useMemo(() => {
-    const allMajorsSet = new Set(allMajors);
-    const validSelected = new Set(
-      Array.from(selectedMajors).filter(m => allMajorsSet.has(m))
-    );
-    let visible = validSelected.size > 0
-      ? allMajors.filter(m => validSelected.has(m))
-      : allMajors;
-    return visible.filter(m => !hiddenMajors.has(m) && allMajorsSet.has(m));
-  }, [allMajors, selectedMajors, hiddenMajors]);
+    return allMajors.filter(m => selectedMajors.has(m));
+  }, [allMajors, selectedMajors]);
 
   // 年份范围
   const years = useMemo(() => {
@@ -113,8 +103,8 @@ export default function TrendChart({ university, category }: TrendChartProps) {
   }, []);
 
   const selectAllMajors = useCallback(() => {
-    setSelectedMajors(new Set());
-  }, []);
+    setSelectedMajors(new Set(allMajors));
+  }, [allMajors]);
 
   const chartData = useMemo(() => {
     return years.map(year => {
@@ -274,12 +264,10 @@ export default function TrendChart({ university, category }: TrendChartProps) {
             className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
             <Filter className="h-4 w-4" />
-            筛选条件
-            {selectedMajors.size > 0 && (
-              <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-semibold">
-                {selectedMajors.size}个专业
-              </span>
-            )}
+            筛选专业
+            <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-semibold">
+              {selectedMajors.size}/{allMajors.length}
+            </span>
             {filterOpen ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
           </button>
 
@@ -340,7 +328,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
           )}
         </div>
 
-        {/* Expanded filter: Major selection */}
+        {/* Expanded filter: Major selection (checkbox style) */}
         <div
           className={`overflow-hidden transition-all duration-300 ease-out ${
             filterOpen ? 'max-h-96 opacity-100 mt-3' : 'max-h-0 opacity-0'
@@ -349,51 +337,47 @@ export default function TrendChart({ university, category }: TrendChartProps) {
           <div className="pt-3 border-t border-border">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium text-muted-foreground">
-                选择专业（点击选择/取消，未选择则显示全部{allMajors.length}个专业）
+                勾选要展示的专业（共{allMajors.length}个）
               </span>
               <div className="flex gap-2">
-                {selectedMajors.size > 0 && (
-                  <button onClick={clearMajorFilter} className="text-xs text-primary hover:underline">
-                    清除选择
-                  </button>
-                )}
+                <button onClick={selectAllMajors} className="text-xs text-primary hover:underline">
+                  全选
+                </button>
+                <button onClick={clearMajorFilter} className="text-xs text-primary hover:underline">
+                  全不选
+                </button>
               </div>
             </div>
             <div className="flex flex-wrap gap-1.5 max-h-40 overflow-y-auto scrollbar-thin">
               {allMajors.map(major => {
-                const isSelected = selectedMajors.has(major);
+                const isChecked = selectedMajors.has(major);
                 return (
-                  <button
+                  <label
                     key={major}
-                    onClick={() => toggleMajor(major)}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-300 ${
-                      isSelected
-                        ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20 scale-[1.02]'
-                        : 'bg-secondary/80 text-secondary-foreground hover:bg-accent hover:shadow-sm'
+                    className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-300 cursor-pointer ${
+                      isChecked
+                        ? 'bg-primary/15 text-primary border border-primary/30'
+                        : 'bg-secondary/50 text-muted-foreground border border-transparent hover:bg-accent/50'
                     }`}
                   >
+                    <input
+                      type="checkbox"
+                      checked={isChecked}
+                      onChange={() => toggleMajor(major)}
+                      className="rounded border-input"
+                    />
                     {major}
-                  </button>
+                  </label>
                 );
               })}
             </div>
           </div>
         </div>
 
-        {/* Selected major tags */}
-        {selectedMajors.size > 0 && !filterOpen && (
-          <div className="mt-2 flex flex-wrap gap-1">
-            {Array.from(selectedMajors).map(major => (
-              <span
-                key={major}
-                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs"
-              >
-                {major}
-                <button onClick={() => toggleMajor(major)} className="hover:text-destructive">
-                  <X className="h-3 w-3" />
-                </button>
-              </span>
-            ))}
+        {/* Hidden majors summary */}
+        {selectedMajors.size < allMajors.length && !filterOpen && (
+          <div className="mt-2 text-xs text-muted-foreground">
+            已隐藏 {allMajors.length - selectedMajors.size} 个专业
           </div>
         )}
       </div>
@@ -442,7 +426,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
                 onClick={(data) => {
                   const majorName = String(data.dataKey ?? '').replace('_rank', '');
                   if (majorName) {
-                    setHiddenMajors(prev => {
+                    setSelectedMajors(prev => {
                       const next = new Set(prev);
                       next.has(majorName) ? next.delete(majorName) : next.add(majorName);
                       return next;
@@ -463,7 +447,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
                   connectNulls
                   animationDuration={800}
                   animationEasing="ease-out"
-                  hide={hiddenMajors.has(major)}
+                  hide={!selectedMajors.has(major)}
                 />
               ))}
               {showPrediction && majors.map((major, idx) => {
@@ -539,7 +523,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
                 onClick={(data) => {
                   const majorName = String(data.dataKey ?? '').replace('_score', '');
                   if (majorName) {
-                    setHiddenMajors(prev => {
+                    setSelectedMajors(prev => {
                       const next = new Set(prev);
                       next.has(majorName) ? next.delete(majorName) : next.add(majorName);
                       return next;
@@ -560,7 +544,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
                   connectNulls
                   animationDuration={800}
                   animationEasing="ease-out"
-                  hide={hiddenMajors.has(major)}
+                  hide={!selectedMajors.has(major)}
                 />
               ))}
               {showPrediction && majors.map((major, idx) => {
@@ -724,7 +708,7 @@ export default function TrendChart({ university, category }: TrendChartProps) {
                 onClick={(data) => {
                   const majorName = String(data.dataKey ?? '').replace('_change', '');
                   if (majorName) {
-                    setHiddenMajors(prev => {
+                    setSelectedMajors(prev => {
                       const next = new Set(prev);
                       next.has(majorName) ? next.delete(majorName) : next.add(majorName);
                       return next;
