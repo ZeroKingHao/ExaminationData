@@ -345,7 +345,7 @@ export default function RecommendView() {
                                   {item.tier}
                                 </span>
                               </div>
-                              <div className="text-sm text-muted-foreground">
+                              <div className="text-sm text-muted-foreground whitespace-normal break-words">
                                 {item.major}
                               </div>
                             </div>
