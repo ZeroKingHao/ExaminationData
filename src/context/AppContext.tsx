@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
 
-export type TabType = 'trend' | 'compare' | 'recommend' | 'heatmap' | 'bar' | 'table' | 'sources';
+export type TabType = 'trend' | 'compare' | 'recommend' | 'heatmap' | 'bar' | 'plan' | 'table' | 'sources';
 
 export interface FavoriteItem {
   id: string;       // `${university}::${major}` 或 `${university}::all`
