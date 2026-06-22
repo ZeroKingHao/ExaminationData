@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react';
 import { enrollmentPlanData } from '../data/enrollmentPlan';
+import { getYears } from '../data/admissionData';
 import { ClipboardList, Search, X } from 'lucide-react';
 import UniversityCard from './UniversityCard';
 import { useIsMobile } from '../hooks/useIsMobile';
 
-const YEARS = [2021, 2022, 2023, 2024, 2025];
+const YEARS = getYears();
 
 // 6 档色阶：人数越多越暖（红），阈值与 HeatmapChart.getScoreColor 一致
 function getPlanColor(num: number, minNum: number, maxNum: number) {
@@ -111,7 +112,7 @@ export default function EnrollmentPlanChart({ university }: { university: string
           </h2>
         </div>
         <p className="text-xs text-muted-foreground tracking-wide">
-          2021–2025 各专业计划招生人数 · 颜色越暖表示当年招生人数越多
+          2021–2026 各专业计划招生人数 · 颜色越暖表示当年招生人数越多
         </p>
         {yearSummary && (
           <p className="text-xs text-muted-foreground mt-1 font-mono">全校总计划：{yearSummary}</p>

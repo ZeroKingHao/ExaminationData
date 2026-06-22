@@ -3267,6 +3267,16 @@ export function getBachelorLine(year: number): { score: number; rank: number } |
   return BACHELOR_LINES[year] || null;
 }
 
+// 一分一段表已覆盖的年份（基于实际数据键派生）
+export function getScoreRankYears(): number[] {
+  return Object.keys(detailedScoreRankTable).map(Number).sort((a, b) => a - b);
+}
+
+// 判断某年份是否有一分一段表数据。2026 等未发布年份返回 false。
+export function hasScoreRank(year: number): boolean {
+  return detailedScoreRankTable[year] !== undefined;
+}
+
 // 一分一段表数据来源（数据来自 ukelv.cn 官方汇总）
 export const SCORE_RANK_SOURCES = [
   { year: 2021, name: '2021年河北省物理类一分一段表', url: 'https://www.ukelv.cn/rank/hebei/2021/phy' },

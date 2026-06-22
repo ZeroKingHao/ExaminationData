@@ -1,5 +1,5 @@
-import { DATA_SOURCES, admissionData } from '../data/admissionData';
-import { detailedScoreRankTable, getRankByScore, getScoreByRank, getBachelorLine, SCORE_RANK_SOURCES, type ScoreRankEntry } from '../data/scoreRankData';
+import { DATA_SOURCES, admissionData, getYears } from '../data/admissionData';
+import { detailedScoreRankTable, getRankByScore, getScoreByRank, getBachelorLine, hasScoreRank, SCORE_RANK_SOURCES, type ScoreRankEntry } from '../data/scoreRankData';
 import { BookOpen, ExternalLink, Table2, Search, ArrowRight, TrendingUp, Award, Target, Shield, Zap, ShieldCheck, ChevronDown as ChevronDownIcon } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { useIsMobile } from '../hooks/useIsMobile';
@@ -151,7 +151,7 @@ export default function DataSourceList() {
         <div className="flex items-center gap-2 mb-4 flex-wrap">
           <span className="text-xs text-muted-foreground">查询年份：</span>
           <div className="flex gap-1 flex-wrap">
-            {[2021, 2022, 2023, 2024, 2025].map(y => (
+            {getYears().map(y => (
               <button
                 key={y}
                 onClick={() => { setQueryYear(y); setBrowseYear(y); }}
@@ -166,6 +166,13 @@ export default function DataSourceList() {
             ))}
           </div>
         </div>
+
+        {/* 无一分一段表数据年份（如 2026）的待发布提示 */}
+        {!hasScoreRank(queryMode === 'browse' ? browseYear : queryYear) && (
+          <div className="mb-4 p-4 rounded-xl bg-secondary/30 border border-dashed border-border/60 text-center text-sm text-muted-foreground">
+            {queryMode === 'browse' ? browseYear : queryYear}年一分一段表待发布
+          </div>
+        )}
 
         {/* Score Query */}
         {queryMode === 'score' && (
@@ -502,7 +509,7 @@ export default function DataSourceList() {
         </p>
 
         <div className="flex gap-2 mb-4">
-          {[2021, 2022, 2023, 2024, 2025].map(y => (
+          {getYears().map(y => (
             <button
               key={y}
               onClick={() => setExpandedYear(expandedYear === y ? null : y)}
@@ -549,6 +556,13 @@ export default function DataSourceList() {
           </div>
         )}
       </div>
+
+      {/* 无一分一段表数据年份（如 2026）的待发布提示 */}
+      {expandedYear && !hasScoreRank(expandedYear) && (
+        <div className="p-6 rounded-xl bg-secondary/30 border border-dashed border-border/60 text-center text-sm text-muted-foreground">
+          {expandedYear}年一分一段表待发布
+        </div>
+      )}
 
       {/* Data Coverage */}
       <div className="mt-8">

@@ -10,7 +10,7 @@ import {
   Cell,
   LabelList,
 } from 'recharts';
-import { admissionData } from '../data/admissionData';
+import { admissionData, hasAdmissionData } from '../data/admissionData';
 import { BarChart3, Search, X, Award, Star, Filter } from 'lucide-react';
 import { ChartTooltip } from './ChartTooltip';
 import { useIsMobile } from '../hooks/useIsMobile';
@@ -151,8 +151,8 @@ export default function BarChartComponent({ year, category }: BarChartComponentP
         {chartData.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
             <BarChart3 className="h-10 w-10 mb-3 opacity-30" />
-            <p className="text-sm">未找到匹配的高校</p>
-            <p className="text-xs mt-1">请调整搜索关键词或筛选条件</p>
+            <p className="text-sm">{hasAdmissionData(year) ? '未找到匹配的高校' : `${year}年录取数据待发布`}</p>
+            <p className="text-xs mt-1">{hasAdmissionData(year) ? '请调整搜索关键词或筛选条件' : '预计 7 月公布，敬请期待'}</p>
           </div>
         ) : (
         <ResponsiveContainer width="100%" height={Math.max(chartData.length * (isMobile ? 32 : 40), 300)}>

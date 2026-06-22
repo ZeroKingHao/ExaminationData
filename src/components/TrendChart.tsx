@@ -12,7 +12,7 @@ import {
   Bar,
   Cell,
 } from 'recharts';
-import { getDataByUniversity, getMajorsByUniversity } from '../data/admissionData';
+import { getDataByUniversity, getMajorsByUniversity, getYears } from '../data/admissionData';
 import { TrendingUp, AlertTriangle, BarChart3, Activity, Filter, ChevronDown, ChevronUp, X, Search, Inbox } from 'lucide-react';
 import { ChartTooltip } from './ChartTooltip';
 import UniversityCard from './UniversityCard';
@@ -42,7 +42,7 @@ const COLORS = [
   'hsl(310, 60%, 58%)',
 ];
 
-const ALL_YEARS = [2021, 2022, 2023, 2024, 2025];
+const ALL_YEARS = getYears();
 
 type SubView = 'rank' | 'score' | 'compare' | 'change';
 
@@ -54,7 +54,7 @@ interface TrendChartProps {
 export default function TrendChart({ university, category }: TrendChartProps) {
   const [subView, setSubView] = useState<SubView>('rank');
   const [yearStart, setYearStart] = useState(2021);
-  const [yearEnd, setYearEnd] = useState(2025);
+  const [yearEnd, setYearEnd] = useState(2026);
   const [selectedMajors, setSelectedMajors] = useState<Set<string>>(new Set());
   const [filterOpen, setFilterOpen] = useState(false);
   const [showUniCard, setShowUniCard] = useState(false);
@@ -150,17 +150,25 @@ export default function TrendChart({ university, category }: TrendChartProps) {
   }, [data, majors, subView, showPrediction]);
 
   // 包含预测年的扩展数据
+  // 年轴已含 2026 行（yearEnd >= 2026）时，预测值填入该行；否则追加预测行。
+  // 避免出现两个 year=2026 的数据点。
   const chartDataWithPrediction = useMemo(() => {
     if (!showPrediction || Object.keys(predictionData).length === 0) return chartData;
-    const predictionRow: Record<string, number | string> = { year: 2026 };
-    majors.forEach(major => {
-      const pred = predictionData[major];
-      if (pred) {
-        const key = subView === 'rank' ? `${major}_rank` : `${major}_score`;
-        predictionRow[key] = pred.value;
-      }
-    });
-    return [...chartData, predictionRow];
+    const fillPrediction = (row: Record<string, number | string>) => {
+      const filled = { ...row };
+      majors.forEach(major => {
+        const pred = predictionData[major];
+        if (pred) {
+          const key = subView === 'rank' ? `${major}_rank` : `${major}_score`;
+          filled[key] = pred.value;
+        }
+      });
+      return filled;
+    };
+    if (chartData.some(r => r.year === 2026)) {
+      return chartData.map(row => (row.year === 2026 ? fillPrediction(row) : row));
+    }
+    return [...chartData, fillPrediction({ year: 2026 })];
   }, [chartData, showPrediction, predictionData, majors, subView]);
 
   const changeData = useMemo(() => {

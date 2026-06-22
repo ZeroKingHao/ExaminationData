@@ -105,7 +105,7 @@ function AppContent() {
                   河北省985/211高校录取数据分析
                 </h1>
                 <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-[10px] text-muted-foreground tracking-wider">2021–2025</span>
+                  <span className="text-[10px] text-muted-foreground tracking-wider">2021–2026</span>
                   <span className="text-[10px] text-muted-foreground/40">|</span>
                   <span className="text-[10px] text-muted-foreground tracking-wide">物理类（理科）</span>
                   <span className="text-[10px] text-muted-foreground/40">|</span>

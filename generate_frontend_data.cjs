@@ -265,7 +265,7 @@ const summary = {
   totalUniversities: Object.keys(selectedUniMap).length,
   universities985: unis985.length,
   universities211: unis211.length,
-  years: [2021, 2022, 2023, 2024, 2025],
+  years: [2021, 2022, 2023, 2024, 2025, 2026],
   sources: [
     { year: 2021, url: 'http://www.hebeea.edu.cn/c/2021-07-24/488945.html' },
     { year: 2022, url: 'http://www.hebeea.edu.cn/c/2022-07-25/488817.html' },

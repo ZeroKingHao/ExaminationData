@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useAppContext } from '../context/AppContext';
-import { admissionData, getCategories } from '../data/admissionData';
+import { admissionData, getCategories, getYears, hasAdmissionData } from '../data/admissionData';
 import { getRankByScore } from '../data/scoreRankData';
 import { Zap, Shield, ShieldCheck, Star, GitCompare, SlidersHorizontal } from 'lucide-react';
 
@@ -27,7 +27,7 @@ const riskConfig = {
 
 const formatRank = (v: number) => v >= 10000 ? `${(v / 10000).toFixed(1)}万` : v.toLocaleString();
 
-const YEAR_OPTIONS = [2021, 2022, 2023, 2024, 2025];
+const YEAR_OPTIONS = getYears();
 
 export default function RecommendView() {
   const { selectedYear, setSelectedYear, addFavorite, favorites, compareList, addToCompare } = useAppContext();
@@ -148,6 +148,19 @@ export default function RecommendView() {
         : [...prev, category]
     );
   };
+
+  // 选中年份无录取数据时，整页提示待发布
+  if (!hasAdmissionData(selectedYear)) {
+    return (
+      <div className="text-center py-16">
+        <div className="w-16 h-16 bg-secondary/50 rounded-full flex items-center justify-center mx-auto mb-4">
+          <SlidersHorizontal className="w-8 h-8 text-muted-foreground/50" />
+        </div>
+        <h3 className="text-lg font-medium text-foreground mb-2">{selectedYear}年录取数据待发布</h3>
+        <p className="text-muted-foreground">预计 7 月公布，敬请期待</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
