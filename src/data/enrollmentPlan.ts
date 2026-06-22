@@ -6480,7 +6480,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "工科试验班",
           "num": 6,
           "length": "四年",
-          "xuanke": "首选物���，再选不限"
+          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "医学试验班",
@@ -18271,7 +18271,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "计算机科学与技术",
           "num": 4,
           "length": "四年",
-          "xuanke": "首���物理，再选化学"
+          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "经济学",
@@ -23893,7 +23893,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "水产类",
           "num": 10,
           "length": "四年",
-          "xuanke": "首选物���，再选化学"
+          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "生态学",
@@ -29753,7 +29753,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "计算机科学与技术",
           "num": 173,
           "length": "四年",
-          "xuanke": "��选物理，再选化学"
+          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "交通工程",
