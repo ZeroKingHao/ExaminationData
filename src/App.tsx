@@ -5,6 +5,7 @@ import { AppProvider, useAppContext } from './context/AppContext';
 import type { TabType } from './context/AppContext';
 import TrendChart from './components/TrendChart';
 import HeatmapChart from './components/HeatmapChart';
+import EnrollmentPlanChart from './components/EnrollmentPlanChart';
 import DataTable from './components/DataTable';
 import BarChart from './components/BarChart';
 import GlobalSearch from './components/GlobalSearch';
@@ -17,7 +18,7 @@ const RecommendView = lazy(() => import('./components/RecommendView'));
 
 import { SkeletonChart, SkeletonStats } from './components/Skeleton';
 
-import { GraduationCap, TrendingUp, BarChart3, Table2, BookOpen, Sun, Moon, Monitor, Target, ChevronDown, SlidersHorizontal, Search } from 'lucide-react';
+import { GraduationCap, TrendingUp, BarChart3, Table2, BookOpen, Sun, Moon, Monitor, Target, ChevronDown, SlidersHorizontal, Search, ClipboardList } from 'lucide-react';
 import MobileTabBar from './components/MobileTabBar';
 import FilterDrawer from './components/FilterDrawer';
 
@@ -75,6 +76,7 @@ function AppContent() {
     { id: 'recommend' as TabType, label: '智能推荐', icon: Target },
     { id: 'bar' as TabType, label: '热度排名', icon: BarChart3 },
     { id: 'heatmap' as TabType, label: '热力图', icon: BarChart3 },
+    { id: 'plan' as TabType, label: '招生计划', icon: ClipboardList },
     { id: 'table' as TabType, label: '数据表', icon: Table2 },
     { id: 'sources' as TabType, label: '数据来源', icon: BookOpen },
   ];
@@ -103,7 +105,7 @@ function AppContent() {
                   河北省985/211高校录取数据分析
                 </h1>
                 <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-[10px] text-muted-foreground tracking-wider">2021–2025</span>
+                  <span className="text-[10px] text-muted-foreground tracking-wider">2021–2026</span>
                   <span className="text-[10px] text-muted-foreground/40">|</span>
                   <span className="text-[10px] text-muted-foreground tracking-wide">物理类（理科）</span>
                   <span className="text-[10px] text-muted-foreground/40">|</span>
@@ -198,6 +200,9 @@ function AppContent() {
           )}
           {activeTab === 'heatmap' && (
             <HeatmapChart university={selectedUniversity} category={selectedCategory} />
+          )}
+          {activeTab === 'plan' && (
+            <EnrollmentPlanChart university={selectedUniversity} />
           )}
           {activeTab === 'bar' && (
             <BarChart year={selectedYear} category={selectedCategory} />

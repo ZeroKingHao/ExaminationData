@@ -11,7 +11,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
-import { admissionData, getCategories, getDataByUniversity } from '../data/admissionData';
+import { admissionData, getCategories, getDataByUniversity, getYears } from '../data/admissionData';
 import { useAppContext } from '../context/AppContext';
 import { ChartTooltip } from './ChartTooltip';
 import { useIsMobile } from '../hooks/useIsMobile';
@@ -35,7 +35,7 @@ const COMPARE_COLORS = [
   { base: 'hsl(280, 65%, 65%)', bg: 'hsla(280, 65%, 65%, 0.15)', border: 'hsla(280, 65%, 65%, 0.4)' },
 ];
 
-const YEARS = [2021, 2022, 2023, 2024, 2025];
+const YEARS = getYears();
 
 const formatRank = (v: number) => (v >= 10000 ? `${(v / 10000).toFixed(1)}万` : v.toLocaleString());
 

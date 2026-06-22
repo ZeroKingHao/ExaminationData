@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { admissionData } from '../data/admissionData';
+import { admissionData, getYears } from '../data/admissionData';
 import { BarChart3, Table2, Search, X } from 'lucide-react';
 import UniversityCard from './UniversityCard';
 import { useIsMobile } from '../hooks/useIsMobile';
@@ -36,7 +36,7 @@ interface HeatmapChartProps {
 type HeatMode = 'rank' | 'score';
 
 export default function HeatmapChart({ university, category }: HeatmapChartProps) {
-  const years = [2021, 2022, 2023, 2024, 2025];
+  const years = getYears();
   const [heatMode, setHeatMode] = useState<HeatMode>('rank');
   const [searchQuery, setSearchQuery] = useState('');
   const [hoveredCell, setHoveredCell] = useState<{ major: string; year: number } | null>(null);

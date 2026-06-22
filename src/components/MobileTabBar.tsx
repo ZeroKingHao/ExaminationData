@@ -1,4 +1,4 @@
-import { TrendingUp, BarChart3, Target, Table2, BookOpen, ArrowLeftRight, Grid3x3 } from 'lucide-react';
+import { TrendingUp, BarChart3, Target, Table2, BookOpen, ArrowLeftRight, Grid3x3, ClipboardList } from 'lucide-react';
 import type { TabType } from '../context/AppContext';
 
 interface MobileTabBarProps {
@@ -12,6 +12,7 @@ const tabs = [
   { id: 'recommend' as TabType, label: '推荐', icon: Target },
   { id: 'bar' as TabType, label: '排名', icon: BarChart3 },
   { id: 'heatmap' as TabType, label: '热力', icon: Grid3x3 },
+  { id: 'plan' as TabType, label: '计划', icon: ClipboardList },
   { id: 'table' as TabType, label: '数据', icon: Table2 },
   { id: 'sources' as TabType, label: '来源', icon: BookOpen },
 ];

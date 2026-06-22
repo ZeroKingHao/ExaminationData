@@ -1,4 +1,4 @@
-// 河北省985/211高校录取数据（2021-2025年 物理类）
+// 河北省985/211高校录取数据（2021-2026年 物理类）
 // 数据来源：河北省教育考试院、掌上高考(gaokao.cn)、中国教育在线(eol.cn)、高考100(gk100.com)
 // 说明：部分数据为基于公开信息整理，具体以官方发布为准
 
@@ -86,5 +86,10 @@ export function getDataByYear(year: number): UniversityData[] {
 }
 
 export function getYears(): number[] {
-  return [2021, 2022, 2023, 2024, 2025];
+  return [2021, 2022, 2023, 2024, 2025, 2026];
+}
+
+// 判断某年份是否有录取数据（分数/位次）。2026 等未发布年份返回 false。
+export function hasAdmissionData(year: number): boolean {
+  return admissionData.some(d => d.year === year);
 }

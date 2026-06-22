@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
 
-export type TabType = 'trend' | 'compare' | 'recommend' | 'heatmap' | 'bar' | 'table' | 'sources';
+export type TabType = 'trend' | 'compare' | 'recommend' | 'heatmap' | 'bar' | 'plan' | 'table' | 'sources';
 
 export interface FavoriteItem {
   id: string;       // `${university}::${major}` 或 `${university}::all`
@@ -34,7 +34,7 @@ const AppContext = createContext<AppContextType | null>(null);
 export function AppProvider({ children }: { children: ReactNode }) {
   const [selectedUniversity, setSelectedUniversity] = useState<string>('北京大学');
   const [selectedCategory, setSelectedCategory] = useState<string>('全部');
-  const [selectedYear, setSelectedYear] = useState<number>(2025);
+  const [selectedYear, setSelectedYear] = useState<number>(2026);
   const [activeTab, setActiveTab] = useState<TabType>('trend');
 
   const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
