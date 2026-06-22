@@ -5,7 +5,7 @@ import { ClipboardList, Search, X } from 'lucide-react';
 import UniversityCard from './UniversityCard';
 import { useIsMobile } from '../hooks/useIsMobile';
 
-const YEARS = [...getYears(), 2026];
+const YEARS = getYears(); // [2021..2026]，getYears 已含 2026，勿再追加否则列重复
 
 // 6 档色阶：人数越多越暖（红），阈值与 HeatmapChart.getScoreColor 一致
 function getPlanColor(num: number, minNum: number, maxNum: number) {
