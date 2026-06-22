@@ -5,13 +5,14 @@ import { AppProvider, useAppContext } from './context/AppContext';
 import type { TabType } from './context/AppContext';
 import TrendChart from './components/TrendChart';
 import HeatmapChart from './components/HeatmapChart';
-import EnrollmentPlanChart from './components/EnrollmentPlanChart';
 import DataTable from './components/DataTable';
 import BarChart from './components/BarChart';
 import GlobalSearch from './components/GlobalSearch';
 import FavoritesPanel from './components/FavoritesPanel';
 
 // 懒加载：DataSourceList 包含 145KB+ 的一分一段表数据，只在用户点击"数据来源"时加载
+// EnrollmentPlanChart 包含 2.2MB+ 招生计划数据，只在用户点击"招生计划"时加载
+const EnrollmentPlanChart = lazy(() => import('./components/EnrollmentPlanChart'));
 const DataSourceList = lazy(() => import('./components/DataSourceList'));
 const CompareView = lazy(() => import('./components/CompareView'));
 const RecommendView = lazy(() => import('./components/RecommendView'));
@@ -202,7 +203,9 @@ function AppContent() {
             <HeatmapChart university={selectedUniversity} category={selectedCategory} />
           )}
           {activeTab === 'plan' && (
-            <EnrollmentPlanChart university={selectedUniversity} />
+            <Suspense fallback={<SkeletonChart />}>
+              <EnrollmentPlanChart university={selectedUniversity} />
+            </Suspense>
           )}
           {activeTab === 'bar' && (
             <BarChart year={selectedYear} category={selectedCategory} />
