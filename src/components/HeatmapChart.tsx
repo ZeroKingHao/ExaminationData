@@ -223,7 +223,11 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
               <tbody>
                 {displayMajors.map(major => {
                   const cells = years.map(y => getCellData(major, y));
-                  const validRanks = cells.filter((c): c is NonNullable<typeof c> => c !== null).map(c => c.minRank);
+                  const validRanks: number[] = [];
+                  const validYears: number[] = [];
+                  cells.forEach((c, i) => {
+                    if (c) { validRanks.push(c.minRank); validYears.push(years[i]); }
+                  });
                   const trend = validRanks.length >= 2 ? validRanks[validRanks.length - 1] - validRanks[0] : 0;
                   const latestEnrollment = cells.filter((c): c is NonNullable<typeof c> => c !== null).pop()?.enrollment;
                   return (
@@ -254,7 +258,7 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
                         );
                       })}
                       <td className="text-center p-3 border-b border-border">
-                        <MiniSparkline data={validRanks} years={years} />
+                        <MiniSparkline data={validRanks} years={validYears} />
                       </td>
                       <td className="text-center p-3 border-b border-border">
                         <span className="text-xs font-mono">{latestEnrollment || '-'}人</span>
@@ -291,7 +295,11 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
           <tbody>
             {displayMajors.map(major => {
               const cells = years.map(y => getCellData(major, y));
-              const validRanks = cells.filter((c): c is NonNullable<typeof c> => c !== null).map(c => c.minRank);
+              const validRanks: number[] = [];
+              const validYears: number[] = [];
+              cells.forEach((c, i) => {
+                if (c) { validRanks.push(c.minRank); validYears.push(years[i]); }
+              });
 
               // 趋势：首位次差
               const trend = validRanks.length >= 2
@@ -338,7 +346,7 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
                     );
                   })}
                   <td className="text-center p-3 border-b border-border">
-                    <MiniSparkline data={validRanks} years={years} />
+                    <MiniSparkline data={validRanks} years={validYears} />
                   </td>
                   <td className="text-center p-3 border-b border-border">
                     <span className="text-xs font-mono">{latestEnrollment || '-'}人</span>
