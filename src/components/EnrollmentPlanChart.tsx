@@ -259,7 +259,7 @@ export default function EnrollmentPlanChart({ university }: { university: string
               </button>
             </div>
           )}
-          <div className="bg-card rounded-xl border border-border/60 p-3 md:p-6 shadow-card card-shine overflow-x-auto">
+          <div className="bg-card rounded-xl border border-border/60 p-3 md:p-6 shadow-card overflow-x-auto scrollbar-thin">
             <table className="w-full border-collapse">
               <thead>
                 <tr>
