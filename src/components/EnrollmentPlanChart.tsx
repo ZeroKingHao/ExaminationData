@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { enrollmentPlanData } from '../data/enrollmentPlan';
 import { getYears } from '../data/admissionData';
 import { ClipboardList, Search, X } from 'lucide-react';
@@ -42,20 +42,37 @@ export default function EnrollmentPlanChart({ university }: { university: string
   const [hovered, setHovered] = useState<{ major: string; year: number; x: number; y: number } | null>(null);
   const [clicked, setClicked] = useState<{ major: string; year: number; x: number; y: number } | null>(null);
   const activeCell = clicked || hovered;
-  const cellEvents = (major: string, year: number) => ({
-    onMouseEnter: (e: React.MouseEvent<HTMLDivElement>) => {
-      const r = e.currentTarget.getBoundingClientRect();
-      setHovered({ major, year, x: r.left + r.width / 2, y: r.top });
-    },
-    onMouseLeave: () => setHovered(null),
-    onClick: (e: React.MouseEvent<HTMLDivElement>) => {
+  const cellEvents = (major: string, year: number) => {
+    const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
       const r = e.currentTarget.getBoundingClientRect();
       const isSame = clicked?.major === major && clicked?.year === year;
       setClicked(isSame ? null : { major, year, x: r.left + r.width / 2, y: r.top });
-    },
-  });
+    };
+    // 移动端无真正 hover：触摸点击会误触发 mouseenter 导致 hovered 残留、气泡点空白不消失，
+    // 故移动端仅用 clicked 控制气泡；桌面端 hover 即时预览 + 点击固定
+    if (isMobile) return { onClick };
+    return {
+      onMouseEnter: (e: React.MouseEvent<HTMLDivElement>) => {
+        const r = e.currentTarget.getBoundingClientRect();
+        setHovered({ major, year, x: r.left + r.width / 2, y: r.top });
+      },
+      onMouseLeave: () => setHovered(null),
+      onClick,
+    };
+  };
   const isCellActive = (major: string, year: number) =>
     (clicked?.major === major && clicked?.year === year) || (hovered?.major === major && hovered?.year === year);
+
+  // 点击气泡单元格以外的任意区域收回气泡（移动端点空白关闭 + 桌面端点外部取消固定）
+  useEffect(() => {
+    if (!clicked) return;
+    const handler = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('[data-plan-cell]')) setClicked(null);
+    };
+    document.addEventListener('click', handler);
+    return () => document.removeEventListener('click', handler);
+  }, [clicked]);
 
   // 数据派生：专业并集（按 5 年合计降序）+ 归一化区间 + 各年总计划
   const { majors, minNum, maxNum, totalPlanByYear, hasData } = useMemo(() => {
@@ -229,6 +246,7 @@ export default function EnrollmentPlanChart({ university }: { university: string
                       <div
                         key={y}
                         {...cellEvents(major, y)}
+                        data-plan-cell
                         className={`flex flex-col items-center rounded-lg px-2 py-1.5 min-w-[56px] shrink-0 cursor-pointer transition-all ${isCellActive(major, y) ? 'ring-2 ring-primary scale-105' : ''}`}
                         style={{ backgroundColor: color.bg, color: color.text }}
                       >
@@ -259,7 +277,7 @@ export default function EnrollmentPlanChart({ university }: { university: string
               </button>
             </div>
           )}
-          <div className="bg-card rounded-xl border border-border/60 p-3 md:p-6 shadow-card card-shine overflow-x-auto">
+          <div className="bg-card rounded-xl border border-border/60 p-3 md:p-6 shadow-card overflow-x-auto scrollbar-thin">
             <table className="w-full border-collapse">
               <thead>
                 <tr>
@@ -303,6 +321,7 @@ export default function EnrollmentPlanChart({ university }: { university: string
                         <td key={y} className="text-center p-2 border-b border-border">
                           <div
                             {...cellEvents(major, y)}
+                            data-plan-cell
                             className={`inline-flex flex-col items-center justify-center rounded-lg p-2 min-w-[72px] transition-all duration-200 cursor-pointer hover:scale-[1.05] ${isCellActive(major, y) ? 'ring-2 ring-primary ring-offset-1 ring-offset-background scale-[1.05]' : ''}`}
                             style={{ backgroundColor: color.bg, color: color.text }}
                           >
