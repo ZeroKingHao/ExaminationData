@@ -3,6 +3,7 @@ import { enrollmentPlanData } from '../data/enrollmentPlan';
 import { getYears } from '../data/admissionData';
 import { ClipboardList, Search, X } from 'lucide-react';
 import UniversityCard from './UniversityCard';
+import MiniSparkline from './MiniSparkline';
 import { useIsMobile } from '../hooks/useIsMobile';
 
 const YEARS = getYears(); // [2021..2026]，getYears 已含 2026，勿再追加否则列重复
@@ -131,6 +132,17 @@ export default function EnrollmentPlanChart({ university }: { university: string
     const items = yp.majors.filter((m) => m.name === majorName);
     if (items.length === 0) return null;
     return { num: items.reduce((s, m) => s + m.num, 0), items };
+  };
+
+  // 趋势折线数据：该专业各年有效计划人数 + 对齐年份（保证 MiniSparkline tooltip 的「年份: 人数」不错位）
+  const getTrend = (majorName: string) => {
+    const nums: number[] = [];
+    const ys: number[] = [];
+    YEARS.forEach((y) => {
+      const c = getCell(majorName, y);
+      if (c) { nums.push(c.num); ys.push(y); }
+    });
+    return { nums, years: ys };
   };
 
   // 空状态：该校无招生计划数据
@@ -292,6 +304,9 @@ export default function EnrollmentPlanChart({ university }: { university: string
                       {y}年
                     </th>
                   ))}
+                  <th className="text-center text-xs font-semibold text-muted-foreground p-3 border-b border-border min-w-[80px]">
+                    趋势
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -302,7 +317,9 @@ export default function EnrollmentPlanChart({ university }: { university: string
                     </td>
                   </tr>
                 )}
-                {displayMajors.map((major) => (
+                {displayMajors.map((major) => {
+                  const trend = getTrend(major);
+                  return (
                   <tr key={major} className="hover:bg-secondary/30 transition-colors">
                     <td className="text-sm font-medium p-3 border-b border-border">{major}</td>
                     {YEARS.map((y) => {
@@ -332,8 +349,12 @@ export default function EnrollmentPlanChart({ university }: { university: string
                         </td>
                       );
                     })}
+                    <td className="text-center p-2 border-b border-border">
+                      <MiniSparkline data={trend.nums} years={trend.years} />
+                    </td>
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
           </div>

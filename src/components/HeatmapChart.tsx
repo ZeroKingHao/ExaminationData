@@ -3,30 +3,7 @@ import { admissionData, getYears } from '../data/admissionData';
 import { BarChart3, Table2, Search, X } from 'lucide-react';
 import UniversityCard from './UniversityCard';
 import { useIsMobile } from '../hooks/useIsMobile';
-
-// Simple sparkline component using SVG
-function MiniSparkline({ data, years, width = 60, height = 20 }: { data: number[]; years?: number[]; width?: number; height?: number }) {
-  if (data.length < 2) return <span className="text-xs text-muted-foreground">-</span>;
-  const min = Math.min(...data);
-  const max = Math.max(...data);
-  const range = max - min || 1;
-  const points = data.map((v, i) => {
-    const x = (i / (data.length - 1)) * width;
-    const y = height - ((v - min) / range) * (height - 4) - 2;
-    return `${x},${y}`;
-  }).join(' ');
-
-  const titleText = years
-    ? data.map((v, i) => `${years[i] ?? '?'}: ${v.toLocaleString()}`).join('\n')
-    : '';
-
-  return (
-    <svg width={width} height={height} className="inline-block">
-      {titleText && <title>{titleText}</title>}
-      <polyline fill="none" stroke="hsl(var(--primary))" strokeWidth={1.5} points={points} />
-    </svg>
-  );
-}
+import MiniSparkline from './MiniSparkline';
 
 interface HeatmapChartProps {
   university: string;
@@ -246,7 +223,11 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
               <tbody>
                 {displayMajors.map(major => {
                   const cells = years.map(y => getCellData(major, y));
-                  const validRanks = cells.filter((c): c is NonNullable<typeof c> => c !== null).map(c => c.minRank);
+                  const validRanks: number[] = [];
+                  const validYears: number[] = [];
+                  cells.forEach((c, i) => {
+                    if (c) { validRanks.push(c.minRank); validYears.push(years[i]); }
+                  });
                   const trend = validRanks.length >= 2 ? validRanks[validRanks.length - 1] - validRanks[0] : 0;
                   const latestEnrollment = cells.filter((c): c is NonNullable<typeof c> => c !== null).pop()?.enrollment;
                   return (
@@ -277,7 +258,7 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
                         );
                       })}
                       <td className="text-center p-3 border-b border-border">
-                        <MiniSparkline data={validRanks} years={years} />
+                        <MiniSparkline data={validRanks} years={validYears} />
                       </td>
                       <td className="text-center p-3 border-b border-border">
                         <span className="text-xs font-mono">{latestEnrollment || '-'}人</span>
@@ -314,7 +295,11 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
           <tbody>
             {displayMajors.map(major => {
               const cells = years.map(y => getCellData(major, y));
-              const validRanks = cells.filter((c): c is NonNullable<typeof c> => c !== null).map(c => c.minRank);
+              const validRanks: number[] = [];
+              const validYears: number[] = [];
+              cells.forEach((c, i) => {
+                if (c) { validRanks.push(c.minRank); validYears.push(years[i]); }
+              });
 
               // 趋势：首位次差
               const trend = validRanks.length >= 2
@@ -361,7 +346,7 @@ export default function HeatmapChart({ university, category }: HeatmapChartProps
                     );
                   })}
                   <td className="text-center p-3 border-b border-border">
-                    <MiniSparkline data={validRanks} years={years} />
+                    <MiniSparkline data={validRanks} years={validYears} />
                   </td>
                   <td className="text-center p-3 border-b border-border">
                     <span className="text-xs font-mono">{latestEnrollment || '-'}人</span>
