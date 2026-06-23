@@ -18,11 +18,27 @@ function getPlanColor(num: number, minNum: number, maxNum: number) {
   return { bg: 'rgba(6, 182, 212, 0.45)', text: '#fff' };
 }
 
+// 从备注提取方向标签（校区/班型），用于明细面板的简短标识
+function getDirectionLabel(remark: string): string {
+  if (!remark) return '普通';
+  if (/芬兰校区/.test(remark)) return '芬兰校区';
+  if (/中外合作/.test(remark)) return '中外合作';
+  if (/利物浦/.test(remark)) return '利物浦学院';
+  if (/马来西亚分校/.test(remark)) return '马来西亚分校';
+  if (/创新实验班|创新班/.test(remark)) return '创新班';
+  if (/拔尖/.test(remark)) return '拔尖班';
+  if (/卓越/.test(remark)) return '卓越班';
+  if (/基地班|人才培养基地/.test(remark)) return '基地班';
+  const m = remark.match(/（([^（）]{2,12})/);
+  return m ? m[1] : '普通';
+}
+
 export default function EnrollmentPlanChart({ university }: { university: string }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showUniCard, setShowUniCard] = useState(false);
   const isMobile = useIsMobile();
   const [mobileViewMode, setMobileViewMode] = useState<'card' | 'table'>('card');
+  const [selectedCell, setSelectedCell] = useState<{ major: string; year: number } | null>(null);
 
   // 数据派生：专业并集（按 5 年合计降序）+ 归一化区间 + 各年总计划
   const { majors, minNum, maxNum, totalPlanByYear, hasData } = useMemo(() => {
@@ -192,15 +208,17 @@ export default function EnrollmentPlanChart({ university }: { university: string
                       );
                     }
                     const color = getPlanColor(cell.num, minNum, maxNum);
-                    const detail = cell.items.map(i => `${i.num}人${i.remark ? '·' + i.remark.slice(0, 25) : '·普通'}`).join('\n');
+                    const isSelected = selectedCell?.major === major && selectedCell?.year === y;
                     return (
                       <div
                         key={y}
-                        className="flex flex-col items-center rounded-lg px-2 py-1.5 min-w-[56px] shrink-0"
+                        onClick={() => setSelectedCell(isSelected ? null : { major, year: y })}
+                        className={`flex flex-col items-center rounded-lg px-2 py-1.5 min-w-[56px] shrink-0 cursor-pointer transition-all ${isSelected ? 'ring-2 ring-primary scale-105' : ''}`}
                         style={{ backgroundColor: color.bg, color: color.text }}
-                        title={detail}
+                        title={cell.items.length > 1 ? `点击查看 ${cell.items.length} 个方向` : `${cell.num}人`}
                       >
                         <span className="text-[11px] font-bold">{cell.num}</span>
+                        {cell.items.length > 1 && <span className="text-[8px] opacity-80 leading-none">方向{cell.items.length}</span>}
                         <span className="text-[10px] opacity-60">{y}</span>
                       </div>
                     );
@@ -266,13 +284,14 @@ export default function EnrollmentPlanChart({ university }: { university: string
                         );
                       }
                       const color = getPlanColor(cell.num, minNum, maxNum);
-                      const detail = cell.items.map(i => `${i.num}人${i.remark ? '·' + i.remark.slice(0, 25) : '·普通'}`).join('\n');
+                      const isSelected = selectedCell?.major === major && selectedCell?.year === y;
                       return (
                         <td key={y} className="text-center p-2 border-b border-border">
                           <div
-                            className="inline-flex flex-col items-center justify-center rounded-lg p-2 min-w-[72px] transition-all duration-200 cursor-default hover:scale-[1.02]"
+                            onClick={() => setSelectedCell(isSelected ? null : { major, year: y })}
+                            className={`inline-flex flex-col items-center justify-center rounded-lg p-2 min-w-[72px] transition-all duration-200 cursor-pointer hover:scale-[1.05] ${isSelected ? 'ring-2 ring-primary ring-offset-1 ring-offset-background scale-[1.05]' : ''}`}
                             style={{ backgroundColor: color.bg, color: color.text }}
-                            title={detail}
+                            title={cell.items.length > 1 ? `点击查看 ${cell.items.length} 个方向明细` : `${cell.num}人 · 点击查看详情`}
                           >
                             <span className="text-xs font-bold">{cell.num}</span>
                             {cell.items.length > 1 && <span className="text-[9px] opacity-75 leading-none">({cell.items.length}方向)</span>}
@@ -288,6 +307,67 @@ export default function EnrollmentPlanChart({ university }: { university: string
           </div>
         </div>
       )}
+
+      {/* 单元格点击展开的方向明细面板 */}
+      {selectedCell && (() => {
+        const cell = getCell(selectedCell.major, selectedCell.year);
+        if (!cell) return null;
+        return (
+          <div className="mt-4 p-4 md:p-5 rounded-xl bg-card border-2 border-primary/40 shadow-card animate-fade-in">
+            <div className="flex items-start justify-between mb-3 gap-2">
+              <div className="min-w-0">
+                <h3 className="text-sm font-serif-cn font-bold ink-text truncate">
+                  {selectedCell.major}
+                  <span className="text-muted-foreground font-normal"> · {selectedCell.year}年</span>
+                </h3>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {cell.items.length} 个方向 · 合计 <span className="font-bold text-primary">{cell.num}</span> 人
+                </p>
+              </div>
+              <button
+                onClick={() => setSelectedCell(null)}
+                className="p-1 rounded-md hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                aria-label="关闭明细"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="space-y-1.5">
+              {cell.items.map((item, i) => {
+                const c = getPlanColor(item.num, minNum, maxNum);
+                const label = getDirectionLabel(item.remark);
+                return (
+                  <div
+                    key={i}
+                    className="flex items-center gap-2 p-2 rounded-lg border border-border/50 bg-background/50"
+                  >
+                    <div
+                      className="shrink-0 w-12 text-center rounded-md py-1 text-xs font-bold"
+                      style={{ backgroundColor: c.bg, color: c.text }}
+                    >
+                      {item.num}
+                    </div>
+                    <span className="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-medium bg-secondary text-secondary-foreground whitespace-nowrap">
+                      {label}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <span className="text-[11px] text-muted-foreground">{item.length} · {item.xuanke}</span>
+                      {item.remark && (
+                        <p className="text-[10px] text-muted-foreground/70 line-clamp-2 mt-0.5" title={item.remark}>
+                          {item.remark}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <p className="text-[10px] text-muted-foreground/60 mt-2 text-center">
+              再次点击该单元格可关闭
+            </p>
+          </div>
+        );
+      })()}
 
       {/* 色阶图例 */}
       <div className="mt-4 p-4 rounded-xl bg-card border border-border/60 shadow-card card-shine">
