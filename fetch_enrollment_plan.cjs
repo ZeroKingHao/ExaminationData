@@ -57,9 +57,11 @@ function postJson(hostname, apiPath, params) {
     }
     const opts = { hostname, path: apiPath, method: 'POST', headers };
     const req = https.request(opts, (res) => {
-      let d = '';
-      res.on('data', c => d += c);
+      // 用 Buffer 收集再统一解码，避免跨 chunk 的多字节 UTF-8 字符被截断产生 U+FFFD（乱码）
+      const chunks = [];
+      res.on('data', c => chunks.push(c));
       res.on('end', () => {
+        const d = Buffer.concat(chunks).toString('utf8');
         try { resolve(JSON.parse(d)); }
         catch (e) { reject(new Error('Parse: ' + d.substring(0, 200))); }
       });
@@ -75,9 +77,9 @@ function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 function httpGet(url) {
   return new Promise((resolve, reject) => {
     https.get(url, { headers: { 'User-Agent': 'Mozilla/5.0' } }, (res) => {
-      let d = '';
-      res.on('data', c => d += c);
-      res.on('end', () => resolve(JSON.parse(d)));
+      const chunks = [];
+      res.on('data', c => chunks.push(c));
+      res.on('end', () => resolve(JSON.parse(Buffer.concat(chunks).toString('utf8'))));
     }).on('error', reject);
   });
 }
@@ -175,7 +177,11 @@ async function main() {
           fetched += items.length;
           for (const m of items) {
             // 仅保留普通类，排除专项计划/中外合作办学等特殊招生类型
+            // 注意：部分学校（如河北工大）的专项/中外合作 zslx_name 也是"普通类"，
+            // 靠备注 remark 标注（"（地方专项计划）""（中外合作办学）"），须额外按 remark 过滤
             if ((m.zslx_name || '') !== '普通类') continue;
+            const remark = m.remark || '';
+            if (/专项/.test(remark) || /中外合作/.test(remark)) continue;
             majors.push({
               major: m.sp_name,
               planNum: parseInt(m.num) || 0,

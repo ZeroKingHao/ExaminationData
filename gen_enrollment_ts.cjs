@@ -25,6 +25,11 @@ for (const [uni, years] of Object.entries(raw)) {
   for (const [year, yp] of Object.entries(years)) {
     if (!yp || !Array.isArray(yp.majors)) continue;
     const majors = yp.majors
+      .filter(m => {
+        // 排除专项计划/中外合作办学（zslx_name 对部分学校不可靠，靠备注 remark 标注，与 fetch 脚本一致）
+        const r = m.remark || '';
+        return !/专项/.test(r) && !/中外合作/.test(r);
+      })
       .map(m => ({
         name: m.major || '',
         num: Number(m.planNum) || 0,

@@ -4,7 +4,7 @@
  * 生成时间：2026-06-23
  * 生成脚本：gen_enrollment_ts.cjs（由 fetch_enrollment_plan.cjs 抓取的原始数据转换）
  *
- * 统计：99 所高校 · 594 个校年记录 · 13917 个专业条目
+ * 统计：99 所高校 · 594 个校年记录 · 13605 个专业条目
  */
 
 export interface MajorPlan {
@@ -691,17 +691,11 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 41,
+      "totalPlan": 29,
       "majors": [
         {
           "name": "工科试验班类",
           "num": 19,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "电子信息类",
-          "num": 12,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -1258,7 +1252,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "软件工程",
           "num": 3,
           "length": "四年",
-          "xuanke": "首选物理，再选���学"
+          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "经济管理试验班",
@@ -1720,7 +1714,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "工商管理类",
           "num": 3,
-          "length": "��年",
+          "length": "四年",
           "xuanke": "首选物理，再选不限"
         },
         {
@@ -1801,7 +1795,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "统��学",
+          "name": "统计学",
           "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
@@ -1947,7 +1941,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2022": {
-      "totalPlan": 139,
+      "totalPlan": 138,
       "majors": [
         {
           "name": "工科试验班类",
@@ -1974,8 +1968,8 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选不限"
         },
         {
-          "name": "工科试验班类",
-          "num": 5,
+          "name": "理科试验班类",
+          "num": 4,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
         },
@@ -2219,7 +2213,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 165,
+      "totalPlan": 135,
       "majors": [
         {
           "name": "工科试验班类",
@@ -2236,36 +2230,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "工科试验班类",
           "num": 32,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "理科试验班类",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "工科试验班类",
-          "num": 7,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "工科试验班类",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "飞行器动力工程",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "工科试验班类",
-          "num": 4,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -2291,7 +2255,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "工程力学",
           "num": 3,
           "length": "四年",
-          "xuanke": "首选物理，再选化���"
+          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "飞行器动力工程",
@@ -2533,7 +2497,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 141,
+      "totalPlan": 134,
       "majors": [
         {
           "name": "工科试验班",
@@ -2568,24 +2532,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "工科试验班",
           "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "会计学",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "能源与动力工程",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "车辆工程",
-          "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         }
@@ -2769,7 +2715,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 65,
+      "totalPlan": 30,
       "majors": [
         {
           "name": "工科试验班",
@@ -2778,44 +2724,8 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "化学",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "应用物理学",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "数学与应用数学",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "工科试验班",
           "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "大数据管理与应用",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "智慧建筑与建造",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "生物技术",
-          "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -3047,7 +2957,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选不限"
         },
         {
-          "name": "��科试验班",
+          "name": "工科试验班",
           "num": 35,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
@@ -3175,7 +3085,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "理科试验班",
           "num": 6,
           "length": "四年",
-          "xuanke": "首选��理，再选化学"
+          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "工科试验班",
@@ -3359,7 +3269,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 182,
+      "totalPlan": 147,
       "majors": [
         {
           "name": "信息工程",
@@ -3404,38 +3314,14 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "电气工程及其自动化",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "工科试验班",
           "num": 8,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "工业设计",
-          "num": 7,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "网络空间安全",
           "num": 7,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "建筑学",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "材料科学与工程",
-          "num": 6,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -3448,12 +3334,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "理科试验班",
           "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "智能制造工程",
-          "num": 5,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -3472,12 +3352,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "工科试验班",
           "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "碳中和科学与工程",
-          "num": 3,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -4297,7 +4171,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 121,
+      "totalPlan": 107,
       "majors": [
         {
           "name": "电气工程及其自动化",
@@ -4332,12 +4206,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "物理学类",
           "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "地理科学",
-          "num": 5,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -4390,12 +4258,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "地球物理学",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "微电子科学与工程",
           "num": 3,
           "length": "四年",
@@ -4412,24 +4274,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "num": 3,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "药学",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "电子信息工程",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "电气工程及其自动化",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "临床医学",
@@ -4450,7 +4294,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "机��人工程",
+          "name": "机器人工程",
           "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
@@ -5079,7 +4923,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 126,
+      "totalPlan": 116,
       "majors": [
         {
           "name": "能源动力类",
@@ -5144,18 +4988,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "电子信息类",
           "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "药学",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "生物科学",
-          "num": 5,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -5336,7 +5168,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "电子信息类",
           "num": 12,
           "length": "四年",
-          "xuanke": "首选���理，再选不限"
+          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "人工智能",
@@ -5425,7 +5257,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "临床医学",
           "num": 17,
           "length": "五年",
-          "xuanke": "��选物理，再选化学"
+          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "人工智能",
@@ -5603,7 +5435,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "临床医学",
           "num": 13,
           "length": "五年",
-          "xuanke": "首��物理，再选化学"
+          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "人工智能",
@@ -6280,7 +6112,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2023": {
-      "totalPlan": 245,
+      "totalPlan": 243,
       "majors": [
         {
           "name": "电气类",
@@ -6572,12 +6404,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         },
         {
           "name": "工商管理类",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "会计学",
           "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
@@ -6913,7 +6739,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 238,
+      "totalPlan": 232,
       "majors": [
         {
           "name": "电子信息类",
@@ -7062,24 +6888,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "工科试验班",
           "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "人工智能",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "电子信息工程",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "机械设计制造及其自动化",
-          "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -7277,7 +7085,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "工科试验班",
           "num": 38,
           "length": "四年",
-          "xuanke": "���选物理，再选化学"
+          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "理科试验班",
@@ -8185,7 +7993,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 123,
+      "totalPlan": 113,
       "majors": [
         {
           "name": "电子信息类",
@@ -8214,12 +8022,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "工科试验班",
           "num": 12,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "机器人工程",
-          "num": 10,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -8378,7 +8180,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "海洋科学类",
           "num": 3,
           "length": "四年",
-          "xuanke": "首选物理，再选化���/生物(2选1)"
+          "xuanke": "首选物理，再选化学/生物(2选1)"
         },
         {
           "name": "材料类",
@@ -9296,7 +9098,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2023": {
-      "totalPlan": 128,
+      "totalPlan": 134,
       "majors": [
         {
           "name": "工科试验班",
@@ -9337,6 +9139,12 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "经济管理试验班",
           "num": 8,
+          "length": "四年",
+          "xuanke": "首选物理，再选不限"
+        },
+        {
+          "name": "工科试验班",
+          "num": 6,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
         },
@@ -9473,7 +9281,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 137,
+      "totalPlan": 125,
       "majors": [
         {
           "name": "工科试验班",
@@ -9502,18 +9310,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "理科试验班",
           "num": 10,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "机械类",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "人工智能",
-          "num": 6,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -11166,7 +10962,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "应用化学",
           "num": 3,
           "length": "四年",
-          "xuanke": "首选物理，再��化学"
+          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "电子信息类",
@@ -11349,7 +11145,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 130,
+      "totalPlan": 101,
       "majors": [
         {
           "name": "人工智能",
@@ -11364,18 +11160,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "计算机类",
-          "num": 13,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "数学与应用数学",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "人工智能",
           "num": 6,
           "length": "四年",
@@ -11384,18 +11168,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "智能制造工程",
           "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "工程力学",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "应用物理学",
-          "num": 5,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -13403,7 +13175,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 378,
+      "totalPlan": 367,
       "majors": [
         {
           "name": "电子信息类",
@@ -13496,12 +13268,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "数学与应用数学",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "临床医学",
           "num": 6,
           "length": "五年",
@@ -13534,12 +13300,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "数学类",
           "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "物理学",
-          "num": 5,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -14295,7 +14055,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "软件工程",
           "num": 12,
           "length": "四年",
-          "xuanke": "首选��理，再选化学"
+          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "金融学类",
@@ -14425,7 +14185,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 303,
+      "totalPlan": 288,
       "majors": [
         {
           "name": "机械类",
@@ -14530,24 +14290,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "土木工程",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "材料科学与工程",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "交通设备与控制工程",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "临床医学",
           "num": 3,
           "length": "八年",
@@ -14556,18 +14298,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "生物医学工程",
           "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "自动化",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "机械设计制造及其自动化",
-          "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -16349,7 +16079,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 159,
+      "totalPlan": 148,
       "majors": [
         {
           "name": "工科试验班",
@@ -16390,30 +16120,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "理科试验班",
           "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "电气工程及其自动化",
-          "num": 3,
-          "length": "五年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "机械设计制造及其自动化",
-          "num": 3,
-          "length": "五年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "物理学",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "土木工程",
-          "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -16500,7 +16206,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "临床医学",
           "num": 9,
           "length": "五年",
-          "xuanke": "首选物���，再选化学/生物(2选1)"
+          "xuanke": "首选物理，再选化学/生物(2选1)"
         },
         {
           "name": "软件工程",
@@ -16678,7 +16384,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "航空航天工程",
           "num": 9,
           "length": "四年",
-          "xuanke": "���选物理，再选不限"
+          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "集成电路设计与集成系统",
@@ -16791,7 +16497,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "护理学",
           "num": 5,
           "length": "四年",
-          "xuanke": "首选物理���再选化学"
+          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "数学类",
@@ -16891,14 +16597,8 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 232,
+      "totalPlan": 188,
       "majors": [
-        {
-          "name": "电子信息类",
-          "num": 18,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
         {
           "name": "软件工程",
           "num": 18,
@@ -16944,18 +16644,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "工科试验班",
           "num": 16,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "电子信息类",
-          "num": 13,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "电子信息类",
-          "num": 13,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -18028,7 +17716,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "临床医学类",
           "num": 2,
           "length": "五年",
-          "xuanke": "首选物理，再��化学"
+          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "电子科学与技术",
@@ -18253,7 +17941,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选不限"
         },
         {
-          "name": "计算机��",
+          "name": "计算机类",
           "num": 10,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
@@ -18941,7 +18629,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 221,
+      "totalPlan": 176,
       "majors": [
         {
           "name": "航空航天类",
@@ -18986,18 +18674,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "高分子材料与工程",
-          "num": 13,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "材料科学与工程",
-          "num": 13,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "电子信息类",
           "num": 12,
           "length": "四年",
@@ -19028,50 +18704,14 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "人工智能",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "电子科学与技术",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "航空航天类",
           "num": 4,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "探测制导与控制技术",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "飞行器设计与工程",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "航空航天工程",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "航空航天类",
           "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "智能交互设计",
-          "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -19609,7 +19249,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 164,
+      "totalPlan": 157,
       "majors": [
         {
           "name": "临床医学",
@@ -19621,12 +19261,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "口腔医学",
           "num": 10,
           "length": "五年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "生物制药",
-          "num": 7,
-          "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
         {
@@ -20487,7 +20121,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 232,
+      "totalPlan": 207,
       "majors": [
         {
           "name": "机械类",
@@ -20520,22 +20154,10 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "材料科学与工程",
-          "num": 14,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "经济管理试验班",
           "num": 13,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "生物医学工程",
-          "num": 11,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "工科试验班",
@@ -20746,7 +20368,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "园艺",
           "num": 5,
           "length": "四年",
-          "xuanke": "��选物理，再选化学/生物(2选1)"
+          "xuanke": "首选物理，再选化学/生物(2选1)"
         },
         {
           "name": "植物保护",
@@ -20805,7 +20427,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "草业科学",
           "num": 3,
-          "length": "���年",
+          "length": "四年",
           "xuanke": "首选物理，再选化学/生物(2选1)"
         },
         {
@@ -21569,7 +21191,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 160,
+      "totalPlan": 150,
       "majors": [
         {
           "name": "电子信息类",
@@ -21680,18 +21302,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "计算机科学与技术",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "人工智能",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "工商管理类",
           "num": 3,
           "length": "四年",
@@ -21718,18 +21328,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "经济学类",
           "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "农林经济管理",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "国际经济与贸易",
-          "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
         },
@@ -21971,7 +21569,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "电子商务",
           "num": 2,
-          "length": "��年",
+          "length": "四年",
           "xuanke": "首选物理，再选不限"
         },
         {
@@ -22811,7 +22409,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "港口航���与海岸工程",
+          "name": "港口航道与海岸工程",
           "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
@@ -22867,7 +22465,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 135,
+      "totalPlan": 127,
       "majors": [
         {
           "name": "材料类",
@@ -22920,12 +22518,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "数学类",
           "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "物理学",
-          "num": 4,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -23030,18 +22622,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "num": 3,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "计算机科学与技术",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "海洋科学",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "财务管理",
@@ -25309,7 +24889,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 340,
+      "totalPlan": 320,
       "majors": [
         {
           "name": "计算机类",
@@ -25354,12 +24934,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "园艺",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "食品质量与安全",
           "num": 8,
           "length": "四年",
@@ -25374,18 +24948,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "环境科学与工程类",
           "num": 7,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "农林经济管理",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "植物保护",
-          "num": 6,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -25682,10 +25244,16 @@ export const enrollmentPlanData: EnrollmentPlanData = {
   },
   "中央民族大学": {
     "2021": {
-      "totalPlan": 31,
+      "totalPlan": 37,
       "majors": [
         {
           "name": "经济学类",
+          "num": 6,
+          "length": "四年",
+          "xuanke": "首选物理，再选不限"
+        },
+        {
+          "name": "工商管理类",
           "num": 6,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
@@ -26079,7 +25647,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 109,
+      "totalPlan": 100,
       "majors": [
         {
           "name": "计算机类",
@@ -26090,7 +25658,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "电子信息类",
           "num": 16,
-          "length": "��年",
+          "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
         {
@@ -26124,12 +25692,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选不限"
         },
         {
-          "name": "数据科学与大数据技术",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "工商管理类",
           "num": 5,
           "length": "四年",
@@ -26138,12 +25700,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "生物科学类",
           "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "环境科学",
-          "num": 4,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -26845,7 +26401,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 202,
+      "totalPlan": 139,
       "majors": [
         {
           "name": "通信工程",
@@ -26872,18 +26428,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "电信工程及管理",
-          "num": 21,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "物联网工程",
-          "num": 13,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "网络空间安全",
           "num": 12,
           "length": "四年",
@@ -26902,38 +26446,8 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "智能科学与技术",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "计算机类",
           "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "电子信息工程",
-          "num": 7,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "智能医学工程",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "数字媒体技术",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "信息与计算科学",
-          "num": 4,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         }
@@ -27114,7 +26628,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2023": {
-      "totalPlan": 192,
+      "totalPlan": 156,
       "majors": [
         {
           "name": "电子信息类",
@@ -27185,48 +26699,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "理科试验班",
           "num": 8,
-          "length": "4",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "机械电子工程",
-          "num": 7,
-          "length": "4",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "信息管理与信息系统",
-          "num": 6,
-          "length": "4",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "环境工程",
-          "num": 5,
-          "length": "4",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "纳米材料与技术",
-          "num": 5,
-          "length": "4",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "计算机科学与技术",
-          "num": 5,
-          "length": "4",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "会计学",
-          "num": 4,
-          "length": "4",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "通信工程",
-          "num": 4,
           "length": "4",
           "xuanke": "首选物理，再选不限"
         },
@@ -27405,7 +26877,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 179,
+      "totalPlan": 141,
       "majors": [
         {
           "name": "自动化类",
@@ -27438,56 +26910,14 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "环境工程",
-          "num": 12,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "会计学",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "通信工程",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "理科试验班类",
           "num": 5,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "计算机科学与技术",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "纳米材料与技术",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "机械电子工程",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "理科试验班类",
           "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "交通运输",
-          "num": 3,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -27723,7 +27153,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "储能科学与工程",
           "num": 5,
           "length": "四年",
-          "xuanke": "首选��理，再选不限"
+          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "应用化学",
@@ -28627,7 +28057,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 168,
+      "totalPlan": 155,
       "majors": [
         {
           "name": "工科试验班",
@@ -28684,20 +28114,8 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "工业设计",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "理科试验班",
           "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "化工与制药类",
-          "num": 5,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -28746,12 +28164,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "理科试验班",
           "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "生物工程",
-          "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -29187,14 +28599,8 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 70,
+      "totalPlan": 56,
       "majors": [
-        {
-          "name": "金融学",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
         {
           "name": "土木类",
           "num": 5,
@@ -29252,24 +28658,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "机器人工程",
           "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "物联网工程",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "软件工程",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "电子信息工程",
-          "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -29873,7 +29261,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学/生物(2选1)"
         },
         {
-          "name": "应���心理学",
+          "name": "应用心理学",
           "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
@@ -30455,7 +29843,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 139,
+      "totalPlan": 135,
       "majors": [
         {
           "name": "计算机类",
@@ -30551,18 +29939,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "生物技术",
           "num": 3,
           "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "木材科学与工程",
-          "num": 2,
-          "length": "五年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "生物技术",
-          "num": 2,
-          "length": "五年",
           "xuanke": "首选物理，再选化学"
         },
         {
@@ -31689,14 +31065,8 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 9,
+      "totalPlan": 6,
       "majors": [
-        {
-          "name": "大数据管理与应用",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
         {
           "name": "翻译",
           "num": 1,
@@ -32177,23 +31547,11 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 58,
+      "totalPlan": 45,
       "majors": [
         {
-          "name": "数字媒体技术",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "智能科学与技术",
           "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "智能科学与技术",
-          "num": 5,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -32242,12 +31600,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "广告学",
           "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "数字经济",
-          "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
         },
@@ -32743,19 +32095,13 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 64,
+      "totalPlan": 58,
       "majors": [
         {
           "name": "统计学类",
           "num": 8,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "国际经济与贸易",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "工商管理类",
@@ -33094,7 +32440,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2025": {
-      "totalPlan": 39,
+      "totalPlan": 43,
       "majors": [
         {
           "name": "金融工程",
@@ -33133,6 +32479,12 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选不限"
         },
         {
+          "name": "经济学类",
+          "num": 4,
+          "length": "四年",
+          "xuanke": "首选物理，再选不限"
+        },
+        {
           "name": "金融数学",
           "num": 3,
           "length": "四年",
@@ -33153,7 +32505,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 57,
+      "totalPlan": 44,
       "majors": [
         {
           "name": "数据科学与大数据技术",
@@ -33168,26 +32520,8 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选不限"
         },
         {
-          "name": "数据科学与大数据技术",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "金融学类",
           "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "精算学",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "保险学",
-          "num": 4,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
         },
@@ -33587,7 +32921,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 42,
+      "totalPlan": 40,
       "majors": [
         {
           "name": "法学",
@@ -33610,12 +32944,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "法学",
           "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "国际商务",
-          "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
         },
@@ -34595,7 +33923,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 64,
+      "totalPlan": 44,
       "majors": [
         {
           "name": "电气类",
@@ -34610,26 +33938,8 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "信息工程",
-          "num": 10,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "理科试验班类",
           "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "材料科学与工程",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "机械工程",
-          "num": 5,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -34965,7 +34275,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "经济管理试验班",
           "num": 2,
-          "length": "��年",
+          "length": "四年",
           "xuanke": "首选物理，再选不限"
         },
         {
@@ -35985,7 +35295,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 128,
+      "totalPlan": 123,
       "majors": [
         {
           "name": "机械类",
@@ -36038,18 +35348,12 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "工科试验班",
           "num": 6,
-          "length": "��年",
+          "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
         {
           "name": "工科试验班",
           "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "高分子材料与工程",
-          "num": 5,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -36452,7 +35756,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "车辆工程",
           "num": 2,
-          "length": "四���",
+          "length": "四年",
           "xuanke": "首选物理，再选不限"
         },
         {
@@ -37169,7 +36473,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 149,
+      "totalPlan": 137,
       "majors": [
         {
           "name": "航空航天类",
@@ -37198,18 +36502,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "微电子科学与工程",
           "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "工业工程",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "人工智能",
-          "num": 5,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -37258,12 +36550,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "能源与动力工程",
           "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "应用物理学",
-          "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -38658,7 +37944,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "能源与动力工程",
           "num": 5,
           "length": "四年",
-          "xuanke": "首选物理���再选不限"
+          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "地质工程",
@@ -39513,7 +38799,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 208,
+      "totalPlan": 203,
       "majors": [
         {
           "name": "水利水电工程",
@@ -39660,12 +38946,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选不限"
         },
         {
-          "name": "土木工程",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "工程管理",
           "num": 3,
           "length": "四年",
@@ -39716,12 +38996,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "工程力学",
           "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "机械工程",
-          "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -40730,7 +40004,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选不限"
         },
         {
-          "name": "电气工程与智能控��",
+          "name": "电气工程与智能控制",
           "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
@@ -40873,7 +40147,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学、生物(2科必选)"
         },
         {
-          "name": "预防��学",
+          "name": "预防医学",
           "num": 2,
           "length": "五年",
           "xuanke": "首选物理，再选化学/生物(2选1)"
@@ -41353,7 +40627,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 48,
+      "totalPlan": 44,
       "majors": [
         {
           "name": "临床医学",
@@ -41364,18 +40638,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "软件工程",
           "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "药学",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "生物制药",
-          "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -42561,7 +41823,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 195,
+      "totalPlan": 191,
       "majors": [
         {
           "name": "机械工程",
@@ -42670,12 +41932,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "num": 5,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "大数据管理与应用",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "低空技术与工程",
@@ -43145,7 +42401,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 96,
+      "totalPlan": 91,
       "majors": [
         {
           "name": "药学类",
@@ -43199,18 +42455,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "药学",
           "num": 3,
           "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "药学",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "临床药学",
-          "num": 2,
-          "length": "五年",
           "xuanke": "首选物理，再选化学"
         },
         {
@@ -44377,7 +43621,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 272,
+      "totalPlan": 262,
       "majors": [
         {
           "name": "食品科学与工程类",
@@ -44486,18 +43730,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "num": 6,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "数据科学与大数据技术",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "统计学",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "公共管理类",
@@ -45003,7 +44235,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选不限"
         },
         {
-          "name": "机械设计制���及其自动化",
+          "name": "机械设计制造及其自动化",
           "num": 13,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
@@ -45417,7 +44649,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 339,
+      "totalPlan": 323,
       "majors": [
         {
           "name": "电子信息类",
@@ -45540,24 +44772,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "车辆工程",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "车辆工程",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "生物科学类",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "环境科学与工程类",
           "num": 4,
           "length": "四年",
@@ -45590,18 +44804,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "材料科学与工程",
           "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "材料科学与工程",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "数字经济",
-          "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -47389,7 +46591,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 231,
+      "totalPlan": 211,
       "majors": [
         {
           "name": "智慧农业",
@@ -47418,18 +46620,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "生物科学类",
           "num": 11,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "园艺",
-          "num": 10,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "生态学",
-          "num": 10,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -47464,7 +46654,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "合成生物���",
+          "name": "合成生物学",
           "num": 7,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
@@ -48273,7 +47463,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 89,
+      "totalPlan": 82,
       "majors": [
         {
           "name": "统计学类",
@@ -48298,12 +47488,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "num": 8,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "人工智能",
-          "num": 7,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "经济管理试验班",
@@ -49751,7 +48935,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 235,
+      "totalPlan": 203,
       "majors": [
         {
           "name": "电气工程及其自动化",
@@ -49798,18 +48982,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "车辆工程",
           "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "计算机科学与技术",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "电子信息工程",
-          "num": 5,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -49904,42 +49076,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "土木工程",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "通信工程",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "高分子材料与工程",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "材料科学与工程",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "工业设计",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "机械设计制造及其自动化",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "物流工程",
           "num": 3,
           "length": "四年",
@@ -50014,18 +49150,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "金融学",
           "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "安全工程",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "环境工程",
-          "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -50899,38 +50023,8 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 59,
+      "totalPlan": 35,
       "majors": [
-        {
-          "name": "市场营销",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "金融数学",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "供应链管理",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "会计学",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "大数据管理与应用",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
         {
           "name": "计算机类",
           "num": 4,
@@ -50946,12 +50040,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "管理科学与工程类",
           "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "国际商务",
-          "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
         },
@@ -51659,7 +50747,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2024": {
-      "totalPlan": 117,
+      "totalPlan": 121,
       "majors": [
         {
           "name": "人力资源管理",
@@ -51693,6 +50781,12 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         },
         {
           "name": "道路桥梁与渡河工程",
+          "num": 4,
+          "length": "四年",
+          "xuanke": "首选物理，再选化学"
+        },
+        {
+          "name": "农业工程",
           "num": 4,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
@@ -51838,7 +50932,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2025": {
-      "totalPlan": 122,
+      "totalPlan": 125,
       "majors": [
         {
           "name": "农业水利工程",
@@ -52013,6 +51107,12 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "num": 4,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
+        },
+        {
+          "name": "财务管理",
+          "num": 3,
+          "length": "四年",
+          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "投资学",
@@ -52270,7 +51370,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "化工与制药类",
           "num": 3,
           "length": "四年",
-          "xuanke": "首选物理，再��化学"
+          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "临床医学",
@@ -53135,7 +52235,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "物理学",
           "num": 8,
           "length": "四年",
-          "xuanke": "首选物理���再选化学"
+          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "药学",
@@ -53195,7 +52295,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "外国语言文学类",
           "num": 5,
           "length": "四年",
-          "xuanke": "首选物理，再选��限"
+          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "会计学",
@@ -54019,37 +53119,13 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 84,
+      "totalPlan": 72,
       "majors": [
         {
           "name": "包装工程",
           "num": 4,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "信息与计算科学",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "数学与应用数学",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "经济统计学",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "经济学",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "低空技术与工程",
@@ -54441,10 +53517,16 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 31,
+      "totalPlan": 37,
       "majors": [
         {
           "name": "物理学",
+          "num": 6,
+          "length": "四年",
+          "xuanke": "首选物理，再选化学"
+        },
+        {
+          "name": "数学与应用数学",
           "num": 6,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
@@ -55483,7 +54565,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 146,
+      "totalPlan": 129,
       "majors": [
         {
           "name": "计算机类",
@@ -55522,24 +54604,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选不限"
         },
         {
-          "name": "船舶与海洋工程",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "电子信息工程",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "机械设计制造及其自动化",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "轮机工程",
           "num": 5,
           "length": "四年",
@@ -55568,12 +54632,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "num": 3,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "法学",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "法学",
@@ -56103,14 +55161,8 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 125,
+      "totalPlan": 104,
       "majors": [
-        {
-          "name": "金融学",
-          "num": 9,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
         {
           "name": "计算机科学与技术",
           "num": 7,
@@ -56142,12 +55194,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选不限"
         },
         {
-          "name": "会计学",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
           "name": "物理学",
           "num": 5,
           "length": "四年",
@@ -56174,12 +55220,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "国际经济与贸易",
           "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "工商管理",
-          "num": 3,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
         },
@@ -56234,18 +55274,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "纪检监察",
           "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "国际商务",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "市场营销",
-          "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
         },
@@ -56717,19 +55745,13 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 68,
+      "totalPlan": 53,
       "majors": [
         {
           "name": "计算机类",
           "num": 8,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "物流管理",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "环境科学与工程类",
@@ -56754,12 +55776,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "num": 6,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "金融学",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "经济学",
@@ -56788,18 +55804,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "数学与应用数学",
           "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "市场营销",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "计算机科学与技术",
-          "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -57499,7 +56503,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 109,
+      "totalPlan": 96,
       "majors": [
         {
           "name": "护理学",
@@ -57526,20 +56530,8 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "食品科学与工程",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "药学类",
           "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "通信工程",
-          "num": 5,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -57602,12 +56594,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "num": 3,
           "length": "四年",
           "xuanke": "首选物理，再选地理"
-        },
-        {
-          "name": "经济学",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "旅游管理",
@@ -57811,7 +56797,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "森林工程",
           "num": 3,
-          "length": "四���",
+          "length": "四年",
           "xuanke": "首选物理，再选不限"
         },
         {
@@ -58419,7 +57405,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选不限"
         },
         {
-          "name": "野生动物与自然保���区管理",
+          "name": "野生动物与自然保护区管理",
           "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选化学/生物(2选1)"
@@ -58947,7 +57933,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 217,
+      "totalPlan": 170,
       "majors": [
         {
           "name": "计算机类",
@@ -58958,30 +57944,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "电子信息类",
           "num": 12,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "工程管理",
-          "num": 11,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "计算机科学与技术",
-          "num": 10,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "生物技术",
-          "num": 10,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "化学",
-          "num": 10,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -59000,12 +57962,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "数学与应用数学",
           "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "计算机科学与技术",
-          "num": 6,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -59079,7 +58035,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "林学类",
           "num": 4,
           "length": "四年",
-          "xuanke": "首���物理，再选化学"
+          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "人工智能",
@@ -59290,7 +58246,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "力学类",
           "num": 8,
           "length": "四年",
-          "xuanke": "首选物理，��选化学"
+          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "工商管理类",
@@ -59469,7 +58425,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "力学类",
           "num": 8,
           "length": "四年",
-          "xuanke": "首��物理，再选不限"
+          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "信息安全",
@@ -59708,7 +58664,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "工商管理类",
           "num": 4,
           "length": "四年",
-          "xuanke": "首选物理���再选不限"
+          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "基础医学",
@@ -60191,7 +59147,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 299,
+      "totalPlan": 294,
       "majors": [
         {
           "name": "材料类",
@@ -60320,12 +59276,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "经济学",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
           "name": "大数据管理与应用",
           "num": 5,
           "length": "四年",
@@ -60396,7 +59346,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
   },
   "河北工业大学": {
     "2021": {
-      "totalPlan": 3474,
+      "totalPlan": 3369,
       "majors": [
         {
           "name": "机械类",
@@ -60675,84 +59625,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选不限"
         },
         {
-          "name": "机械类",
-          "num": 11,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "材料类",
-          "num": 10,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "化工与制药类",
-          "num": 10,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "应用统计学",
-          "num": 9,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "能源动力类",
-          "num": 9,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "数学类",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "电子信息工程",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "计算机类",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "土木类",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "高分子材料与工程",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "环境科学与工程类",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "电气工程及其自动化",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "思想政治教育",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选思想政治"
-        },
-        {
           "name": "汉语国际教育",
           "num": 3,
           "length": "四年",
@@ -60761,18 +59633,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "公共管理类",
           "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "法学",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "英语",
-          "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
         },
@@ -60809,7 +59669,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2022": {
-      "totalPlan": 3402,
+      "totalPlan": 3294,
       "majors": [
         {
           "name": "电气工程及其自动化",
@@ -61100,132 +59960,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选不限"
         },
         {
-          "name": "机械类",
-          "num": 11,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "材料类",
-          "num": 10,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "应用统计学",
-          "num": 9,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "能源动力类",
-          "num": 9,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "数学类",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "电子信息工程",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "计算机类",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "高分子材料与工程",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "环境科学与工程类",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "电气工程及其自动化",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "土木工程",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "化学工程与工艺",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "制药工程",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "生物工程",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "法���",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "思想政治教育",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选思想政治"
-        },
-        {
-          "name": "英语",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "给排水科学与工程",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "道路桥梁与渡河工程",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "工程管理",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "工业工程",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
           "name": "法学",
           "num": 2,
           "length": "四年",
@@ -61495,7 +60229,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选不限"
         },
         {
-          "name": "新能源科���与工程",
+          "name": "新能源科学与工程",
           "num": 39,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
@@ -61671,7 +60405,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2024": {
-      "totalPlan": 3680,
+      "totalPlan": 3573,
       "majors": [
         {
           "name": "电气工程及其自动化",
@@ -62038,174 +60772,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "num": 10,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "应用统计学",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "电子信息工程",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "数学类",
-          "num": 7,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "高分子材料与工程",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "能源与动力工程",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "电气工程及其自动化",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "机械设计制造及其自动化",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "机械电子工程",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "车辆工程",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "金属材料工程",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "土木工程",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "建筑环境与能源应用工程",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "化学工程与工艺",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "环境工程",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "无机非金属材料工程",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "新能源材料与器件",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "计算机科学与技术",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "物联网工程",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "制药工程",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "环保设备工程",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "生物工程",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "软件工程",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "给排水科学与工程",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "道路桥梁与渡河工程",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "工程管理",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "工业工程",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "法学",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "英语",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "法学",
@@ -62617,7 +61183,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 4251,
+      "totalPlan": 3673,
       "majors": [
         {
           "name": "电气工程及其自动化",
@@ -62640,12 +61206,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "储能科学与工程",
           "num": 140,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "物联网工程",
-          "num": 137,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -62794,28 +61354,10 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "计算机科学与技术",
-          "num": 46,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "本科预科班",
           "num": 45,
           "length": "一年",
           "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "生物医学工程",
-          "num": 45,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "机器人工程",
-          "num": 44,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "制药工程",
@@ -62826,12 +61368,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "数据科学与大数据技术",
           "num": 43,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "机械设计制造及其自动化",
-          "num": 41,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -62872,38 +61408,14 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "工业工程",
-          "num": 38,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "大数据管理与应用",
-          "num": 38,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "光电信息科学与工程",
           "num": 38,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "电子信息工程",
-          "num": 37,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "物联网工程",
           "num": 36,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "高分子材料与工程",
-          "num": 34,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -63050,174 +61562,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "num": 10,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "化学工程与工艺",
-          "num": 10,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "车辆工程",
-          "num": 9,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "电子信息工程",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "能源与动力工程",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "应用统计学",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "数学与应用数学",
-          "num": 7,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "高分子材料与工程",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "电气工程及其自动化",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "环境工程",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "建筑环境与能源应用工程",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "金属材料工程",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "机械电子工程",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "机械设计制造及其自动化",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "生物工程",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "制药工程",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "物联网工程",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "计算机科学与技术",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "光电信息科学与工程",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "新能源材料与器件",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "无机非金属材料工程",
-          "num": 3,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "工业工程",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "大数据管理与应用",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "工程管理",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "给排水科学与工程",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "土木工程",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "电子信息材料",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "英语",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "法学",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "公共事业管理",
@@ -64030,7 +62374,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "数据��学与大数据技术",
+          "name": "数据科学与大数据技术",
           "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
@@ -65946,7 +64290,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "��工智能",
+          "name": "人工智能",
           "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
@@ -67071,7 +65415,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "数���科学与大数据技术",
+          "name": "数据科学与大数据技术",
           "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
@@ -68182,7 +66526,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "应用物理学",
           "num": 6,
           "length": "四年",
-          "xuanke": "首选物理，���选不限"
+          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "车辆工程",
@@ -68331,7 +66675,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2024": {
-      "totalPlan": 242,
+      "totalPlan": 238,
       "majors": [
         {
           "name": "机械设计制造及其自动化",
@@ -68550,12 +66894,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "数字经济",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
           "name": "金融工程",
           "num": 4,
           "length": "四年",
@@ -68606,7 +66944,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2025": {
-      "totalPlan": 238,
+      "totalPlan": 233,
       "majors": [
         {
           "name": "机械设计制造及其自动化",
@@ -68765,12 +67103,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选不限"
         },
         {
-          "name": "数字经济",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
           "name": "机器人工程",
           "num": 5,
           "length": "四年",
@@ -68851,7 +67183,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 254,
+      "totalPlan": 245,
       "majors": [
         {
           "name": "机械设计制造及其自动化",
@@ -69004,12 +67336,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "国际经济与贸易",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
           "name": "工业工程",
           "num": 5,
           "length": "四年",
@@ -69042,12 +67368,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "数字经济",
           "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "数字经济",
-          "num": 4,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
         },
@@ -69579,7 +67899,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 130,
+      "totalPlan": 124,
       "majors": [
         {
           "name": "机器人工程",
@@ -69700,24 +68020,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "num": 3,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "数字媒体技术",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "应用统计学",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "应用物理学",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
         }
       ]
     }
@@ -69908,7 +68210,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "光电信息科学与工程",
           "num": 2,
-          "length": "四��",
+          "length": "四年",
           "xuanke": "首选物理，再选不限"
         },
         {
@@ -70265,7 +68567,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "计算机科学与技术",
           "num": 4,
           "length": "四年",
-          "xuanke": "首选物理，��选化学"
+          "xuanke": "首选物理，再选化学"
         },
         {
           "name": "自动化",
@@ -71204,7 +69506,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "电子商务",
           "num": 3,
           "length": "四年",
-          "xuanke": "首选物理，再选���限"
+          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "管理科学",
@@ -71305,7 +69607,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 207,
+      "totalPlan": 198,
       "majors": [
         {
           "name": "临床医学",
@@ -71371,12 +69673,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "土木工程",
           "num": 5,
           "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "临床医学",
-          "num": 4,
-          "length": "五年",
           "xuanke": "首选物理，再选化学"
         },
         {
@@ -71554,24 +69850,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选不限"
         },
         {
-          "name": "医学检验技术",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "数据科学与大数据技术",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "计算机科学与技术",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "会计学",
           "num": 2,
           "length": "四年",
@@ -71596,6 +69874,12 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
+          "name": "建筑环境与能源应用工程",
+          "num": 2,
+          "length": "四年",
+          "xuanke": "首选物理，再选化学"
+        },
+        {
           "name": "数据科学与大数据技术",
           "num": 2,
           "length": "四年",
@@ -71612,12 +69896,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "软件工程",
-          "num": 1,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
         }
       ]
     }
@@ -71917,7 +70195,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2022": {
-      "totalPlan": 95,
+      "totalPlan": 96,
       "majors": [
         {
           "name": "数据科学与大数据技术",
@@ -72133,6 +70411,12 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "数学与应用数学",
           "num": 1,
           "length": "四年",
+          "xuanke": "首选物理，再选不限"
+        },
+        {
+          "name": "建筑学",
+          "num": 1,
+          "length": "五年",
           "xuanke": "首选物理，再选不限"
         },
         {
@@ -72975,14 +71259,8 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 173,
+      "totalPlan": 152,
       "majors": [
-        {
-          "name": "智能科学与技术",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
         {
           "name": "应用物理学",
           "num": 8,
@@ -73006,12 +71284,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "num": 6,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "电子商务",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "食品科学与工程",
@@ -73156,30 +71428,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "num": 3,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "会展经济与管理",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "酒店管理",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "行政管理",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "人文地理与城乡规划",
-          "num": 2,
-          "length": "四年",
-          "xuanke": "首选物理，再选地理"
         },
         {
           "name": "物流管理",
@@ -74429,7 +72677,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "生物科学",
           "num": 2,
-          "length": "四���",
+          "length": "四年",
           "xuanke": "首选物理，再选化学、生物(2科必选)"
         },
         {
@@ -74627,43 +72875,13 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 112,
+      "totalPlan": 81,
       "majors": [
-        {
-          "name": "药学",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "植物科学与技术",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "软件工程",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "计算机科学与技术",
-          "num": 6,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
         {
           "name": "动物科学",
           "num": 4,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "心理学",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "生物科学",
@@ -74681,12 +72899,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "动物医学类",
           "num": 3,
           "length": "五年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "生物技术",
-          "num": 3,
-          "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
         {
@@ -74882,7 +73094,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "应用心理��",
+          "name": "应用心理学",
           "num": 1,
           "length": "四年",
           "xuanke": "首选物理，再选不限"
@@ -75650,7 +73862,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2025": {
-      "totalPlan": 82,
+      "totalPlan": 86,
       "majors": [
         {
           "name": "计算机类",
@@ -75666,6 +73878,12 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         },
         {
           "name": "土木类",
+          "num": 4,
+          "length": "四年",
+          "xuanke": "首选物理，再选化学"
+        },
+        {
+          "name": "电子信息类",
           "num": 4,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
@@ -75841,38 +74059,8 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 116,
+      "totalPlan": 84,
       "majors": [
-        {
-          "name": "信息管理与信息系统",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "机械设计制造及其自动化",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "旅游管理",
-          "num": 7,
-          "length": "四年",
-          "xuanke": "首选物理，再选不限"
-        },
-        {
-          "name": "化学工程与工艺",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "环境科学",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
         {
           "name": "电子信息科学与技术",
           "num": 4,
@@ -75976,7 +74164,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "城��规划",
+          "name": "城乡规划",
           "num": 2,
           "length": "五年",
           "xuanke": "首选物理，再选不限"
@@ -76163,7 +74351,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学/生物(2选1)"
         },
         {
-          "name": "生��学",
+          "name": "生态学",
           "num": 2,
           "length": "四年",
           "xuanke": "首选物理，再选化学/生物(2选1)"
@@ -78234,7 +76422,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "临床医学",
           "num": 1,
-          "length": "五���",
+          "length": "五年",
           "xuanke": "首选物理，再选化学、生物(2科必选)"
         },
         {
@@ -79687,7 +77875,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 130,
+      "totalPlan": 121,
       "majors": [
         {
           "name": "化学工程与工艺",
@@ -79726,12 +77914,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "葡萄与葡萄酒工程",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "生物科学",
           "num": 5,
           "length": "四年",
@@ -79740,12 +77922,6 @@ export const enrollmentPlanData: EnrollmentPlanData = {
         {
           "name": "数学与应用数学",
           "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "机械工程",
-          "num": 4,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -82017,7 +80193,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "name": "经济学类",
           "num": 8,
           "length": "四年",
-          "xuanke": "首选物理，再���不限"
+          "xuanke": "首选物理，再选不限"
         },
         {
           "name": "农业资源与环境",
@@ -84559,7 +82735,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 250,
+      "totalPlan": 235,
       "majors": [
         {
           "name": "计算机类",
@@ -84616,22 +82792,10 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "土木工程",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "物理学类",
           "num": 8,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "建筑环境与能源应用工程",
-          "num": 7,
-          "length": "四年",
-          "xuanke": "��选物理，再选化学"
         },
         {
           "name": "大数据管理与应用",
@@ -86025,7 +84189,7 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 279,
+      "totalPlan": 250,
       "majors": [
         {
           "name": "机械类",
@@ -86088,32 +84252,8 @@ export const enrollmentPlanData: EnrollmentPlanData = {
           "xuanke": "首选物理，再选化学"
         },
         {
-          "name": "人工智能",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "车辆工程",
-          "num": 8,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "交通运输",
-          "num": 7,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
           "name": "电气工程及其自动化",
           "num": 7,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "道路桥梁与渡河工程",
-          "num": 6,
           "length": "四年",
           "xuanke": "首选物理，再选化学"
         },
@@ -86633,20 +84773,8 @@ export const enrollmentPlanData: EnrollmentPlanData = {
       ]
     },
     "2026": {
-      "totalPlan": 24,
+      "totalPlan": 15,
       "majors": [
-        {
-          "name": "电子信息科学与技术",
-          "num": 5,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
-        {
-          "name": "物理学",
-          "num": 4,
-          "length": "四年",
-          "xuanke": "首选物理，再选化学"
-        },
         {
           "name": "食品科学与工程类",
           "num": 2,
