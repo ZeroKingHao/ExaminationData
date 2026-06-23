@@ -5,7 +5,7 @@ import { ClipboardList, Search, X } from 'lucide-react';
 import UniversityCard from './UniversityCard';
 import { useIsMobile } from '../hooks/useIsMobile';
 
-const YEARS = getYears();
+const YEARS = getYears(); // [2021..2026]，getYears 已含 2026，勿再追加否则列重复
 
 // 6 档色阶：人数越多越暖（红），阈值与 HeatmapChart.getScoreColor 一致
 function getPlanColor(num: number, minNum: number, maxNum: number) {
@@ -18,11 +18,44 @@ function getPlanColor(num: number, minNum: number, maxNum: number) {
   return { bg: 'rgba(6, 182, 212, 0.45)', text: '#fff' };
 }
 
+// 从备注提取方向标签（校区/班型），用于明细面板的简短标识
+function getDirectionLabel(remark: string): string {
+  if (!remark) return '普通';
+  if (/芬兰校区/.test(remark)) return '芬兰校区';
+  if (/中外合作/.test(remark)) return '中外合作';
+  if (/利物浦/.test(remark)) return '利物浦学院';
+  if (/马来西亚分校/.test(remark)) return '马来西亚分校';
+  if (/创新实验班|创新班/.test(remark)) return '创新班';
+  if (/拔尖/.test(remark)) return '拔尖班';
+  if (/卓越/.test(remark)) return '卓越班';
+  if (/基地班|人才培养基地/.test(remark)) return '基地班';
+  const m = remark.match(/（([^（）]{2,12})/);
+  return m ? m[1] : '普通';
+}
+
 export default function EnrollmentPlanChart({ university }: { university: string }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showUniCard, setShowUniCard] = useState(false);
   const isMobile = useIsMobile();
   const [mobileViewMode, setMobileViewMode] = useState<'card' | 'table'>('card');
+  // 悬停(hovered)或点击(clicked)的单元格；桌面 hover 弹出、移动端点击触发
+  const [hovered, setHovered] = useState<{ major: string; year: number; x: number; y: number } | null>(null);
+  const [clicked, setClicked] = useState<{ major: string; year: number; x: number; y: number } | null>(null);
+  const activeCell = clicked || hovered;
+  const cellEvents = (major: string, year: number) => ({
+    onMouseEnter: (e: React.MouseEvent<HTMLDivElement>) => {
+      const r = e.currentTarget.getBoundingClientRect();
+      setHovered({ major, year, x: r.left + r.width / 2, y: r.top });
+    },
+    onMouseLeave: () => setHovered(null),
+    onClick: (e: React.MouseEvent<HTMLDivElement>) => {
+      const r = e.currentTarget.getBoundingClientRect();
+      const isSame = clicked?.major === major && clicked?.year === year;
+      setClicked(isSame ? null : { major, year, x: r.left + r.width / 2, y: r.top });
+    },
+  });
+  const isCellActive = (major: string, year: number) =>
+    (clicked?.major === major && clicked?.year === year) || (hovered?.major === major && hovered?.year === year);
 
   // 数据派生：专业并集（按 5 年合计降序）+ 归一化区间 + 各年总计划
   const { majors, minNum, maxNum, totalPlanByYear, hasData } = useMemo(() => {
@@ -46,9 +79,12 @@ export default function EnrollmentPlanChart({ university }: { university: string
     for (const yr of YEARS) {
       const yp = uniPlan[String(yr)];
       if (!yp) continue;
-      for (const m of yp.majors) {
-        if (m.num < minNum) minNum = m.num;
-        if (m.num > maxNum) maxNum = m.num;
+      // 按专业名分组合计（同年同名累加），颜色归一化基于合计人数而非单条目
+      const byName: Record<string, number> = {};
+      for (const m of yp.majors) byName[m.name] = (byName[m.name] || 0) + m.num;
+      for (const num of Object.values(byName)) {
+        if (num < minNum) minNum = num;
+        if (num > maxNum) maxNum = num;
       }
     }
     if (!isFinite(minNum)) {
@@ -71,10 +107,13 @@ export default function EnrollmentPlanChart({ university }: { university: string
     return majors.filter((m) => m.toLowerCase().includes(q));
   }, [majors, searchQuery]);
 
+  // 同名专业（不同校区/班型）合并到同一行：num 为同年合计，items 为各条目明细（悬停查看）
   const getCell = (majorName: string, year: number) => {
     const yp = (enrollmentPlanData[university] || {})[String(year)];
     if (!yp) return null;
-    return yp.majors.find((m) => m.name === majorName) ?? null;
+    const items = yp.majors.filter((m) => m.name === majorName);
+    if (items.length === 0) return null;
+    return { num: items.reduce((s, m) => s + m.num, 0), items };
   };
 
   // 空状态：该校无招生计划数据
@@ -167,7 +206,9 @@ export default function EnrollmentPlanChart({ university }: { university: string
               <div key={major} className="bg-card rounded-xl border border-border/60 p-3 shadow-card-sm">
                 <span className="text-sm font-medium">{major}</span>
                 {latest && (
-                  <p className="text-[10px] text-muted-foreground truncate mb-2">{latest.xuanke}</p>
+                  <p className="text-[10px] text-muted-foreground truncate mb-2">
+                    {latest.items[0]?.xuanke}{latest.items.length > 1 ? ` · 等${latest.items.length}个方向` : ''}
+                  </p>
                 )}
                 <div className="flex gap-1.5 overflow-x-auto scrollbar-thin">
                   {YEARS.map((y, yi) => {
@@ -187,11 +228,12 @@ export default function EnrollmentPlanChart({ university }: { university: string
                     return (
                       <div
                         key={y}
-                        className="flex flex-col items-center rounded-lg px-2 py-1.5 min-w-[56px] shrink-0"
+                        {...cellEvents(major, y)}
+                        className={`flex flex-col items-center rounded-lg px-2 py-1.5 min-w-[56px] shrink-0 cursor-pointer transition-all ${isCellActive(major, y) ? 'ring-2 ring-primary scale-105' : ''}`}
                         style={{ backgroundColor: color.bg, color: color.text }}
-                        title={`${cell.num}人 · ${cell.length} · ${cell.xuanke}`}
                       >
                         <span className="text-[11px] font-bold">{cell.num}</span>
+                        {cell.items.length > 1 && <span className="text-[8px] opacity-80 leading-none">方向{cell.items.length}</span>}
                         <span className="text-[10px] opacity-60">{y}</span>
                       </div>
                     );
@@ -260,11 +302,12 @@ export default function EnrollmentPlanChart({ university }: { university: string
                       return (
                         <td key={y} className="text-center p-2 border-b border-border">
                           <div
-                            className="inline-flex flex-col items-center justify-center rounded-lg p-2 min-w-[72px] transition-all duration-200 cursor-default hover:scale-[1.02]"
+                            {...cellEvents(major, y)}
+                            className={`inline-flex flex-col items-center justify-center rounded-lg p-2 min-w-[72px] transition-all duration-200 cursor-pointer hover:scale-[1.05] ${isCellActive(major, y) ? 'ring-2 ring-primary ring-offset-1 ring-offset-background scale-[1.05]' : ''}`}
                             style={{ backgroundColor: color.bg, color: color.text }}
-                            title={`${cell.num}人 · ${cell.length} · ${cell.xuanke}`}
                           >
                             <span className="text-xs font-bold">{cell.num}</span>
+                            {cell.items.length > 1 && <span className="text-[9px] opacity-75 leading-none">({cell.items.length}方向)</span>}
                             <span className="text-[10px] opacity-75">人</span>
                           </div>
                         </td>
@@ -277,6 +320,56 @@ export default function EnrollmentPlanChart({ university }: { university: string
           </div>
         </div>
       )}
+
+      {/* 单元格悬浮/点击的方向明细气泡（fixed 跟随单元格，pointer-events-none 不挡 hover） */}
+      {activeCell && (() => {
+        const cell = getCell(activeCell.major, activeCell.year);
+        if (!cell) return null;
+        const showBelow = activeCell.y < 150;
+        return (
+          <div
+            className="fixed z-50 p-3 rounded-xl bg-card border border-border shadow-2xl animate-fade-in pointer-events-none"
+            style={{
+              left: `${activeCell.x}px`,
+              top: showBelow ? `${activeCell.y + 28}px` : `${activeCell.y - 12}px`,
+              transform: 'translateX(-50%)',
+              maxWidth: 'min(340px, 90vw)',
+              width: 'max-content',
+            }}
+          >
+            <div className="flex items-center justify-between gap-3 mb-2 pb-2 border-b border-border/60">
+              <span className="text-xs font-serif-cn font-bold ink-text truncate">
+                {activeCell.major}
+                <span className="text-muted-foreground font-normal"> · {activeCell.year}年</span>
+              </span>
+              <span className="text-[10px] text-muted-foreground shrink-0 whitespace-nowrap">
+                {cell.items.length}方向 · <span className="text-primary font-bold">{cell.num}</span>人
+              </span>
+            </div>
+            <div className="space-y-1">
+              {cell.items.map((item, i) => {
+                const c = getPlanColor(item.num, minNum, maxNum);
+                return (
+                  <div key={i} className="flex items-center gap-1.5 min-w-0">
+                    <span
+                      className="shrink-0 w-9 text-center rounded text-[10px] font-bold py-0.5"
+                      style={{ backgroundColor: c.bg, color: c.text }}
+                    >
+                      {item.num}
+                    </span>
+                    <span className="shrink-0 text-[10px] px-1 rounded bg-secondary text-secondary-foreground whitespace-nowrap">
+                      {getDirectionLabel(item.remark)}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground truncate" title={item.remark || item.xuanke}>
+                      {item.xuanke}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* 色阶图例 */}
       <div className="mt-4 p-4 rounded-xl bg-card border border-border/60 shadow-card card-shine">
