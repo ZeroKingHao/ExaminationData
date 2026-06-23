@@ -46,9 +46,12 @@ export default function EnrollmentPlanChart({ university }: { university: string
     for (const yr of YEARS) {
       const yp = uniPlan[String(yr)];
       if (!yp) continue;
-      for (const m of yp.majors) {
-        if (m.num < minNum) minNum = m.num;
-        if (m.num > maxNum) maxNum = m.num;
+      // 按专业名分组合计（同年同名累加），颜色归一化基于合计人数而非单条目
+      const byName: Record<string, number> = {};
+      for (const m of yp.majors) byName[m.name] = (byName[m.name] || 0) + m.num;
+      for (const num of Object.values(byName)) {
+        if (num < minNum) minNum = num;
+        if (num > maxNum) maxNum = num;
       }
     }
     if (!isFinite(minNum)) {
@@ -71,10 +74,13 @@ export default function EnrollmentPlanChart({ university }: { university: string
     return majors.filter((m) => m.toLowerCase().includes(q));
   }, [majors, searchQuery]);
 
+  // 同名专业（不同校区/班型）合并到同一行：num 为同年合计，items 为各条目明细（悬停查看）
   const getCell = (majorName: string, year: number) => {
     const yp = (enrollmentPlanData[university] || {})[String(year)];
     if (!yp) return null;
-    return yp.majors.find((m) => m.name === majorName) ?? null;
+    const items = yp.majors.filter((m) => m.name === majorName);
+    if (items.length === 0) return null;
+    return { num: items.reduce((s, m) => s + m.num, 0), items };
   };
 
   // 空状态：该校无招生计划数据
@@ -167,7 +173,9 @@ export default function EnrollmentPlanChart({ university }: { university: string
               <div key={major} className="bg-card rounded-xl border border-border/60 p-3 shadow-card-sm">
                 <span className="text-sm font-medium">{major}</span>
                 {latest && (
-                  <p className="text-[10px] text-muted-foreground truncate mb-2">{latest.xuanke}</p>
+                  <p className="text-[10px] text-muted-foreground truncate mb-2">
+                    {latest.items[0]?.xuanke}{latest.items.length > 1 ? ` · 等${latest.items.length}个方向` : ''}
+                  </p>
                 )}
                 <div className="flex gap-1.5 overflow-x-auto scrollbar-thin">
                   {YEARS.map((y, yi) => {
@@ -184,12 +192,13 @@ export default function EnrollmentPlanChart({ university }: { university: string
                       );
                     }
                     const color = getPlanColor(cell.num, minNum, maxNum);
+                    const detail = cell.items.map(i => `${i.num}人${i.remark ? '·' + i.remark.slice(0, 25) : '·普通'}`).join('\n');
                     return (
                       <div
                         key={y}
                         className="flex flex-col items-center rounded-lg px-2 py-1.5 min-w-[56px] shrink-0"
                         style={{ backgroundColor: color.bg, color: color.text }}
-                        title={`${cell.num}人 · ${cell.length} · ${cell.xuanke}`}
+                        title={detail}
                       >
                         <span className="text-[11px] font-bold">{cell.num}</span>
                         <span className="text-[10px] opacity-60">{y}</span>
@@ -257,14 +266,16 @@ export default function EnrollmentPlanChart({ university }: { university: string
                         );
                       }
                       const color = getPlanColor(cell.num, minNum, maxNum);
+                      const detail = cell.items.map(i => `${i.num}人${i.remark ? '·' + i.remark.slice(0, 25) : '·普通'}`).join('\n');
                       return (
                         <td key={y} className="text-center p-2 border-b border-border">
                           <div
                             className="inline-flex flex-col items-center justify-center rounded-lg p-2 min-w-[72px] transition-all duration-200 cursor-default hover:scale-[1.02]"
                             style={{ backgroundColor: color.bg, color: color.text }}
-                            title={`${cell.num}人 · ${cell.length} · ${cell.xuanke}`}
+                            title={detail}
                           >
                             <span className="text-xs font-bold">{cell.num}</span>
+                            {cell.items.length > 1 && <span className="text-[9px] opacity-75 leading-none">({cell.items.length}方向)</span>}
                             <span className="text-[10px] opacity-75">人</span>
                           </div>
                         </td>

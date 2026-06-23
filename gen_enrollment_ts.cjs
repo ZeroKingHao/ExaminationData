@@ -35,6 +35,7 @@ for (const [uni, years] of Object.entries(raw)) {
         num: Number(m.planNum) || 0,
         length: m.length || '',
         xuanke: m.xuanke || '',
+        remark: m.remark || '',
       }))
       .filter(m => m.name); // 丢弃无名称的脏数据
     if (majors.length === 0) continue;
@@ -61,6 +62,7 @@ export interface MajorPlan {
   num: number;
   length: string;
   xuanke: string;
+  remark: string;
 }
 
 export interface YearPlan {
