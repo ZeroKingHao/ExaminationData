@@ -1,4 +1,4 @@
-import { useMemo, useState, useRef, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import { enrollmentPlanData } from '../data/enrollmentPlan';
 import { getYears } from '../data/admissionData';
 import { ClipboardList, Search, X } from 'lucide-react';
@@ -38,14 +38,24 @@ export default function EnrollmentPlanChart({ university }: { university: string
   const [showUniCard, setShowUniCard] = useState(false);
   const isMobile = useIsMobile();
   const [mobileViewMode, setMobileViewMode] = useState<'card' | 'table'>('card');
-  const [selectedCell, setSelectedCell] = useState<{ major: string; year: number } | null>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
-  // 选中单元格后，明细面板自动滚入视口（面板在表格下方，避免点击后看不见）
-  useEffect(() => {
-    if (selectedCell && panelRef.current) {
-      panelRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-  }, [selectedCell]);
+  // 悬停(hovered)或点击(clicked)的单元格；桌面 hover 弹出、移动端点击触发
+  const [hovered, setHovered] = useState<{ major: string; year: number; x: number; y: number } | null>(null);
+  const [clicked, setClicked] = useState<{ major: string; year: number; x: number; y: number } | null>(null);
+  const activeCell = clicked || hovered;
+  const cellEvents = (major: string, year: number) => ({
+    onMouseEnter: (e: React.MouseEvent<HTMLDivElement>) => {
+      const r = e.currentTarget.getBoundingClientRect();
+      setHovered({ major, year, x: r.left + r.width / 2, y: r.top });
+    },
+    onMouseLeave: () => setHovered(null),
+    onClick: (e: React.MouseEvent<HTMLDivElement>) => {
+      const r = e.currentTarget.getBoundingClientRect();
+      const isSame = clicked?.major === major && clicked?.year === year;
+      setClicked(isSame ? null : { major, year, x: r.left + r.width / 2, y: r.top });
+    },
+  });
+  const isCellActive = (major: string, year: number) =>
+    (clicked?.major === major && clicked?.year === year) || (hovered?.major === major && hovered?.year === year);
 
   // 数据派生：专业并集（按 5 年合计降序）+ 归一化区间 + 各年总计划
   const { majors, minNum, maxNum, totalPlanByYear, hasData } = useMemo(() => {
@@ -215,14 +225,12 @@ export default function EnrollmentPlanChart({ university }: { university: string
                       );
                     }
                     const color = getPlanColor(cell.num, minNum, maxNum);
-                    const isSelected = selectedCell?.major === major && selectedCell?.year === y;
                     return (
                       <div
                         key={y}
-                        onClick={() => setSelectedCell(isSelected ? null : { major, year: y })}
-                        className={`flex flex-col items-center rounded-lg px-2 py-1.5 min-w-[56px] shrink-0 cursor-pointer transition-all ${isSelected ? 'ring-2 ring-primary scale-105' : ''}`}
+                        {...cellEvents(major, y)}
+                        className={`flex flex-col items-center rounded-lg px-2 py-1.5 min-w-[56px] shrink-0 cursor-pointer transition-all ${isCellActive(major, y) ? 'ring-2 ring-primary scale-105' : ''}`}
                         style={{ backgroundColor: color.bg, color: color.text }}
-                        title={cell.items.length > 1 ? `点击查看 ${cell.items.length} 个方向` : `${cell.num}人`}
                       >
                         <span className="text-[11px] font-bold">{cell.num}</span>
                         {cell.items.length > 1 && <span className="text-[8px] opacity-80 leading-none">方向{cell.items.length}</span>}
@@ -291,14 +299,12 @@ export default function EnrollmentPlanChart({ university }: { university: string
                         );
                       }
                       const color = getPlanColor(cell.num, minNum, maxNum);
-                      const isSelected = selectedCell?.major === major && selectedCell?.year === y;
                       return (
                         <td key={y} className="text-center p-2 border-b border-border">
                           <div
-                            onClick={() => setSelectedCell(isSelected ? null : { major, year: y })}
-                            className={`inline-flex flex-col items-center justify-center rounded-lg p-2 min-w-[72px] transition-all duration-200 cursor-pointer hover:scale-[1.05] ${isSelected ? 'ring-2 ring-primary ring-offset-1 ring-offset-background scale-[1.05]' : ''}`}
+                            {...cellEvents(major, y)}
+                            className={`inline-flex flex-col items-center justify-center rounded-lg p-2 min-w-[72px] transition-all duration-200 cursor-pointer hover:scale-[1.05] ${isCellActive(major, y) ? 'ring-2 ring-primary ring-offset-1 ring-offset-background scale-[1.05]' : ''}`}
                             style={{ backgroundColor: color.bg, color: color.text }}
-                            title={cell.items.length > 1 ? `点击查看 ${cell.items.length} 个方向明细` : `${cell.num}人 · 点击查看详情`}
                           >
                             <span className="text-xs font-bold">{cell.num}</span>
                             {cell.items.length > 1 && <span className="text-[9px] opacity-75 leading-none">({cell.items.length}方向)</span>}
@@ -315,63 +321,52 @@ export default function EnrollmentPlanChart({ university }: { university: string
         </div>
       )}
 
-      {/* 单元格点击展开的方向明细面板 */}
-      {selectedCell && (() => {
-        const cell = getCell(selectedCell.major, selectedCell.year);
+      {/* 单元格悬浮/点击的方向明细气泡（fixed 跟随单元格，pointer-events-none 不挡 hover） */}
+      {activeCell && (() => {
+        const cell = getCell(activeCell.major, activeCell.year);
         if (!cell) return null;
+        const showBelow = activeCell.y < 150;
         return (
-          <div ref={panelRef} className="mt-4 p-4 md:p-5 rounded-xl bg-card border-2 border-primary/40 shadow-card animate-fade-in">
-            <div className="flex items-start justify-between mb-3 gap-2">
-              <div className="min-w-0">
-                <h3 className="text-sm font-serif-cn font-bold ink-text truncate">
-                  {selectedCell.major}
-                  <span className="text-muted-foreground font-normal"> · {selectedCell.year}年</span>
-                </h3>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  {cell.items.length} 个方向 · 合计 <span className="font-bold text-primary">{cell.num}</span> 人
-                </p>
-              </div>
-              <button
-                onClick={() => setSelectedCell(null)}
-                className="p-1 rounded-md hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors shrink-0"
-                aria-label="关闭明细"
-              >
-                <X className="h-4 w-4" />
-              </button>
+          <div
+            className="fixed z-50 p-3 rounded-xl bg-card border border-border shadow-2xl animate-fade-in pointer-events-none"
+            style={{
+              left: `${activeCell.x}px`,
+              top: showBelow ? `${activeCell.y + 28}px` : `${activeCell.y - 12}px`,
+              transform: 'translateX(-50%)',
+              maxWidth: 'min(340px, 90vw)',
+              width: 'max-content',
+            }}
+          >
+            <div className="flex items-center justify-between gap-3 mb-2 pb-2 border-b border-border/60">
+              <span className="text-xs font-serif-cn font-bold ink-text truncate">
+                {activeCell.major}
+                <span className="text-muted-foreground font-normal"> · {activeCell.year}年</span>
+              </span>
+              <span className="text-[10px] text-muted-foreground shrink-0 whitespace-nowrap">
+                {cell.items.length}方向 · <span className="text-primary font-bold">{cell.num}</span>人
+              </span>
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-1">
               {cell.items.map((item, i) => {
                 const c = getPlanColor(item.num, minNum, maxNum);
-                const label = getDirectionLabel(item.remark);
                 return (
-                  <div
-                    key={i}
-                    className="flex items-center gap-2 p-2 rounded-lg border border-border/50 bg-background/50"
-                  >
-                    <div
-                      className="shrink-0 w-12 text-center rounded-md py-1 text-xs font-bold"
+                  <div key={i} className="flex items-center gap-1.5 min-w-0">
+                    <span
+                      className="shrink-0 w-9 text-center rounded text-[10px] font-bold py-0.5"
                       style={{ backgroundColor: c.bg, color: c.text }}
                     >
                       {item.num}
-                    </div>
-                    <span className="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-medium bg-secondary text-secondary-foreground whitespace-nowrap">
-                      {label}
                     </span>
-                    <div className="min-w-0 flex-1">
-                      <span className="text-[11px] text-muted-foreground">{item.length} · {item.xuanke}</span>
-                      {item.remark && (
-                        <p className="text-[10px] text-muted-foreground/70 line-clamp-2 mt-0.5" title={item.remark}>
-                          {item.remark}
-                        </p>
-                      )}
-                    </div>
+                    <span className="shrink-0 text-[10px] px-1 rounded bg-secondary text-secondary-foreground whitespace-nowrap">
+                      {getDirectionLabel(item.remark)}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground truncate" title={item.remark || item.xuanke}>
+                      {item.xuanke}
+                    </span>
                   </div>
                 );
               })}
             </div>
-            <p className="text-[10px] text-muted-foreground/60 mt-2 text-center">
-              再次点击该单元格可关闭
-            </p>
           </div>
         );
       })()}
