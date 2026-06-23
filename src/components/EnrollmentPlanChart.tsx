@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef, useEffect } from 'react';
 import { enrollmentPlanData } from '../data/enrollmentPlan';
 import { getYears } from '../data/admissionData';
 import { ClipboardList, Search, X } from 'lucide-react';
@@ -39,6 +39,13 @@ export default function EnrollmentPlanChart({ university }: { university: string
   const isMobile = useIsMobile();
   const [mobileViewMode, setMobileViewMode] = useState<'card' | 'table'>('card');
   const [selectedCell, setSelectedCell] = useState<{ major: string; year: number } | null>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  // 选中单元格后，明细面板自动滚入视口（面板在表格下方，避免点击后看不见）
+  useEffect(() => {
+    if (selectedCell && panelRef.current) {
+      panelRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, [selectedCell]);
 
   // 数据派生：专业并集（按 5 年合计降序）+ 归一化区间 + 各年总计划
   const { majors, minNum, maxNum, totalPlanByYear, hasData } = useMemo(() => {
@@ -313,7 +320,7 @@ export default function EnrollmentPlanChart({ university }: { university: string
         const cell = getCell(selectedCell.major, selectedCell.year);
         if (!cell) return null;
         return (
-          <div className="mt-4 p-4 md:p-5 rounded-xl bg-card border-2 border-primary/40 shadow-card animate-fade-in">
+          <div ref={panelRef} className="mt-4 p-4 md:p-5 rounded-xl bg-card border-2 border-primary/40 shadow-card animate-fade-in">
             <div className="flex items-start justify-between mb-3 gap-2">
               <div className="min-w-0">
                 <h3 className="text-sm font-serif-cn font-bold ink-text truncate">
