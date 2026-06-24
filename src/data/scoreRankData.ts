@@ -3259,7 +3259,7 @@ const BACHELOR_LINES: Record<number, { score: number; rank: number }> = {
   2022: { score: 430, rank: 177075 },
   2023: { score: 439, rank: 183522 },
   2024: { score: 448, rank: 207066 },
-  2025: { score: 437, rank: 252764 },
+  2025: { score: 459, rank: 224230 },
 };
 
 // 获取某年份本科线
