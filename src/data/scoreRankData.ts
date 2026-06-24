@@ -3259,12 +3259,26 @@ const BACHELOR_LINES: Record<number, { score: number; rank: number }> = {
   2022: { score: 430, rank: 177075 },
   2023: { score: 439, rank: 183522 },
   2024: { score: 448, rank: 207066 },
-  2025: { score: 437, rank: 252764 },
+  2025: { score: 459, rank: 224230 },
 };
 
 // 获取某年份本科线
 export function getBachelorLine(year: number): { score: number; rank: number } | null {
   return BACHELOR_LINES[year] || null;
+}
+
+// 河北省物理类特殊类型招生控制线(强基计划 / 高校专项等)
+const SPECIAL_LINES: Record<number, { score: number; rank: number }> = {
+  2021: { score: 498, rank: 89072 },
+  2022: { score: 487, rank: 106171 },
+  2023: { score: 492, rank: 110450 },
+  2024: { score: 484, rank: 148325 },
+  2025: { score: 499, rank: 162246 },
+};
+
+// 获取某年份特殊类型招生控制线
+export function getSpecialLine(year: number): { score: number; rank: number } | null {
+  return SPECIAL_LINES[year] || null;
 }
 
 // 一分一段表已覆盖的年份（基于实际数据键派生）
