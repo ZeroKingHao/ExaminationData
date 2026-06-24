@@ -105,7 +105,7 @@ export default function ScoreRankChart({ data, year, bachelorScore }: ScoreRankC
               yAxisId="rank"
               stroke="hsl(var(--primary))"
               strokeDasharray="4 4"
-              label={{ value: '本科线', position: 'top', fill: 'hsl(var(--primary))', fontSize: 11 }}
+              label={{ value: '本科线', position: 'insideTop', fill: 'hsl(var(--primary))', fontSize: 11 }}
             />
           )}
           <Line
