@@ -3,6 +3,7 @@ import { detailedScoreRankTable, getRankByScore, getScoreByRank, getBachelorLine
 import { BookOpen, ExternalLink, Table2, Search, ArrowRight, TrendingUp, Award, Target, Shield, Zap, ShieldCheck, ChevronDown as ChevronDownIcon } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { useIsMobile } from '../hooks/useIsMobile';
+import ScoreRankChart from './ScoreRankChart';
 
 type QueryMode = 'score' | 'rank' | 'browse';
 
@@ -15,6 +16,8 @@ export default function DataSourceList() {
   const [browseYear, setBrowseYear] = useState(2025);
   const [browseScoreRange, setBrowseScoreRange] = useState<[number, number]>([550, 700]);
   const [expandedMatched, setExpandedMatched] = useState<number | null>(null);
+  // 一分一段表完整数据区的视图模式:默认折线图
+  const [dataView, setDataView] = useState<'table' | 'chart'>('chart');
   const isMobile = useIsMobile();
 
   // 分数查询结果
@@ -500,9 +503,31 @@ export default function DataSourceList() {
 
       {/* Original Score-Rank Table View */}
       <div className="mt-8">
-        <div className="flex items-center gap-2 mb-2">
-          <Table2 className="h-5 w-5 text-primary" />
-          <h2 className="text-2xl font-bold">一分一段表完整数据</h2>
+        <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
+          <div className="flex items-center gap-2">
+            <Table2 className="h-5 w-5 text-primary" />
+            <h2 className="text-2xl font-bold">一分一段表完整数据</h2>
+          </div>
+          {expandedYear && hasScoreRank(expandedYear) && (
+            <div className="flex items-center gap-1 bg-muted/60 rounded-lg p-1">
+              {([
+                { id: 'chart' as const, label: '折线图' },
+                { id: 'table' as const, label: '表格' },
+              ]).map(v => (
+                <button
+                  key={v.id}
+                  onClick={() => setDataView(v.id)}
+                  className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-300 ${
+                    dataView === v.id
+                      ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
+                  }`}
+                >
+                  {v.label}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
         <p className="text-sm text-muted-foreground mb-4">
           分数-位次对照表，完整数据请参考河北省教育考试院官网
@@ -525,35 +550,45 @@ export default function DataSourceList() {
         </div>
 
         {expandedYear && detailedScoreRankTable[expandedYear] && (
-          <div className="bg-card rounded-xl border border-border/60 overflow-hidden animate-fade-in shadow-card card-shine">
-            <div className="overflow-x-auto scrollbar-thin max-h-[500px] overflow-y-auto">
-              <table className="w-full text-sm">
-                <thead className="sticky top-0 bg-secondary/90 backdrop-blur-sm z-10">
-                  <tr>
-                    <th className="text-left p-3 font-semibold text-muted-foreground border-b border-border">分数</th>
-                    <th className="text-right p-3 font-semibold text-muted-foreground border-b border-border">该分数人数</th>
-                    <th className="text-right p-3 font-semibold text-muted-foreground border-b border-border">累计位次</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {detailedScoreRankTable[expandedYear].map((row, i) => (
-                    <tr key={i} className={`border-b border-border hover:bg-secondary/30 transition-colors ${
-                      getBachelorLine(expandedYear)?.score === row.score ? 'bg-primary/5 font-semibold' : ''
-                    }`}>
-                      <td className="p-3 font-mono font-medium">
-                        {row.score}
-                        {getBachelorLine(expandedYear)?.score === row.score && (
-                          <span className="ml-2 text-[10px] text-primary">本科线</span>
-                        )}
-                      </td>
-                      <td className="p-3 text-right font-mono text-muted-foreground">{row.count.toLocaleString()}</td>
-                      <td className="p-3 text-right font-mono">{row.rank.toLocaleString()}</td>
+          dataView === 'table' ? (
+            <div className="bg-card rounded-xl border border-border/60 overflow-hidden animate-fade-in shadow-card card-shine">
+              <div className="overflow-x-auto scrollbar-thin max-h-[500px] overflow-y-auto">
+                <table className="w-full text-sm">
+                  <thead className="sticky top-0 bg-secondary/90 backdrop-blur-sm z-10">
+                    <tr>
+                      <th className="text-left p-3 font-semibold text-muted-foreground border-b border-border">分数</th>
+                      <th className="text-right p-3 font-semibold text-muted-foreground border-b border-border">该分数人数</th>
+                      <th className="text-right p-3 font-semibold text-muted-foreground border-b border-border">累计位次</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {detailedScoreRankTable[expandedYear].map((row, i) => (
+                      <tr key={i} className={`border-b border-border hover:bg-secondary/30 transition-colors ${
+                        getBachelorLine(expandedYear)?.score === row.score ? 'bg-primary/5 font-semibold' : ''
+                      }`}>
+                        <td className="p-3 font-mono font-medium">
+                          {row.score}
+                          {getBachelorLine(expandedYear)?.score === row.score && (
+                            <span className="ml-2 text-[10px] text-primary">本科线</span>
+                          )}
+                        </td>
+                        <td className="p-3 text-right font-mono text-muted-foreground">{row.count.toLocaleString()}</td>
+                        <td className="p-3 text-right font-mono">{row.rank.toLocaleString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="animate-fade-in">
+              <ScoreRankChart
+                data={detailedScoreRankTable[expandedYear]}
+                year={expandedYear}
+                bachelorScore={getBachelorLine(expandedYear)?.score}
+              />
+            </div>
+          )
         )}
       </div>
 
