@@ -19,3 +19,10 @@
 
 - [x] 3.1 `npm run build` 通过(`tsc -b && vite build`,strict 模式无报错)
 - [x] 3.2 `npm run dev` 手动验证:展开年份默认显示折线图、双轴曲线与「万」刻度正确、本科线参考线出现、表格/折线图可切换、切换年份后视图选择保留、无数据年份(2026)显示待发布提示、移动端布局正常
+
+## 4. 特控线参考线(增量需求)
+
+- [x] 4.1 `src/data/scoreRankData.ts` 新增 `SPECIAL_LINES`(2021–2025)与 `getSpecialLine`
+- [x] 4.2 `ScoreRankChart` 增 `specialScore` prop,渲染第二条参考线(`hsl(var(--chart-3))` 色、点虚线,与本科线区分)
+- [x] 4.3 `DataSourceList` 传入 `getSpecialLine(expandedYear)?.score`
+- [x] 4.4 验证:2025/2021 等年份同时显示本科线 + 特控线两条参考线
