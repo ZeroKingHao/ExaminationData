@@ -18,12 +18,13 @@ interface ScoreRankChartProps {
   data: ScoreRankEntry[];
   year: number;
   bachelorScore?: number;
+  specialScore?: number;
 }
 
 const RANK_NAME = '累计位次';
 const COUNT_NAME = '该分数人数';
 
-export default function ScoreRankChart({ data, year, bachelorScore }: ScoreRankChartProps) {
+export default function ScoreRankChart({ data, year, bachelorScore, specialScore }: ScoreRankChartProps) {
   const isMobile = useIsMobile();
 
   // 原始数据为降序(750→低分),按分数升序排序,使 X 轴左低右高、累计位次单调递减
@@ -106,6 +107,15 @@ export default function ScoreRankChart({ data, year, bachelorScore }: ScoreRankC
               stroke="hsl(var(--primary))"
               strokeDasharray="4 4"
               label={{ value: '本科线', position: 'insideTop', fill: 'hsl(var(--primary))', fontSize: 11 }}
+            />
+          )}
+          {specialScore !== undefined && (
+            <ReferenceLine
+              x={specialScore}
+              yAxisId="rank"
+              stroke="hsl(var(--chart-3))"
+              strokeDasharray="2 4"
+              label={{ value: '特控线', position: 'insideTop', fill: 'hsl(var(--chart-3))', fontSize: 11 }}
             />
           )}
           <Line

@@ -1,5 +1,5 @@
 import { DATA_SOURCES, admissionData, getYears } from '../data/admissionData';
-import { detailedScoreRankTable, getRankByScore, getScoreByRank, getBachelorLine, hasScoreRank, SCORE_RANK_SOURCES, type ScoreRankEntry } from '../data/scoreRankData';
+import { detailedScoreRankTable, getRankByScore, getScoreByRank, getBachelorLine, getSpecialLine, hasScoreRank, SCORE_RANK_SOURCES, type ScoreRankEntry } from '../data/scoreRankData';
 import { BookOpen, ExternalLink, Table2, Search, ArrowRight, TrendingUp, Award, Target, Shield, Zap, ShieldCheck, ChevronDown as ChevronDownIcon } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { useIsMobile } from '../hooks/useIsMobile';
@@ -586,6 +586,7 @@ export default function DataSourceList() {
                 data={detailedScoreRankTable[expandedYear]}
                 year={expandedYear}
                 bachelorScore={getBachelorLine(expandedYear)?.score}
+                specialScore={getSpecialLine(expandedYear)?.score}
               />
             </div>
           )
