@@ -102,6 +102,7 @@ export default function ScoreRankChart({ data, year, bachelorScore }: ScoreRankC
           {bachelorScore !== undefined && (
             <ReferenceLine
               x={bachelorScore}
+              yAxisId="rank"
               stroke="hsl(var(--primary))"
               strokeDasharray="4 4"
               label={{ value: '本科线', position: 'top', fill: 'hsl(var(--primary))', fontSize: 11 }}
