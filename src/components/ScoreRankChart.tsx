@@ -12,7 +12,7 @@ import {
 } from 'recharts';
 import { ChartTooltip } from './ChartTooltip';
 import { useIsMobile } from '../hooks/useIsMobile';
-import type { ScoreRankEntry } from '../data/scoreRankData';
+import { detailedScoreRankTable, type ScoreRankEntry } from '../data/scoreRankData';
 
 interface ScoreRankChartProps {
   data: ScoreRankEntry[];
@@ -23,6 +23,21 @@ interface ScoreRankChartProps {
 
 const RANK_NAME = '累计位次';
 const COUNT_NAME = '该分数人数';
+
+// 统一坐标范围：基于全部年份的极值固定，切换年份时坐标不变，便于横向趋势对比
+const ALL_ENTRIES: ScoreRankEntry[] = Object.values(detailedScoreRankTable).flat();
+const GLOBAL_DOMAIN = ALL_ENTRIES.reduce(
+  (acc, e) => ({
+    minScore: Math.min(acc.minScore, e.score),
+    maxScore: Math.max(acc.maxScore, e.score),
+    maxRank: Math.max(acc.maxRank, e.rank),
+    maxCount: Math.max(acc.maxCount, e.count),
+  }),
+  { minScore: Infinity, maxScore: -Infinity, maxRank: 0, maxCount: 0 },
+);
+// X 轴分数下限固定 140：2022-2026 最低分均为 140；2021 含 score<140 的 count=0 展开残留（无趋势意义），
+// 固定下限避免 2021 的 score=0 把整轴拉到 0、导致曲线偏右挤在右侧。
+const SCORE_AXIS_MIN = 140;
 
 export default function ScoreRankChart({ data, year, bachelorScore, specialScore }: ScoreRankChartProps) {
   const isMobile = useIsMobile();
@@ -65,7 +80,8 @@ export default function ScoreRankChart({ data, year, bachelorScore, specialScore
           <XAxis
             dataKey="score"
             type="number"
-            domain={['dataMin', 'dataMax']}
+            domain={[SCORE_AXIS_MIN, GLOBAL_DOMAIN.maxScore]}
+            allowDataOverflow={true}
             tickFormatter={v => `${v}`}
             interval="preserveStartEnd"
             minTickGap={30}
@@ -76,6 +92,7 @@ export default function ScoreRankChart({ data, year, bachelorScore, specialScore
           <YAxis
             yAxisId="rank"
             orientation="left"
+            domain={[0, GLOBAL_DOMAIN.maxRank]}
             tickFormatter={formatRank}
             stroke="hsl(var(--chart-1))"
             fontSize={12}
@@ -84,6 +101,7 @@ export default function ScoreRankChart({ data, year, bachelorScore, specialScore
           <YAxis
             yAxisId="count"
             orientation="right"
+            domain={[0, GLOBAL_DOMAIN.maxCount]}
             allowDecimals={false}
             tickFormatter={v => Math.round(v).toLocaleString()}
             stroke="hsl(var(--chart-2))"
